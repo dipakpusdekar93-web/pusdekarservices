@@ -3,83 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Digital & Group of Services</title>
+    <title>Pusdekar Services | माढेळी</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; color: #333; }
-        header { background-color: #0d6efd; color: white; padding: 30px 20px; text-align: center; }
-        header h1 { margin: 0; font-size: 2.5em; }
-        nav { display: flex; justify-content: center; background-color: #212529; flex-wrap: wrap; }
-        nav a { color: white; padding: 15px 20px; text-decoration: none; font-weight: bold; }
-        nav a:hover { background-color: #0d6efd; color: white; }
-        .container { padding: 40px 20px; max-width: 1100px; margin: auto; }
-        .section-title { text-align: center; color: #0d6efd; margin-bottom: 30px; font-size: 2em; border-bottom: 2px solid #0d6efd; display: inline-block; padding-bottom: 10px; }
-        .center-wrap { text-align: center; }
-        .services { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-        .service-card { background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 300px; text-align: center; border-top: 4px solid #0d6efd; transition: 0.3s; }
-        .service-card:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); }
-        .service-card h3 { color: #212529; }
-        footer { background-color: #212529; color: white; text-align: center; padding: 15px 0; margin-top: 20px; }
-        .whatsapp-btn { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; padding: 15px; border-radius: 50%; font-size: 28px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; z-index: 1000; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; }
+        :root {
+            --primary: #1a365d;
+            --secondary: #0d6efd;
+            --accent: #ffc107;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light); color: var(--dark); line-height: 1.6; }
+        
+        /* Header & Brand Hierarchy */
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        header h1 { margin: 0; font-size: 2.5em; font-weight: bold; letter-spacing: 1px; }
+        .tagline { font-size: 1.1em; margin-top: 5px; opacity: 0.9; }
+        
+        /* Sub-Brands Bar */
+        .sub-brands { background-color: #112240; color: white; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; padding: 12px; font-size: 0.95em; font-weight: 500; border-bottom: 3px solid var(--accent); }
+        .sub-brands span { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+
+        /* Navigation Menu */
+        nav { display: flex; justify-content: center; background-color: var(--dark); flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: 600; transition: 0.3s; }
+        nav a:hover { background-color: var(--secondary); color: white; }
+
+        .container { padding: 50px 20px; max-width: 1100px; margin: auto; }
+        .section-title { text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2.2em; position: relative; }
+        .section-title::after { content: ''; width: 60px; height: 4px; background: var(--accent); display: block; margin: 10px auto 0; border-radius: 2px; }
+
+        /* Grid Layouts */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
+        .service-card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); text-align: center; border-top: 5px solid var(--secondary); transition: transform 0.3s, box-shadow 0.3s; }
+        .service-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
+        .service-card .icon { font-size: 3em; margin-bottom: 15px; display: inline-block; }
+        .service-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.4em; }
+
+        /* Highlight Section for 3 Main Pillars */
+        .pillars-section { background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
+        .pillars-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: center; }
+        .pillar-box { background: #f1f5f9; padding: 25px; border-radius: 10px; border-left: 5px solid var(--primary); }
+        .pillar-box h4 { color: var(--primary); margin-top: 0; font-size: 1.2em; }
+
+        /* Contact Section */
+        .contact-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; max-width: 600px; margin: auto; }
+        .contact-box p { font-size: 1.1em; margin: 12px 0; }
+
+        footer { background-color: var(--dark); color: white; text-align: center; padding: 20px 0; margin-top: 40px; font-size: 0.9em; }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-btn { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; padding: 15px; border-radius: 50%; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s; z-index: 1000; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; }
         .whatsapp-btn:hover { background-color: #1ebe5d; transform: scale(1.1); }
-        .contact-info p { font-size: 1.2em; margin: 10px 0; }
     </style>
 </head>
 <body>
 
+    <!-- Main Header -->
     <header>
-        <h1>Pusdekar Digital</h1>
-        <p style="font-size: 1.2em; margin-top: 10px;">Pusdekar Group Of Services - आपली विश्वासार्ह सेवा</p>
+        <h1>Pusdekar Services</h1>
+        <div class="tagline">आपली विश्वासार्ह डिजिटल, वित्तीय आणि व्यावसायिक सेवा</div>
     </header>
 
+    <!-- Sub-Brands Bar requested by you -->
+    <div class="sub-brands">
+        <span>⭐ 1. Pusdekar Online Center</span>
+        <span>⭐ 2. Swaraj Vima Seva Kendra</span>
+        <span>⭐ 3. Shree Gurukripa RealEstate Advisor</span>
+    </div>
+
+    <!-- Navigation Bar -->
     <nav>
         <a href="#home">Home</a>
-        <a href="#about">About</a>
-        <a href="#services">Services</a>
+        <a href="#about">About Us</a>
+        <a href="#divisions">Our Divisions</a>
+        <a href="#services">All Services</a>
         <a href="#contact">Contact</a>
     </nav>
 
-    <div class="container center-wrap" id="home">
+    <!-- Home / Welcome Section -->
+    <div class="container" id="home">
         <h2 class="section-title">स्वागत आहे!</h2>
-        <p style="font-size: 1.2em; line-height: 1.6;">आम्ही ग्राहकांना उत्तम, तत्पर आणि खात्रीशीर डिजिटल, बँकिंग तसेच इतर आवश्यक सुविधा एकाच छताखाली उपलब्ध करून देतो. आधुनिक तंत्रज्ञानाचा वापर करून तुमची कामे सोपी करणे हे आमचे ध्येय आहे.</p>
-    </div>
-
-    <div class="container" id="services">
-        <div class="center-wrap"><h2 class="section-title">आमच्या सेवा (Our Services)</h2></div>
-        <div class="services">
-            <div class="service-card">
-                <h3 style="font-size: 2em; margin: 0;">💳</h3>
-                <h3>Banking Services</h3>
-                <p>Fino Payment Bank, Money Transfer (PhonePe, Google Pay), Cash Deposit आणि इतर बँकिंग सुविधा.</p>
-            </div>
-            <div class="service-card">
-                <h3 style="font-size: 2em; margin: 0;">📄</h3>
-                <h3>Online & Documents</h3>
-                <p>नवीन PAN Card, Aadhaar Card अपडेट्स, आणि सर्व प्रकारची ऑनलाईन बिल पेमेंट्स.</p>
-            </div>
-            <div class="service-card">
-                <h3 style="font-size: 2em; margin: 0;">🖨️</h3>
-                <h3>Printing Services</h3>
-                <p>Xerox, Banners, Digital Invitation Cards आणि इतर सर्व प्रिंटिंगची कामे.</p>
-            </div>
-            <div class="service-card">
-                <h3 style="font-size: 2em; margin: 0;">🛡️</h3>
-                <h3>Real Estate & LIC</h3>
-                <p>रिअल इस्टेट संबंधित खरेदी-विक्री आणि LIC विमा पॉलिसीचे मार्गदर्शन.</p>
+        <div class="pillars-section">
+            <p style="text-align: center; font-size: 1.2em; max-width: 800px; margin: 0 auto 30px auto;">
+                माढेळी येथील सि.डी.सी.सी. बँक समोरील आमचे केंद्र ग्राहकांना एकाच छताखाली सर्वोत्कृष्ट सेवा देण्यासाठी कटिबद्ध आहे. आमच्या अंतर्गत चालणारे प्रमुख तीन विभाग खालीलप्रमाणे आहेत:
+            </p>
+            <div class="pillars-list">
+                <div class="pillar-box">
+                    <h4>1. Pusdekar Online Center</h4>
+                    <p>सर्व प्रकारचे ऑनलाईन अर्ज, डिजिटल सेवा, मनी ट्रान्सफर आणि प्रिंटिंग कामे.</p>
+                </div>
+                <div class="pillar-box">
+                    <h4>2. Swaraj Vima Seva Kendra</h4>
+                    <p>LIC विमा पॉलिसी, आणि सर्व प्रकारच्या इन्शुरन्स संबंधित तज्ज्ञ मार्गदर्शन.</p>
+                </div>
+                <div class="pillar-box">
+                    <h4>3. Shree Gurukripa RealEstate Advisor</h4>
+                    <p>जमीन, प्लॉट व घरांची कायदेशीर आणि खात्रीशीर खरेदी-विक्री सल्ला.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="container center-wrap" id="contact">
-        <h2 class="section-title">संपर्क (Contact Us)</h2>
-        <div class="contact-info">
+    <!-- Services Grid -->
+    <div class="container" id="services" style="padding-top: 0;">
+        <h2 class="section-title">आमच्या प्रमुख सेवा</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="icon">💳</div>
+                <h3>Banking & Fino Services</h3>
+                <p>Fino Payment Bank खाती, मनी ट्रान्सफर (PhonePe, Google Pay), आधार कार्डद्वारे पैसे काढणे व कॅश डिपॉझिट.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">📄</div>
+                <h3>Online Documentation</h3>
+                <p>नवीन PAN Card, आधार अपडेट्स, शासकीय कागदपत्रे आणि विविध ऑनलाईन फॉर्म भरण्याची सुविधा.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🛡️</div>
+                <h3>Swaraj Vima Seva (LIC)</h3>
+                <p>कुटुंबाच्या सुरक्षेसाठी LIC विमा योजना, नवीन पॉलिसी आणि पॉलिसी संबंधित सर्व सेवा.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🏡</div>
+                <h3>Shree Gurukripa RealEstate</h3>
+                <p>माढेळी व परिसर परिसरातील शेतजमीन, प्लॉट, घरे खरेदी-विक्रीसाठी योग्य आणि पारदर्शक मार्गदर्शन.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">🖨️</div>
+                <h3>Digital Printing & Xerox</h3>
+                <p>झेरॉक्स, कलर प्रिंटीउट, डिजिटल लग्नपत्रिका, बॅनर्स आणि डिझायनिंगचे सर्व काम.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon">📞</div>
+                <h3>Customer Support</h3>
+                <p>ग्राहकांसाठी तत्पर सेवा आणि प्रत्येक कामात पारदर्शकता हेच आमचे मुख्य वैशिष्ट्य आहे.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="container" id="contact" style="padding-top: 0;">
+        <h2 class="section-title">संपर्क करा</h2>
+        <div class="contact-box">
             <p>📍 <strong>पत्ता:</strong> सि.डी.सी.सी. बँक समोर, माढेळी</p>
             <p>📞 <strong>मोबाईल / WhatsApp:</strong> +91 8007601734</p>
-            <p>✉️ <strong>ईमेल:</strong> लवकरच उपलब्ध होईल</p>
+            <p>✉️ <strong>ईमेल:</strong> dipakpusdekar@gmail.com</p>
+            <p style="margin-top: 20px; color: var(--secondary); font-weight: bold;">तुम्हाला कधीही, कोणत्याही सर्विससाठी लागलीच मेसेज करू शकता!</p>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Pusdekar Digital. All Rights Reserved.</p>
+        <p>&copy; 2026 Pusdekar Services (Pusdekar Digital). All Rights Reserved.</p>
     </footer>
 
     <!-- WhatsApp Floating Button -->
