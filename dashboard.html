@@ -12,9 +12,10 @@
         
         .summary-cards { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
         .card { background: white; padding: 20px; border-radius: 8px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
-        .card h4 { margin: 0 0 10px 0; color: #555; }
-        .card.income h3 { color: #28a745; margin: 0; font-size: 28px; }
-        .card.expense h3 { color: #dc3545; margin: 0; font-size: 28px; }
+        .card h4 { margin: 0 0 10px 0; color: #555; font-size: 16px; }
+        .card.income h3 { color: #28a745; margin: 0; font-size: 26px; }
+        .card.expense h3 { color: #dc3545; margin: 0; font-size: 26px; }
+        .card.monthly h3 { color: #17a2b8; margin: 0; font-size: 26px; }
 
         .container { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
         .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
@@ -24,7 +25,11 @@
         .save-btn { background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
         .save-btn:hover { background: #218838; }
         
-        .table-responsive { overflow-x: auto; margin-top: 20px; }
+        .table-header { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
+        .print-btn { background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .print-btn:hover { background: #5a6268; }
+
+        .table-responsive { overflow-x: auto; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); min-width: 900px; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
         th { background-color: #007BFF; color: white; white-space: nowrap; }
@@ -32,17 +37,28 @@
         .delete-btn:hover { background: #c82333; }
         .highlight-alert { color: #dc3545; font-size: 12px; font-weight: bold; margin-top: 4px; display: block; }
         .search-msg { color: #28a745; font-size: 12px; font-weight: bold; margin-top: 4px; display: none; }
+
+        /* Print Settings - फक्त टेबल प्रिंट होईल, बाकी सर्व लपेल */
+        @media print {
+            .no-print { display: none !important; }
+            body { padding: 0; background-color: white; }
+            table { box-shadow: none; width: 100%; min-width: auto; border: 1px solid #000; }
+            th, td { border: 1px solid #000; color: #000; padding: 6px; font-size: 12px; }
+            th { background-color: #f2f2f2; color: #000; }
+            .header { background: none; color: black; padding: 0; border: none; text-align: center; justify-content: center; margin-bottom: 20px;}
+            .header h2 { font-size: 24px; border-bottom: 2px solid black; padding-bottom: 10px;}
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2>Pusdekar Services - Daily Management</h2>
-        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
     </div>
 
     <!-- Summary Cards -->
-    <div class="summary-cards">
+    <div class="summary-cards no-print">
         <div class="card income">
             <h4>आजची एकूण कमाई (कमिशन)</h4>
             <h3 id="todayIncome">₹ 0</h3>
@@ -51,10 +67,14 @@
             <h4>आजचा एकूण खर्च</h4>
             <h3 id="todayExpense">₹ 0</h3>
         </div>
+        <div class="card monthly">
+            <h4>या महिन्याची एकूण कमाई</h4>
+            <h3 id="monthlyIncome">₹ 0</h3>
+        </div>
     </div>
 
     <!-- Entry Form -->
-    <div class="container">
+    <div class="container no-print">
         <h3 style="margin-top: 0;">नवीन नोंद (New Entry)</h3>
         
         <div class="form-row">
@@ -79,7 +99,6 @@
         <div class="form-row">
             <div class="form-group">
                 <label>ग्राहक मोबाईल नंबर (Mobile Number)</label>
-                <!-- onblur मुळे नंबर टाकून बाहेर क्लिक केल्यावर आपोआप नाव शोधले जाईल -->
                 <input type="tel" id="mobile" placeholder="येथे नंबर टाका म्हणजे नाव आपोआप येईल" maxlength="10" onblur="searchCustomer()">
                 <span id="searchMsg" class="search-msg">✔️ जुना ग्राहक सापडला!</span>
             </div>
@@ -112,7 +131,11 @@
     </div>
 
     <!-- Data Table -->
-    <h3 style="margin-top: 30px;">आजचा जमा-खर्च (Recent Entries)</h3>
+    <div class="table-header">
+        <h3 style="margin: 0;">आजचा जमा-खर्च (Recent Entries)</h3>
+        <button class="print-btn no-print" onclick="window.print()">🖨️ Print Record</button>
+    </div>
+    
     <div class="table-responsive">
         <table>
             <thead>
@@ -125,7 +148,7 @@
                     <th>पॅन/आधार</th>
                     <th>रक्कम (₹)</th>
                     <th>कमिशन (₹)</th>
-                    <th>कृती</th>
+                    <th class="no-print">कृती</th>
                 </tr>
             </thead>
             <tbody id="entriesTable">
@@ -161,20 +184,18 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // --- जुना ग्राहक शोधण्याची सिस्टीम (Auto-Fill) ---
+        // --- जुना ग्राहक शोधण्याची सिस्टीम ---
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value;
             const searchMsg = document.getElementById('searchMsg');
             
-            // जर नंबर १० अंकी असेल तरच शोधा
             if (mobile.length === 10) {
                 db.collection("transactions")
                   .where("mobile", "==", mobile)
-                  .limit(1) // फक्त एक जुना रेकॉर्ड आणा
+                  .limit(1)
                   .get()
                   .then((querySnapshot) => {
                       if (!querySnapshot.empty) {
-                          // ग्राहक सापडला
                           const data = querySnapshot.docs[0].data();
                           document.getElementById('details').value = data.details || "";
                           
@@ -182,7 +203,6 @@
                               document.getElementById('idProof').value = data.idProof;
                           }
                           
-                          // हिरवा मेसेज दाखवा
                           searchMsg.style.display = "block";
                           setTimeout(() => { searchMsg.style.display = "none"; }, 3000);
                       }
@@ -221,7 +241,6 @@
                 commission: Number(commission) || 0, 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
-                // फॉर्म रिकामा करणे
                 document.getElementById('amount').value = "";
                 document.getElementById('details').value = "";
                 document.getElementById('mobile').value = "";
@@ -247,7 +266,12 @@
             
             let todayIncome = 0;
             let todayExpense = 0;
-            const todayDateStr = new Date().toLocaleDateString('en-IN'); 
+            let monthlyIncome = 0;
+            
+            const now = new Date();
+            const todayDateStr = now.toLocaleDateString('en-IN'); 
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -255,25 +279,38 @@
                 
                 let dateStr = "Loading...";
                 let isToday = false;
+                let isThisMonth = false;
 
                 if (data.timestamp) {
                     const dateObj = data.timestamp.toDate();
                     dateStr = dateObj.toLocaleString('en-IN'); 
                     
+                    // आजची तारीख चेक करा
                     if(dateObj.toLocaleDateString('en-IN') === todayDateStr) {
                         isToday = true;
                     }
+                    
+                    // चालू महिना आणि वर्ष चेक करा
+                    if(dateObj.getMonth() === currentMonth && dateObj.getFullYear() === currentYear) {
+                        isThisMonth = true;
+                    }
                 }
 
-                if(isToday) {
-                    const amt = parseFloat(data.amount) || 0;
-                    const comm = parseFloat(data.commission) || 0;
+                const amt = parseFloat(data.amount) || 0;
+                const comm = parseFloat(data.commission) || 0;
 
+                // आजची कमाई आणि खर्च
+                if(isToday) {
                     if(data.service === "Shop Expense") {
                         todayExpense += amt; 
                     } else {
                         todayIncome += comm; 
                     }
+                }
+
+                // महिन्याची एकूण कमाई
+                if(isThisMonth && data.service !== "Shop Expense") {
+                    monthlyIncome += comm;
                 }
 
                 const mob = data.mobile ? data.mobile : "-";
@@ -290,13 +327,14 @@
                                 <td>${idp}</td>
                                 <td>₹ ${data.amount}</td>
                                 <td>₹ ${comDisp}</td>
-                                <td><button class="delete-btn" onclick="deleteEntry('${docId}')">Delete</button></td>
+                                <td class="no-print"><button class="delete-btn" onclick="deleteEntry('${docId}')">Delete</button></td>
                              </tr>`;
                 table.innerHTML += row;
             });
 
             document.getElementById('todayIncome').innerText = "₹ " + todayIncome;
             document.getElementById('todayExpense').innerText = "₹ " + todayExpense;
+            document.getElementById('monthlyIncome').innerText = "₹ " + monthlyIncome;
         });
     </script>
 </body>
