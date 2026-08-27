@@ -24,10 +24,11 @@
         .save-btn { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
         .save-btn:hover { background: #218838; }
         
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #007BFF; color: white; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .table-responsive { overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
+        th { background-color: #007BFF; color: white; white-space: nowrap; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .delete-btn:hover { background: #c82333; }
     </style>
 </head>
@@ -41,11 +42,11 @@
     <!-- Summary Cards -->
     <div class="summary-cards">
         <div class="card income">
-            <h4>आजची एकूण कमाई (Income)</h4>
+            <h4>आजची एकूण कमाई (कमिशन)</h4>
             <h3 id="todayIncome">₹ 0</h3>
         </div>
         <div class="card expense">
-            <h4>आजचा एकूण खर्च (Expense)</h4>
+            <h4>आजचा एकूण खर्च</h4>
             <h3 id="todayExpense">₹ 0</h3>
         </div>
     </div>
@@ -53,6 +54,7 @@
     <!-- Entry Form -->
     <div class="container">
         <h3>नवीन नोंद (New Entry)</h3>
+        
         <div class="form-group">
             <label>सर्व्हिसचा प्रकार (Service Type)</label>
             <select id="serviceType">
@@ -64,33 +66,50 @@
                 <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
             </select>
         </div>
+        
         <div class="form-group">
-            <label>रक्कम (Amount in ₹)</label>
-            <input type="number" id="amount" placeholder="उदा. 500">
+            <label>रक्कम (Transaction Amount in ₹)</label>
+            <input type="number" id="amount" placeholder="व्यवहाराची मूळ रक्कम (उदा. 5000)">
         </div>
+
         <div class="form-group">
-            <label>तपशील / ग्राहकाचे नाव (Details)</label>
+            <label>तपशील / ग्राहकाचे नाव (Customer Name/Details)</label>
             <input type="text" id="details" placeholder="ग्राहकाचे नाव किंवा सेवेची माहिती">
         </div>
+
+        <div class="form-group">
+            <label>ग्राहक मोबाईल नंबर (Mobile Number)</label>
+            <input type="tel" id="mobile" placeholder="उदा. 9876543210" maxlength="10">
+        </div>
+
+        <div class="form-group">
+            <label>मिळालेले कमिशन (Commission in ₹)</label>
+            <input type="number" id="commission" placeholder="या व्यवहारावर तुमची कमाई किती? (उदा. 50)">
+        </div>
+
         <button class="save-btn" onclick="saveEntry()">Save Entry</button>
     </div>
 
     <!-- Data Table -->
     <h3 style="margin-top: 30px;">आजचा जमा-खर्च (Recent Entries)</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>तारीख आणि वेळ</th>
-                <th>सर्व्हिस प्रकार</th>
-                <th>तपशील</th>
-                <th>रक्कम (₹)</th>
-                <th>कृती (Action)</th>
-            </tr>
-        </thead>
-        <tbody id="entriesTable">
-            <!-- Data will load here automatically -->
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>वेळ</th>
+                    <th>सर्व्हिस</th>
+                    <th>नाव/तपशील</th>
+                    <th>मोबाईल नं.</th>
+                    <th>मूळ रक्कम (₹)</th>
+                    <th>कमिशन (₹)</th>
+                    <th>कृती</th>
+                </tr>
+            </thead>
+            <tbody id="entriesTable">
+                <!-- Data will load here automatically -->
+            </tbody>
+        </table>
+    </div>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -127,20 +146,28 @@
             const service = document.getElementById('serviceType').value;
             const amount = document.getElementById('amount').value;
             const details = document.getElementById('details').value;
+            const mobile = document.getElementById('mobile').value;
+            const commission = document.getElementById('commission').value;
 
+            // दुकानाचा खर्च नसेल, तर कमिशन टाकणे गरजेचे आहे 
             if(amount === "" || details === "") {
-                alert("कृपया रक्कम आणि तपशील भरा!");
+                alert("कृपया रक्कम आणि ग्राहकाचे नाव भरा!");
                 return;
             }
 
             db.collection("transactions").add({
                 service: service,
-                amount: Number(amount), // रक्कम Number स्वरूपात सेव्ह करणे
+                amount: Number(amount),
                 details: details,
+                mobile: mobile || "-", // नंबर दिला नाही तर डॅश ( - ) सेव्ह होईल
+                commission: Number(commission) || 0, // कमिशन टाकले नाही तर शून्य (0) पकडले जाईल
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
+                // फॉर्म रिकामा करणे
                 document.getElementById('amount').value = "";
                 document.getElementById('details').value = "";
+                document.getElementById('mobile').value = "";
+                document.getElementById('commission').value = "";
             }).catch((error) => {
                 alert("Error: " + error.message);
             });
@@ -162,7 +189,7 @@
             
             let todayIncome = 0;
             let todayExpense = 0;
-            const todayDateStr = new Date().toLocaleDateString('en-IN'); // आजची तारीख
+            const todayDateStr = new Date().toLocaleDateString('en-IN'); 
 
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -175,7 +202,6 @@
                     const dateObj = data.timestamp.toDate();
                     dateStr = dateObj.toLocaleString('en-IN'); 
                     
-                    // एंट्री आजची आहे का ते चेक करणे
                     if(dateObj.toLocaleDateString('en-IN') === todayDateStr) {
                         isToday = true;
                     }
@@ -184,25 +210,30 @@
                 // आजची कमाई आणि खर्च मोजणे
                 if(isToday) {
                     const amt = parseFloat(data.amount) || 0;
+                    const comm = parseFloat(data.commission) || 0;
+
                     if(data.service === "Shop Expense") {
-                        todayExpense += amt;
+                        todayExpense += amt; // दुकानाचा खर्च असेल तर मूळ रक्कम खर्चात जाईल
                     } else {
-                        todayIncome += amt;
+                        todayIncome += comm; // इतर सर्व्हिस असेल तर कमिशनची रक्कम कमाईत जोडली जाईल
                     }
                 }
 
-                // टेबलमध्ये रो ऍड करणे (Delete बटणासहित)
+                const mob = data.mobile ? data.mobile : "-";
+                const comDisp = data.commission ? data.commission : "0";
+
                 const row = `<tr>
                                 <td>${dateStr}</td>
                                 <td>${data.service}</td>
                                 <td>${data.details}</td>
+                                <td>${mob}</td>
                                 <td>₹ ${data.amount}</td>
+                                <td>₹ ${comDisp}</td>
                                 <td><button class="delete-btn" onclick="deleteEntry('${docId}')">Delete</button></td>
                              </tr>`;
                 table.innerHTML += row;
             });
 
-            // बॉक्समध्ये टोटल रक्कम दाखवणे
             document.getElementById('todayIncome').innerText = "₹ " + todayIncome;
             document.getElementById('todayExpense').innerText = "₹ " + todayExpense;
         });
