@@ -15,6 +15,10 @@
         select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         .save-btn { background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; }
         .save-btn:hover { background: #218838; }
+        
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #007BFF; color: white; }
     </style>
 </head>
 <body>
@@ -24,40 +28,54 @@
         <button class="logout-btn" onclick="logoutUser()">Logout</button>
     </div>
 
+    <!-- Entry Form -->
     <div class="container">
         <h3>नवीन नोंद (New Entry)</h3>
-        
         <div class="form-group">
             <label>सर्व्हिसचा प्रकार (Service Type)</label>
             <select id="serviceType">
                 <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
-                <option value="Fino Payment Bank">Fino Payment Bank Transaction</option>
+                <option value="Fino Payment Bank">Fino Payment Bank</option>
                 <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
                 <option value="Printing & Xerox">Xerox / Printing / Banner</option>
                 <option value="Bill Payment">Bill Payment / Recharge</option>
                 <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
             </select>
         </div>
-
         <div class="form-group">
             <label>रक्कम (Amount in ₹)</label>
             <input type="number" id="amount" placeholder="उदा. 500">
         </div>
-
         <div class="form-group">
             <label>तपशील / ग्राहकाचे नाव (Details)</label>
             <input type="text" id="details" placeholder="ग्राहकाचे नाव किंवा सेवेची माहिती">
         </div>
-
         <button class="save-btn" onclick="saveEntry()">Save Entry</button>
     </div>
+
+    <!-- Data Table -->
+    <h3 style="margin-top: 30px;">आजचा जमा-खर्च (Recent Entries)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>तारीख आणि वेळ</th>
+                <th>सर्व्हिस प्रकार</th>
+                <th>तपशील</th>
+                <th>रक्कम (₹)</th>
+            </tr>
+        </thead>
+        <tbody id="entriesTable">
+            <!-- Data will load here automatically -->
+        </tbody>
+    </table>
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script> <!-- New DB Script -->
 
     <script>
-        // तुमचा Firebase Config कोड 
+        // तुमचा Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U",
             authDomain: "pusdekar-services.firebaseapp.com",
@@ -69,24 +87,19 @@
         };
 
         firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Database चालू करणे
 
-        // लॉगीन चेक करणे (विना लॉगीन कोणीही हे पेज उघडू शकणार नाही)
+        // लॉगीन चेक
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) {
-                window.location.href = "Login.html"; // लॉगीन नसेल तर परत लॉगीन पेजवर पाठवा
-            }
+            if (!user) { window.location.href = "login.html"; }
         });
 
-        // लॉगआऊट फंक्शन
+        // लॉगआऊट
         function logoutUser() {
-            firebase.auth().signOut().then(() => {
-                window.location.href = "Login.html";
-            }).catch((error) => {
-                alert("Logout Error!");
-            });
+            firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // एंट्री सेव्ह करण्यासाठी डमी फंक्शन (हा डेटा डेटाबेसमध्ये कसा पाठवायचा ते आपण पुढे पाहू)
+        // डेटा सेव्ह करणे (Save to Database)
         function saveEntry() {
             const service = document.getElementById('serviceType').value;
             const amount = document.getElementById('amount').value;
@@ -97,12 +110,45 @@
                 return;
             }
 
-            alert("तुमची नोंद यशस्वीरित्या सेव्ह झाली!\n\nसर्व्हिस: " + service + "\nरक्कम: ₹" + amount + "\nतपशील: " + details);
-            
-            // फॉर्म रिकामा करणे
-            document.getElementById('amount').value = "";
-            document.getElementById('details').value = "";
+            // डेटाबेस मध्ये 'transactions' नावाचे फोल्डर बनवून त्यात माहिती टाकणे
+            db.collection("transactions").add({
+                service: service,
+                amount: amount,
+                details: details,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp() // सेव्ह केलेली वेळ
+            }).then(() => {
+                alert("नोंद यशस्वीरित्या सेव्ह झाली!");
+                document.getElementById('amount').value = "";
+                document.getElementById('details').value = "";
+            }).catch((error) => {
+                alert("Error: " + error.message);
+            });
         }
+
+        // डेटाबेस मधून माहिती वाचणे आणि टेबलमध्ये दाखवणे (Read Data)
+        db.collection("transactions").orderBy("timestamp", "desc").onSnapshot((querySnapshot) => {
+            const table = document.getElementById("entriesTable");
+            table.innerHTML = ""; // जुना डेटा पुसून नवीन टाकणे
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                // वेळ आणि तारीख फॉरमॅट करणे
+                let dateStr = "Loading...";
+                if (data.timestamp) {
+                    const dateObj = data.timestamp.toDate();
+                    dateStr = dateObj.toLocaleString('en-IN'); 
+                }
+
+                const row = `<tr>
+                                <td>${dateStr}</td>
+                                <td>${data.service}</td>
+                                <td>${data.details}</td>
+                                <td>₹ ${data.amount}</td>
+                             </tr>`;
+                table.innerHTML += row;
+            });
+        });
     </script>
 </body>
 </html>
