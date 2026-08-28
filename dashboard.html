@@ -3,15 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Digital - Colorful Management System</title>
+    <title>Pusdekar Digital - Complete Management System</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; margin: 0; padding: 20px; }
         .header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0061f2, #60efff); color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .logout-btn { background: #ff3366; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .logout-btn:hover { background: #e60039; }
         
+        /* Total Balance Grand Card */
+        .grand-total-card { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .grand-total-card h4 { margin: 0 0 5px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .grand-total-card h2 { margin: 0; font-size: 32px; font-weight: bold; }
+
         /* Colorful 5 Wallet Cards */
-        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
         .w-card { background: white; padding: 18px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
         .w-card:hover { transform: translateY(-3px); }
         .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -84,6 +89,12 @@
         <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
     </div>
 
+    <!-- Grand Total Available Balance Card -->
+    <div class="grand-total-card">
+        <h4>💰 एकूण उपलब्ध बॅलन्स (Total Business Balance)</h4>
+        <h2 id="grandTotalBalance">₹ 0</h2>
+    </div>
+
     <!-- 5 Colorful Wallets & Cash Display Cards -->
     <div class="wallet-cards">
         <div class="w-card card-fino">
@@ -118,6 +129,7 @@
             <h4>आजचा एकूण खर्च</h4>
             <h3 id="todayExpense">₹ 0</h3>
         </div>
+        .card monthly h3 { color: #0061f2; margin: 0; font-size: 22px; }
         <div class="card monthly">
             <h4>या महिन्याची एकूण कमाई</h4>
             <h3 id="monthlyIncome">₹ 0</h3>
@@ -155,6 +167,7 @@
                 <label>सर्व्हिसचा प्रकार (Service Type)</label>
                 <select id="serviceType" onchange="toggleExpenseSource()">
                     <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
+                    <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
                     <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
                     <option value="Payworld Services">Payworld Services (Wallet)</option>
                     <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
@@ -170,7 +183,7 @@
             </div>
         </div>
 
-        <!-- खर्चासाठी माध्यम निवडण्याचा स्पेशल बॉक्स (फक्त खर्च निवडल्यावर दिसेल) -->
+        <!-- खर्चासाठी माध्यम निवडण्याचा बॉक्स -->
         <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff3f3; padding: 10px; border-radius: 6px; border: 1px dashed #dc3545;">
             <div class="form-group">
                 <label style="color: #dc3545; font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
@@ -316,7 +329,6 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // खर्च निवडल्यावर खर्चाचे माध्यम दाखवणे
         function toggleExpenseSource() {
             const serviceType = document.getElementById('serviceType').value;
             const expenseRow = document.getElementById('expenseSourceRow');
@@ -450,7 +462,7 @@
                 const comm = parseFloat(data.commission) || 0;
                 const src = data.expenseFrom || "Cash";
 
-                // अचूक हिशोब मोजणी (विविध वॉलेट्स आणि खर्च)
+                // अचूक हिशोब मोजणी
                 if(data.service === "Fino Opening") finoBal += amt;
                 else if(data.service === "Payworld Opening") payworldBal += amt;
                 else if(data.service === "UPI Opening") upiBal += amt;
@@ -460,13 +472,14 @@
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
                 else if(data.service === "Money Transfer") { upiBal -= amt; cashBal += amt; }
+                else if(data.service === "UPI Cash Given") { upiBal += amt; cashBal -= amt; }
                 
                 else if(data.service === "Shop Expense") {
                     if(src === "UPI") upiBal -= amt;
                     else if(src === "Fino") finoBal -= amt;
                     else if(src === "Payworld") payworldBal -= amt;
                     else if(src === "Mahapower") mahapowerBal -= amt;
-                    else cashBal -= amt; // डिफॉल्ट रोख गल्ल्यातून वजा होईल
+                    else cashBal -= amt; 
                 }
 
                 if(isToday) {
@@ -512,6 +525,10 @@
                 table.innerHTML += row;
             });
 
+            // सर्व वॉलेट्स आणि कॅशची बेरीज करून 'Grand Total' काढणे
+            const grandTotal = finoBal + payworldBal + upiBal + mahapowerBal + cashBal;
+
+            document.getElementById('grandTotalBalance').innerText = "₹ " + grandTotal;
             document.getElementById('finoBalance').innerText = "₹ " + finoBal;
             document.getElementById('payworldBalance').innerText = "₹ " + payworldBal;
             document.getElementById('upiBalance').innerText = "₹ " + upiBal;
