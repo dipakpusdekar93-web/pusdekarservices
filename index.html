@@ -1,164 +1,288 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Services | माढेळी</title>
+    <title>Pusdekar Digital - Official Portal</title>
     <style>
-        :root {
-            --primary: #1a365d;
-            --secondary: #0d6efd;
-            --accent: #ffc107;
-            --light: #f8f9fa;
-            --dark: #212529;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--light); color: var(--dark); line-height: 1.6; }
-        
-        /* Header & Brand Hierarchy */
-        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        header h1 { margin: 0; font-size: 2.5em; font-weight: bold; letter-spacing: 1px; }
-        .tagline { font-size: 1.1em; margin-top: 5px; opacity: 0.9; }
-        
-        /* Sub-Brands Bar */
-        .sub-brands { background-color: #112240; color: white; display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; padding: 12px; font-size: 0.95em; font-weight: 500; border-bottom: 3px solid var(--accent); }
-        .sub-brands span { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
 
-        /* Navigation Menu */
-        nav { display: flex; justify-content: center; background-color: var(--dark); flex-wrap: wrap; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        nav a { color: white; padding: 14px 20px; text-decoration: none; font-weight: 600; transition: 0.3s; }
-        nav a:hover { background-color: var(--secondary); color: white; }
+        /* Top Bar with Contact Info */
+        .top-bar {
+            background-color: #0043c2;
+            color: white;
+            padding: 8px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .top-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-        .container { padding: 50px 20px; max-width: 1100px; margin: auto; }
-        .section-title { text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2.2em; position: relative; }
-        .section-title::after { content: ''; width: 60px; height: 4px; background: var(--accent); display: block; margin: 10px auto 0; border-radius: 2px; }
+        /* Header & Navigation Menu */
+        header {
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+        }
+        .logo-area {
+            font-size: 22px;
+            font-weight: 900;
+            color: #0043c2;
+            letter-spacing: 0.5px;
+        }
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .nav-menu a {
+            text-decoration: none;
+            color: #475569;
+            font-weight: 700;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .nav-menu a:hover {
+            color: #0043c2;
+        }
+        .login-nav-btn {
+            background: #16a34a;
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 800 !important;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+            transition: transform 0.2s;
+        }
+        .login-nav-btn:hover {
+            background: #15803d !important;
+            transform: translateY(-2px);
+        }
 
-        /* Grid Layouts */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; }
-        .service-card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.06); text-align: center; border-top: 5px solid var(--secondary); transition: transform 0.3s, box-shadow 0.3s; }
-        .service-card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(0,0,0,0.12); }
-        .service-card .icon { font-size: 3em; margin-bottom: 15px; display: inline-block; }
-        .service-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.4em; }
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0043c2, #0080ff);
+            color: white;
+            padding: 60px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        .hero-content h1 {
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            font-weight: 900;
+        }
+        .hero-content p {
+            font-size: 18px;
+            margin: 0 0 20px 0;
+            opacity: 0.9;
+        }
+        .hero-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
 
-        /* Highlight Section for 3 Main Pillars */
-        .pillars-section { background: white; padding: 40px 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 40px; }
-        .pillars-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: center; }
-        .pillar-box { background: #f1f5f9; padding: 25px; border-radius: 10px; border-left: 5px solid var(--primary); }
-        .pillar-box h4 { color: var(--primary); margin-top: 0; font-size: 1.2em; }
+        /* Founder Card on Hero */
+        .hero-card {
+            background: white;
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            min-width: 320px;
+        }
+        .founder-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #0043c2;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .founder-info h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #0f172a;
+        }
+        .founder-info p {
+            margin: 4px 0 0 0;
+            font-size: 13px;
+            color: #64748b;
+        }
 
-        /* Contact Section */
-        .contact-box { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; max-width: 600px; margin: auto; }
-        .contact-box p { font-size: 1.1em; margin: 12px 0; }
+        /* Services Section */
+        .section-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            font-weight: 900;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 40px;
+        }
 
-        footer { background-color: var(--dark); color: white; text-align: center; padding: 20px 0; margin-top: 40px; font-size: 0.9em; }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .service-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-top: 5px solid #0043c2;
+            transition: transform 0.2s;
+        }
+        .service-box:hover {
+            transform: translateY(-5px);
+        }
+        .service-box h3 {
+            margin-top: 0;
+            color: #0043c2;
+            font-size: 18px;
+        }
+        .service-box p {
+            color: #475569;
+            font-size: 13px;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
 
-        /* WhatsApp Floating Button */
-        .whatsapp-btn { position: fixed; bottom: 30px; right: 30px; background-color: #25D366; color: white; padding: 15px; border-radius: 50%; font-size: 30px; text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s; z-index: 1000; display: flex; align-items: center; justify-content: center; width: 65px; height: 65px; }
-        .whatsapp-btn:hover { background-color: #1ebe5d; transform: scale(1.1); }
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            margin-top: 60px;
+        }
+        footer strong {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
+            .hero { padding: 40px 20px; text-align: center; }
+            .hero-card { width: 100%; box-sizing: border-box; }
+            .top-bar { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Main Header -->
+    <div class="top-bar">
+        <span>📞 WhatsApp: 8007601734</span>
+        <span>✉️ Email: sgskscsc@gmail.com</span>
+        <span>📍 पत्ता: सि.डी.सी.सी. बँक समोर, माढेळी</span>
+    </div>
+
     <header>
-        <h1>Pusdekar Services</h1>
-        <div class="tagline">आपली विश्वासार्ह डिजिटल, वित्तीय आणि व्यावसायिक सेवा</div>
+        <div class="logo-area">Pusdekar Digital</div>
+        <div class="nav-menu">
+            <a href="#">Home</a>
+            <a href="#services">Services</a>
+            <a href="#about">About Us</a>
+            <a href="#contact">Contact</a>
+            <a href="Login.html" class="login-nav-btn">Admin Login</a>
+        </div>
     </header>
 
-    <!-- Sub-Brands Bar requested by you -->
-    <div class="sub-brands">
-        <span>⭐ 1. Pusdekar Online Center</span>
-        <span>⭐ 2. Swaraj Vima Seva Kendra</span>
-        <span>⭐ 3. Shree Gurukripa RealEstate Advisor</span>
-    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">✨ अधिकृत डिजिटल व सेतू केंद्र</div>
+            <h1>Connecting Villages to the Digital World...</h1>
+            <p>आपल्या दुकानात सर्व प्रकारचे शासकीय अर्ज, बँकिंग सेवा आणि डिजिटल पेमेंट्स योग्य दरात उपलब्ध आहेत.</p>
+        </div>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#divisions">Our Divisions</a>
-        <a href="#services">All Services</a>
-        <a href="#contact">Contact</a>
-    </nav>
-
-    <!-- Home / Welcome Section -->
-    <div class="container" id="home">
-        <h2 class="section-title">स्वागत आहे!</h2>
-        <div class="pillars-section">
-            <p style="text-align: center; font-size: 1.2em; max-width: 800px; margin: 0 auto 30px auto;">
-                माढेळी येथील सि.डी.सी.सी. बँक समोरील आमचे केंद्र ग्राहकांना एकाच छताखाली सर्वोत्कृष्ट सेवा देण्यासाठी कटिबद्ध आहे. आमच्या अंतर्गत चालणारे प्रमुख तीन विभाग खालीलप्रमाणे आहेत:
-            </p>
-            <div class="pillars-list">
-                <div class="pillar-box">
-                    <h4>1. Pusdekar Online Center</h4>
-                    <p>सर्व प्रकारचे ऑनलाईन अर्ज, डिजिटल सेवा, मनी ट्रान्सफर आणि प्रिंटिंग कामे.</p>
-                </div>
-                <div class="pillar-box">
-                    <h4>2. Swaraj Vima Seva Kendra</h4>
-                    <p>LIC विमा पॉलिसी, आणि सर्व प्रकारच्या इन्शुरन्स संबंधित तज्ज्ञ मार्गदर्शन.</p>
-                </div>
-                <div class="pillar-box">
-                    <h4>3. Shree Gurukripa RealEstate Advisor</h4>
-                    <p>जमीन, प्लॉट व घरांची कायदेशीर आणि खात्रीशीर खरेदी-विक्री सल्ला.</p>
-                </div>
+        <div class="hero-card">
+            <img src="my-photo.jpg" alt="Founder Photo" class="founder-img" onerror="this.src='https://www.svgrepo.com/show/452092/avatar.svg'">
+            <div class="founder-info">
+                <h3>दिपक श. पुसदेकर</h3>
+                <p><strong>प्रोप्राप्रायटर</strong></p>
+                <p>Pusdekar Digital, माढेळी</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Services Grid -->
-    <div class="container" id="services" style="padding-top: 0;">
-        <h2 class="section-title">आमच्या प्रमुख सेवा</h2>
+    <div class="section-container" id="services">
+        <div class="section-title">आमच्या प्रमुख सेवा</div>
+        <div class="section-subtitle">दुकानात उपलब्ध असलेल्या विविध शासकीय व बँकिंग सेवा</div>
+
         <div class="services-grid">
-            <div class="service-card">
-                <div class="icon">💳</div>
-                <h3>Banking & Fino Services</h3>
-                <p>Fino Payment Bank खाती, मनी ट्रान्सफर (PhonePe, Google Pay), आधार कार्डद्वारे पैसे काढणे व कॅश डिपॉझिट.</p>
+            <div class="service-box">
+                <h3>⚡ आपले सरकार सेतू केंद्र</h3>
+                <p>सर्व प्रकारचे शासकीय दाखले, प्रमाणपत्रे आणि ऑनलाईन अर्ज योग्य वेळेत करून मिळतील.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">📄</div>
-                <h3>Online Documentation</h3>
-                <p>नवीन PAN Card, आधार अपडेट्स, शासकीय कागदपत्रे आणि विविध ऑनलाईन फॉर्म भरण्याची सुविधा.</p>
+            <div class="service-box">
+                <h3>📜 Cast Validity</h3>
+                <p>कास्ट व्हॅलिडिटी (जात प्रमाणपत्र पडताळणी) साठी कागदपत्रे व ऑनलाईन फाईल सेवा.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">🛡️</div>
-                <h3>Swaraj Vima Seva (LIC)</h3>
-                <p>कुटुंबाच्या सुरक्षेसाठी LIC विमा योजना, नवीन पॉलिसी आणि पॉलिसी संबंधित सर्व सेवा.</p>
+            <div class="service-box">
+                <h3>✍️ राजपत्र (Gazette / नाव बदल)</h3>
+                <p>गॅझेटद्वारे नावात बदल, जन्मतारीख किंवा आडनाव बदलण्याची संपूर्ण प्रक्रिया.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">🏡</div>
-                <h3>Shree Gurukripa RealEstate</h3>
-                <p>माढेळी व परिसर परिसरातील शेतजमीन, प्लॉट, घरे खरेदी-विक्रीसाठी योग्य आणि पारदर्शक मार्गदर्शन.</p>
+            <div class="service-box">
+                <h3>💡 नवीन मीटर कनेक्शन</h3>
+                <p>महावितरण अंतर्गत नवीन वीज मीटर जोडणीसाठी ऑनलाईन अर्ज व पाठपुरावा सेवा.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">🖨️</div>
-                <h3>Digital Printing & Xerox</h3>
-                <p>झेरॉक्स, कलर प्रिंटीउट, डिजिटल लग्नपत्रिका, बॅनर्स आणि डिझायनिंगचे सर्व काम.</p>
+            <div class="service-box">
+                <h3>💸 AEPS & Money Transfer</h3>
+                <p>आधार कार्डद्वारे पैसे काढणे (AEPS), फिफो बँक सेवा आणि मोबाईलद्वारे मनी ट्रान्सफर.</p>
             </div>
-            <div class="service-card">
-                <div class="icon">📞</div>
-                <h3>Customer Support</h3>
-                <p>ग्राहकांसाठी तत्पर सेवा आणि प्रत्येक कामात पारदर्शकता हेच आमचे मुख्य वैशिष्ट्य आहे.</p>
+            <div class="service-box">
+                <h3>🪪 PAN & Aadhaar Services</h3>
+                <p>नवीन पॅन कार्ड काढणे, आधार अपडेट्स आणि सर्व प्रकारच्या प्रिंटिंग व झेरॉक्स सुविधा.</p>
             </div>
         </div>
     </div>
 
-    <!-- Contact Section -->
-    <div class="container" id="contact" style="padding-top: 0;">
-        <h2 class="section-title">संपर्क करा</h2>
-        <div class="contact-box">
-            <p>📍 <strong>पत्ता:</strong> सि.डी.सी.सी. बँक समोर, माढेळी</p>
-            <p>📞 <strong>मोबाईल / WhatsApp:</strong> +91 8007601734</p>
-            <p>✉️ <strong>ईमेल:</strong> dipakpusdekar@gmail.com</p>
-            <p style="margin-top: 20px; color: var(--secondary); font-weight: bold;">तुम्हाला कधीही, कोणत्याही सर्विससाठी लागलीच मेसेज करू शकता!</p>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2026 Pusdekar Services (Pusdekar Digital). All Rights Reserved.</p>
+    <footer id="contact">
+        <p>&copy; 2026 <strong>Pusdekar Digital</strong> (Pusdekar Online Center). All Rights Reserved.</p>
+        <p>सि.डी.सी.सी. बँक समोर, माढेळी | संपर्क: 8007601734</p>
     </footer>
-
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/918007601734" class="whatsapp-btn" target="_blank" title="WhatsApp वर मेसेज करा">💬</a>
 
 </body>
 </html>
