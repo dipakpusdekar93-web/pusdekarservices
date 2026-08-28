@@ -7,109 +7,282 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0061f2, #60efff);
+            background: linear-gradient(135deg, #0052cc, #4389f2);
             margin: 0;
-            padding: 0;
+            padding: 15px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
-        .login-card {
+
+        /* Main Wrapper Box */
+        .main-wrapper {
             background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             width: 100%;
-            max-width: 380px;
-            text-align: center;
+            max-width: 900px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-wrap: wrap;
         }
-        .login-card h2 {
-            margin-bottom: 10px;
-            color: #333;
+
+        /* Left Side: Shop Branding & Details */
+        .shop-info-side {
+            flex: 1.3;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .shop-info-side h1 {
+            color: #0052cc;
             font-size: 24px;
+            margin: 0 0 3px 0;
+            font-weight: 800;
         }
-        .login-card p {
+
+        .shop-info-side h3 {
+            color: #495057;
+            font-size: 14px;
+            margin: 0 0 12px 0;
+            font-weight: 600;
+        }
+
+        .shop-details {
+            font-size: 12px;
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .shop-details p {
+            margin: 4px 0;
+        }
+
+        /* Services Tags Section */
+        .services-tags {
+            margin-bottom: 12px;
+        }
+        .services-tags h4 {
+            margin: 0 0 5px 0;
+            font-size: 12px;
+            color: #0052cc;
+            text-transform: uppercase;
+        }
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .tag {
+            background: #e2e8f0;
+            color: #333;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Logo / Partner Badges at Bottom */
+        .partner-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px dashed #ccc;
+        }
+        .badge {
+            background: #fff;
+            border: 1px solid #cbd5e1;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        /* Sliding Running Ticker */
+        .ticker-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            border: 1px dashed #ffeeba;
+            margin-top: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-box marquee { width: 100%; }
+
+        /* Right Side: Login Corner Tab */
+        .login-side {
+            flex: 1;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: white;
+        }
+
+        .login-side h2 {
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .login-side p {
             color: #666;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-        .form-group {
+            font-size: 12px;
             margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
             text-align: left;
         }
+
         label {
             display: block;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             color: #444;
-            font-size: 13px;
+            font-size: 12px;
         }
+
         input {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             border: 1px solid #ccc;
-            border-radius: 8px;
+            border-radius: 6px;
             box-sizing: border-box;
-            font-size: 14px;
+            font-size: 13px;
             transition: border-color 0.2s;
         }
+
         input:focus {
-            border-color: #0061f2;
+            border-color: #0052cc;
             outline: none;
         }
+
         .login-btn {
-            background: linear-gradient(135deg, #0061f2, #0043c2);
+            background: #28a745;
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 8px;
+            padding: 11px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             width: 100%;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(0, 97, 242, 0.3);
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
             transition: transform 0.2s;
         }
+
         .login-btn:hover {
-            transform: translateY(-2px);
+            background: #218838;
+            transform: translateY(-1px);
         }
+
         #errorMsg {
-            color: #ff3366;
-            font-size: 13px;
-            margin-top: 15px;
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 10px;
             font-weight: bold;
             display: none;
         }
-        .brand-footer {
-            margin-top: 25px;
-            font-size: 12px;
+
+        .footer-note {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 11px;
             color: #888;
+        }
+
+        /* Responsive design for mobile */
+        @media (max-width: 768px) {
+            .main-wrapper { flex-direction: column; }
+            .shop-info-side { border-right: none; border-bottom: 1px solid #dee2e6; padding: 20px; }
+            .login-side { padding: 25px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="login-card">
-        <h2>Pusdekar Digital</h2>
-        <p>प्रवेश करण्यासाठी तुमचा ईमेल आणि पासवर्ड टाका</p>
-        
-        <div class="form-group">
-            <label>Registered Email</label>
-            <input type="email" id="email" placeholder="email@example.com">
+    <div class="main-wrapper">
+        <!-- Left Side: Shop Branding & Details -->
+        <div class="shop-info-side">
+            <div>
+                <h1>PUSDEKAR DIGITAL</h1>
+                <h3>(Pusdekar Online Center)</h3>
+                
+                <div class="shop-details">
+                    <p>📍 <strong>पत्ता:</strong> सि.डी.सी.सी. बँक समोर, माढेळी</p>
+                    <p>📞 <strong>WhatsApp:</strong> 8007601734</p>
+                    <p>✉️ <strong>Email:</strong> sgskscsc@gmail.com</p>
+                </div>
+
+                <!-- Services Tags -->
+                <div class="services-tags">
+                    <h4>प्रमुख डिजिटल व शासकीय सेवा:</h4>
+                    <div class="tag-list">
+                        <span class="tag">आपले सरकार सेतू केंद्र</span>
+                        <span class="tag">Cast Validity</span>
+                        <span class="tag">राजपत्र (नाव बदल)</span>
+                        <span class="tag">नवीन मीटर कनेक्शन</span>
+                        <span class="tag">AEPS & Money Transfer</span>
+                        <span class="tag">PAN & Aadhaar Services</span>
+                        <span class="tag">Bill Payments</span>
+                    </div>
+                </div>
+
+                <!-- Partner Badges (LIC, Bank, Aadhaar, PAN, AEPS) -->
+                <div class="partner-badges">
+                    <span class="badge">🏦 Bank Services</span>
+                    <span class="badge">💳 AEPS</span>
+                    <span class="badge">🛡️ LIC</span>
+                    <span class="badge">🆔 Aadhaar</span>
+                    <span class="badge">📄 PAN Card</span>
+                    <span class="badge">⚡ Mahavitaran</span>
+                </div>
+            </div>
+
+            <!-- Sliding Running Ticker -->
+            <div class="ticker-box">
+                <marquee behavior="scroll" direction="left">✨ आपले सरकार सेतू केंद्र, कास्ट व्हॅलिडिटी, राजपत्र आणि सर्व बँकिंग सेवा योग्य व दरात उपलब्ध! स्वागत आहे... ✨</marquee>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="password" placeholder="••••••••">
-        </div>
+        <!-- Right Side: Login Tab -->
+        <div class="login-side">
+            <h2>Admin Login</h2>
+            <p>डॅशबोर्डमध्ये प्रवेश करण्यासाठी माहिती भरा</p>
+            
+            <div class="form-group">
+                <label>Admin Email</label>
+                <input type="email" id="email" placeholder="email@example.com" value="sgskscsc@gmail.com">
+            </div>
 
-        <button class="login-btn" onclick="loginUser()">Login to Dashboard</button>
-        
-        <div id="errorMsg"></div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
 
-        <div class="brand-footer">
-            Secure Management System
+            <button class="login-btn" onclick="loginUser()">Login Securely</button>
+            
+            <div id="errorMsg"></div>
+
+            <div class="footer-note">
+                Secured Cloud System
+            </div>
         </div>
     </div>
 
@@ -130,7 +303,6 @@
 
         firebase.initializeApp(firebaseConfig);
 
-        // जर आधीच लॉगिन असेल तर थेट डॅशबोर्डवर पाठवा
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 window.location.href = "dashboard.html";
@@ -149,11 +321,10 @@
             }
 
             firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // यशस्वी लॉगिन झाल्यावर डॅशबोर्डवर जाईल
+                .then(() => {
                     window.location.href = "dashboard.html";
                 })
-                .catch((error) => {
+                .catch(() => {
                     errorMsg.innerText = "चुकीचा ईमेल किंवा पासवर्ड! पुन्हा प्रयत्न करा.";
                     errorMsg.style.display = "block";
                 });
