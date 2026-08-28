@@ -3,25 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Pusdekar Services</title>
+    <title>Login - Pusdekar Digital</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; margin: 0; }
-        .login-box { background: white; padding: 30px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); width: 100%; max-width: 320px; text-align: center; }
-        .login-box h2 { margin-bottom: 20px; color: #333; }
-        input { width: 90%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
-        button { width: 100%; padding: 10px; background: #007BFF; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0056b3; }
-        #error-message { color: red; font-size: 14px; margin-top: 10px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0061f2, #60efff);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+        }
+        .login-card h2 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 24px;
+        }
+        .login-card p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 13px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        input:focus {
+            border-color: #0061f2;
+            outline: none;
+        }
+        .login-btn {
+            background: linear-gradient(135deg, #0061f2, #0043c2);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 97, 242, 0.3);
+            transition: transform 0.2s;
+        }
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+        #errorMsg {
+            color: #ff3366;
+            font-size: 13px;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+        .brand-footer {
+            margin-top: 25px;
+            font-size: 12px;
+            color: #888;
+        }
     </style>
 </head>
 <body>
 
-    <div class="login-box">
-        <h2>Shop Login</h2>
-        <input type="email" id="email" placeholder="Email Address" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button onclick="loginUser()">Login</button>
-        <p id="error-message"></p>
+    <div class="login-card">
+        <h2>Pusdekar Digital</h2>
+        <p>प्रवेश करण्यासाठी तुमचा ईमेल आणि पासवर्ड टाका</p>
+        
+        <div class="form-group">
+            <label>Registered Email</label>
+            <input type="email" id="email" placeholder="email@example.com">
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="••••••••">
+        </div>
+
+        <button class="login-btn" onclick="loginUser()">Login to Dashboard</button>
+        
+        <div id="errorMsg"></div>
+
+        <div class="brand-footer">
+            Secure Management System
+        </div>
     </div>
 
     <!-- Firebase SDKs -->
@@ -29,7 +118,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
     <script>
-        // तुमचा Firebase Config कोड 
         const firebaseConfig = {
             apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U",
             authDomain: "pusdekar-services.firebaseapp.com",
@@ -40,23 +128,34 @@
             measurementId: "G-7F82VD9WM9"
         };
 
-        // Firebase Initialize करणे
         firebase.initializeApp(firebaseConfig);
 
+        // जर आधीच लॉगिन असेल तर थेट डॅशबोर्डवर पाठवा
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = "dashboard.html";
+            }
+        });
+
         function loginUser() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMessage = document.getElementById('error-message');
-            
-            errorMessage.innerText = "Checking...";
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMsg = document.getElementById('errorMsg');
+
+            if (!email || !password) {
+                errorMsg.innerText = "कृपया ईमेल आणि पासवर्ड दोन्ही भरा!";
+                errorMsg.style.display = "block";
+                return;
+            }
 
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    alert("Login Successful!");
-                    window.location.href = "dashboard.html"; 
+                    // यशस्वी लॉगिन झाल्यावर डॅशबोर्डवर जाईल
+                    window.location.href = "dashboard.html";
                 })
                 .catch((error) => {
-                    errorMessage.innerText = "Error: चुकीचा ईमेल किंवा पासवर्ड.";
+                    errorMsg.innerText = "चुकीचा ईमेल किंवा पासवर्ड! पुन्हा प्रयत्न करा.";
+                    errorMsg.style.display = "block";
                 });
         }
     </script>
