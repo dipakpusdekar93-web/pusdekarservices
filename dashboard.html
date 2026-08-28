@@ -17,7 +17,6 @@
         .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
         .w-card h3 { margin: 0; font-size: 22px; font-weight: bold; }
 
-        /* Specific Card Theme Colors */
         .card-fino { border-top: 5px solid #0052cc; background: linear-gradient(to bottom, #ffffff, #f0f4ff); }
         .card-fino h4 { color: #0052cc; }
         
@@ -33,7 +32,6 @@
         .card-cash { border-top: 5px solid #28a745; background: linear-gradient(to bottom, #ffffff, #f0fff4); }
         .card-cash h4 { color: #28a745; }
 
-        /* Summary Income Cards */
         .summary-cards { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
         .card { background: white; padding: 15px; border-radius: 12px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .card h4 { margin: 0 0 8px 0; color: #555; font-size: 14px; }
@@ -62,14 +60,12 @@
         th, td { border: 1px solid #eee; padding: 12px; text-align: left; font-size: 13px; }
         th { background-color: #0061f2; color: white; white-space: nowrap; }
         
-        /* Green and Red Transaction Highlights */
         .text-green { color: #28a745; font-weight: bold; }
         .text-red { color: #dc3545; font-weight: bold; }
 
         .delete-btn { background: #ff3366; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
         .delete-btn:hover { background: #e60039; }
 
-        /* Print Settings */
         @media print {
             .no-print { display: none !important; }
             body { padding: 0; background-color: white; }
@@ -131,8 +127,6 @@
     <!-- Morning Opening Balance / Wallet Adjustment Form -->
     <div class="container no-print" style="border-left: 5px solid #17a2b8;">
         <h3 style="margin-top: 0; color: #17a2b8;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
-        <p style="font-size: 13px; color: #666;">दुकान सुरू करताना किंवा वॉलेटमध्ये नवीन रक्कम ॲड करण्यासाठी:</p>
-        
         <div class="form-row">
             <div class="form-group">
                 <label>कोणते वॉलेट किंवा गल्ला निवडा</label>
@@ -144,7 +138,6 @@
                     <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                 </select>
             </div>
-            
             <div class="form-group">
                 <label>रक्कम टाका (Amount in ₹) *</label>
                 <input type="number" id="adjAmount" placeholder="उदा. 5000">
@@ -160,7 +153,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label>सर्व्हिसचा प्रकार (Service Type)</label>
-                <select id="serviceType">
+                <select id="serviceType" onchange="toggleExpenseSource()">
                     <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                     <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
                     <option value="Payworld Services">Payworld Services (Wallet)</option>
@@ -174,6 +167,20 @@
             <div class="form-group">
                 <label>रक्कम (Transaction Amount in ₹) *</label>
                 <input type="number" id="amount" placeholder="व्यवहाराची मूळ रक्कम">
+            </div>
+        </div>
+
+        <!-- खर्चासाठी माध्यम निवडण्याचा स्पेशल बॉक्स (फक्त खर्च निवडल्यावर दिसेल) -->
+        <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff3f3; padding: 10px; border-radius: 6px; border: 1px dashed #dc3545;">
+            <div class="form-group">
+                <label style="color: #dc3545; font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
+                <select id="expenseSource">
+                    <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                    <option value="UPI">UPI Wallet (बँक अकाउंट)</option>
+                    <option value="Fino">Fino Wallet</option>
+                    <option value="Payworld">Payworld Wallet</option>
+                    <option value="Mahapower">Mahapower Wallet</option>
+                </select>
             </div>
         </div>
 
@@ -223,7 +230,7 @@
 
             <div class="form-group">
                 <label>व्यवहाराचे कारण (Purpose)</label>
-                <input type="text" id="purpose" placeholder="उदा. फी भरणे, घरखर्च, इ.">
+                <input type="text" id="purpose" placeholder="उदा. चहापाणी, वीज बिल, इ.">
             </div>
         </div>
 
@@ -269,7 +276,7 @@
                     <th>सर्व्हिस</th>
                     <th>नाव</th>
                     <th>मोबाईल</th>
-                    <th>पत्ता (गाव, जिल्हा, राज्य)</th>
+                    <th>पत्ता</th>
                     <th>स्थिती</th>
                     <th>कारण</th>
                     <th>पॅन/आधार</th>
@@ -278,9 +285,7 @@
                     <th class="no-print">कृती</th>
                 </tr>
             </thead>
-            <tbody id="entriesTable">
-                <!-- Data will load here dynamically -->
-            </tbody>
+            <tbody id="entriesTable"></tbody>
         </table>
     </div>
 
@@ -311,29 +316,34 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
+        // खर्च निवडल्यावर खर्चाचे माध्यम दाखवणे
+        function toggleExpenseSource() {
+            const serviceType = document.getElementById('serviceType').value;
+            const expenseRow = document.getElementById('expenseSourceRow');
+            if(serviceType === "Shop Expense") {
+                expenseRow.style.display = "flex";
+            } else {
+                expenseRow.style.display = "none";
+            }
+        }
+
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value;
             const searchMsg = document.getElementById('searchMsg');
             
             if (mobile.length === 10) {
-                db.collection("transactions")
-                  .where("mobile", "==", mobile)
-                  .limit(1)
-                  .get()
-                  .then((querySnapshot) => {
-                      if (!querySnapshot.empty) {
-                          const data = querySnapshot.docs[0].data();
-                          document.getElementById('details').value = data.details || "";
-                          document.getElementById('villageInput').value = data.village || "";
-                          document.getElementById('districtInput').value = data.district || "";
-                          if(data.state) { document.getElementById('stateSelect').value = data.state; }
-                          if(data.idProof && data.idProof !== "-") {
-                              document.getElementById('idProof').value = data.idProof;
-                          }
-                          searchMsg.style.display = "block";
-                          setTimeout(() => { searchMsg.style.display = "none"; }, 3000);
-                      }
-                  });
+                db.collection("transactions").where("mobile", "==", mobile).limit(1).get().then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        const data = querySnapshot.docs[0].data();
+                        document.getElementById('details').value = data.details || "";
+                        document.getElementById('villageInput').value = data.village || "";
+                        document.getElementById('districtInput').value = data.district || "";
+                        if(data.state) { document.getElementById('stateSelect').value = data.state; }
+                        if(data.idProof && data.idProof !== "-") { document.getElementById('idProof').value = data.idProof; }
+                        searchMsg.style.display = "block";
+                        setTimeout(() => { searchMsg.style.display = "none"; }, 3000);
+                    }
+                });
             }
         }
 
@@ -346,6 +356,7 @@
             db.collection("transactions").add({
                 service: adjWallet,
                 amount: Number(amount),
+                expenseFrom: "-",
                 details: "Opening/Adjustment",
                 mobile: "-", district: "-", village: "-", state: "-",
                 payStatus: "Paid", purpose: "Wallet Adjustment", idProof: "-",
@@ -360,6 +371,7 @@
         function saveEntry() {
             const service = document.getElementById('serviceType').value;
             const amount = document.getElementById('amount').value;
+            const expenseSource = service === "Shop Expense" ? document.getElementById('expenseSource').value : "-";
             const details = document.getElementById('details').value;
             const mobile = document.getElementById('mobile').value;
             const state = document.getElementById('stateSelect').value;
@@ -372,12 +384,12 @@
 
             if(amount === "" || details === "") { alert("कृपया रक्कम आणि ग्राहकाचे नाव नक्की भरा!"); return; }
 
-            if (service === "Money Transfer" && Number(amount) > 10000 && idProof.trim() === "") {
-                alert("₹10,000+ मनी ट्रान्सफरसाठी पॅन किंवा आधार क्रमांक आवश्यक आहे!"); return; 
-            }
-
             db.collection("transactions").add({
-                service, amount: Number(amount), details, mobile: mobile || "-", 
+                service, 
+                amount: Number(amount), 
+                expenseFrom: expenseSource,
+                details, 
+                mobile: mobile || "-", 
                 state: state || "-", district: district || "-", village: village || "-", 
                 payStatus, purpose: purpose || "-", idProof: idProof || "-",
                 commission: Number(commission) || 0, 
@@ -391,6 +403,8 @@
                 document.getElementById('purpose').value = "";
                 document.getElementById('idProof').value = "";
                 document.getElementById('commission').value = "";
+                document.getElementById('expenseSourceRow').style.display = "none";
+                document.getElementById('serviceType').selectedIndex = 0;
             }).catch((error) => { alert("Error: " + error.message); });
         }
 
@@ -434,17 +448,26 @@
 
                 const amt = parseFloat(data.amount) || 0;
                 const comm = parseFloat(data.commission) || 0;
+                const src = data.expenseFrom || "Cash";
 
-                // हिशोब मोजणी
+                // अचूक हिशोब मोजणी (विविध वॉलेट्स आणि खर्च)
                 if(data.service === "Fino Opening") finoBal += amt;
                 else if(data.service === "Payworld Opening") payworldBal += amt;
                 else if(data.service === "UPI Opening") upiBal += amt;
                 else if(data.service === "Mahapower Opening") mahapowerBal += amt;
                 else if(data.service === "Cash Opening") cashBal += amt;
+                
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
                 else if(data.service === "Money Transfer") { upiBal -= amt; cashBal += amt; }
-                else if(data.service === "Shop Expense") { cashBal -= amt; }
+                
+                else if(data.service === "Shop Expense") {
+                    if(src === "UPI") upiBal -= amt;
+                    else if(src === "Fino") finoBal -= amt;
+                    else if(src === "Payworld") payworldBal -= amt;
+                    else if(src === "Mahapower") mahapowerBal -= amt;
+                    else cashBal -= amt; // डिफॉल्ट रोख गल्ल्यातून वजा होईल
+                }
 
                 if(isToday) {
                     if(data.service === "Shop Expense") todayExpense += amt; 
@@ -464,19 +487,18 @@
 
                 const status = data.payStatus === "Udhar" ? "<span style='color:red; font-weight:bold;'>Udhar</span>" : "Paid";
                 
-                // + आणि - नुसार हिरवा आणि लाल रंग देणे
                 let amtDisplay = `₹ ${data.amount}`;
-                let commDisplay = `₹ ${data.commission || 0}`;
+                let serviceDisplay = data.service;
 
                 if(data.service === "Shop Expense") {
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${src})</span>`;
                 } else if(!data.service.includes("Opening")) {
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
                 }
 
                 const row = `<tr>
                                 <td>${dateStr}</td>
-                                <td>${data.service}</td>
+                                <td>${serviceDisplay}</td>
                                 <td>${data.details}</td>
                                 <td>${mob}</td>
                                 <td>${fullAddress}</td>
@@ -484,7 +506,7 @@
                                 <td>${data.purpose || "-"}</td>
                                 <td>${data.idProof || "-"}</td>
                                 <td>${amtDisplay}</td>
-                                <td class="text-green">+ ${commDisplay}</td>
+                                <td class="text-green">+ ₹ ${data.commission || 0}</td>
                                 <td class="no-print"><button class="delete-btn" onclick="deleteEntry('${data.id}')">Delete</button></td>
                              </tr>`;
                 table.innerHTML += row;
@@ -514,7 +536,6 @@
             }));
         }
 
-        function resetFileter() { resetFilter(); }
         function resetFilter() {
             document.getElementById('fromDate').value = "";
             document.getElementById('toDate').value = "";
