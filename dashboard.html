@@ -3,56 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Digital - Complete Management System</title>
+    <title>Pusdekar Digital - Colorful Management System</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: #007BFF; color: white; padding: 10px 20px; border-radius: 8px; }
-        .logout-btn { background: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; }
-        .logout-btn:hover { background: #c82333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; margin: 0; padding: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0061f2, #60efff); color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .logout-btn { background: #ff3366; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
+        .logout-btn:hover { background: #e60039; }
         
-        /* 4 Wallets & Cash Highlight Cards */
-        .wallet-cards { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-        .w-card { background: white; padding: 15px; border-radius: 8px; flex: 1; min-width: 180px; text-align: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); border-top: 4px solid #007BFF; }
-        .w-card h4 { margin: 0 0 8px 0; color: #555; font-size: 14px; }
-        .w-card h3 { margin: 0; font-size: 22px; color: #333; }
+        /* Colorful 5 Wallet Cards */
+        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 20px; }
+        .w-card { background: white; padding: 18px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
+        .w-card:hover { transform: translateY(-3px); }
+        .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .w-card h3 { margin: 0; font-size: 22px; font-weight: bold; }
+
+        /* Specific Card Theme Colors */
+        .card-fino { border-top: 5px solid #0052cc; background: linear-gradient(to bottom, #ffffff, #f0f4ff); }
+        .card-fino h4 { color: #0052cc; }
+        
+        .card-payworld { border-top: 5px solid #ff9900; background: linear-gradient(to bottom, #ffffff, #fffdf0); }
+        .card-payworld h4 { color: #b36b00; }
+
+        .card-upi { border-top: 5px solid #6f42c1; background: linear-gradient(to bottom, #ffffff, #f8f4ff); }
+        .card-upi h4 { color: #6f42c1; }
+
+        .card-mahapower { border-top: 5px solid #17a2b8; background: linear-gradient(to bottom, #ffffff, #eef9fb); }
+        .card-mahapower h4 { color: #17a2b8; }
+
+        .card-cash { border-top: 5px solid #28a745; background: linear-gradient(to bottom, #ffffff, #f0fff4); }
+        .card-cash h4 { color: #28a745; }
 
         /* Summary Income Cards */
         .summary-cards { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        .card { background: white; padding: 15px; border-radius: 8px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        .card { background: white; padding: 15px; border-radius: 12px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .card h4 { margin: 0 0 8px 0; color: #555; font-size: 14px; }
         .card.income h3 { color: #28a745; margin: 0; font-size: 22px; }
         .card.expense h3 { color: #dc3545; margin: 0; font-size: 22px; }
-        .card.monthly h3 { color: #17a2b8; margin: 0; font-size: 22px; }
+        .card.monthly h3 { color: #0061f2; margin: 0; font-size: 22px; }
 
-        .container { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); }
+        .container { background: white; padding: 25px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
         .form-group { flex: 1; min-width: 220px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #333; font-size: 13px; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .save-btn { background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 13px; }
+        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        
+        .save-btn { background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
         .save-btn:hover { background: #218838; }
 
-        .adj-btn { background: #17a2b8; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
+        .adj-btn { background: #17a2b8; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
         .adj-btn:hover { background: #138496; }
         
-        .filter-section { background: white; padding: 15px 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
-        .print-btn { background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; height: 41px; }
+        .filter-section { background: white; padding: 15px 25px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .print-btn { background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; height: 41px; }
         .print-btn:hover { background: #5a6268; }
 
-        .table-responsive { overflow-x: auto; margin-top: 20px; }
-        table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); min-width: 1000px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
-        th { background-color: #007BFF; color: white; white-space: nowrap; }
-        .delete-btn { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .delete-btn:hover { background: #c82333; }
+        .table-responsive { overflow-x: auto; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        table { width: 100%; border-collapse: collapse; background: white; min-width: 1000px; }
+        th, td { border: 1px solid #eee; padding: 12px; text-align: left; font-size: 13px; }
+        th { background-color: #0061f2; color: white; white-space: nowrap; }
+        
+        /* Green and Red Transaction Highlights */
+        .text-green { color: #28a745; font-weight: bold; }
+        .text-red { color: #dc3545; font-weight: bold; }
+
+        .delete-btn { background: #ff3366; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .delete-btn:hover { background: #e60039; }
 
         /* Print Settings */
         @media print {
             .no-print { display: none !important; }
             body { padding: 0; background-color: white; }
             table { box-shadow: none; width: 100%; border: 1px solid #000; }
-            th, td { border: 1px solid #000; color: #000; padding: 5px; font-size: 11px; }
-            th { background-color: #f2f2f2; color: #000; }
+            th, td { border: 1px solid #000; color: #000; padding: 6px; font-size: 11px; }
+            th { background-color: #f2f2f2 !important; color: #000; }
             .header { background: none; color: black; padding: 0; border: none; text-align: center; margin-bottom: 15px;}
             .header h2 { font-size: 20px; border-bottom: 2px solid black; padding-bottom: 8px;}
         }
@@ -65,21 +88,25 @@
         <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
     </div>
 
-    <!-- 4 Wallets & Cash Display Cards -->
+    <!-- 5 Colorful Wallets & Cash Display Cards -->
     <div class="wallet-cards">
-        <div class="w-card" style="border-top-color: #17a2b8;">
+        <div class="w-card card-fino">
             <h4>Fino Wallet</h4>
             <h3 id="finoBalance">₹ 0</h3>
         </div>
-        <div class="w-card" style="border-top-color: #ffc107;">
+        <div class="w-card card-payworld">
             <h4>Payworld Wallet</h4>
             <h3 id="payworldBalance">₹ 0</h3>
         </div>
-        <div class="w-card" style="border-top-color: #6f42c1;">
-            <h4>UPI Wallet (GPay/PhonePe)</h4>
+        <div class="w-card card-upi">
+            <h4>UPI Wallet</h4>
             <h3 id="upiBalance">₹ 0</h3>
         </div>
-        <div class="w-card" style="border-top-color: #28a745;">
+        <div class="w-card card-mahapower">
+            <h4>Mahapower Wallet</h4>
+            <h3 id="mahapowerBalance">₹ 0</h3>
+        </div>
+        <div class="w-card card-cash">
             <h4>Cash in Hand (रोख गल्ला)</h4>
             <h3 id="cashBalance">₹ 0</h3>
         </div>
@@ -104,15 +131,16 @@
     <!-- Morning Opening Balance / Wallet Adjustment Form -->
     <div class="container no-print" style="border-left: 5px solid #17a2b8;">
         <h3 style="margin-top: 0; color: #17a2b8;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
-        <p style="font-size: 13px; color: #666;">दुकान सुरू करताना किंवा संध्याकाळी हिशोब करताना वॉलेटमध्ये नवीन रक्कम ॲड करण्यासाठी:</p>
+        <p style="font-size: 13px; color: #666;">दुकान सुरू करताना किंवा वॉलेटमध्ये नवीन रक्कम ॲड करण्यासाठी:</p>
         
         <div class="form-row">
             <div class="form-group">
-                <label>कोणते वॉलेट किंवा गल्ला (Select Target)</label>
+                <label>कोणते वॉलेट किंवा गल्ला निवडा</label>
                 <select id="adjWallet">
                     <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
                     <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
                     <option value="UPI Opening">UPI Wallet ॲडजस्टमेंट</option>
+                    <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
                     <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                 </select>
             </div>
@@ -127,7 +155,7 @@
 
     <!-- Entry Form -->
     <div class="container no-print">
-        <h3 style="margin-top: 0; color: #007BFF;">नवीन व्यवहार नोंद (New Entry)</h3>
+        <h3 style="margin-top: 0; color: #0061f2;">नवीन व्यवहार नोंद (New Entry)</h3>
         
         <div class="form-row">
             <div class="form-group">
@@ -162,7 +190,6 @@
             </div>
         </div>
 
-        <!-- State Dropdown & District/Village Text Inputs -->
         <div class="form-row">
             <div class="form-group">
                 <label>राज्य (State)</label>
@@ -284,7 +311,6 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // ग्राहक शोधण्याची सिस्टीम (Auto-Fill)
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value;
             const searchMsg = document.getElementById('searchMsg');
@@ -307,41 +333,28 @@
                           searchMsg.style.display = "block";
                           setTimeout(() => { searchMsg.style.display = "none"; }, 3000);
                       }
-                  }).catch((error) => {
-                      console.log("Error:", error);
                   });
             }
         }
 
-        // सकाळी वॉलेट किंवा कॅश ॲडजस्ट करण्यासाठी (Opening Balance Setup)
         function saveAdjustment() {
             const adjWallet = document.getElementById('adjWallet').value;
             const amount = document.getElementById('adjAmount').value;
 
-            if(amount === "") {
-                alert("कृपया ॲडजस्टमेंट रक्कम भरा!");
-                return;
-            }
+            if(amount === "") { alert("कृपया ॲडजस्टमेंट रक्कम भरा!"); return; }
 
             db.collection("transactions").add({
                 service: adjWallet,
                 amount: Number(amount),
                 details: "Opening/Adjustment",
-                mobile: "-", 
-                district: "-",
-                village: "-",
-                state: "-",
-                payStatus: "Paid",
-                purpose: "Wallet Adjustment",
-                idProof: "-",
+                mobile: "-", district: "-", village: "-", state: "-",
+                payStatus: "Paid", purpose: "Wallet Adjustment", idProof: "-",
                 commission: 0, 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
                 document.getElementById('adjAmount').value = "";
                 alert("वॉलेट बॅलन्स यशस्वीरित्या अपडेट झाला!");
-            }).catch((error) => {
-                alert("Error: " + error.message);
-            });
+            }).catch((error) => { alert("Error: " + error.message); });
         }
 
         function saveEntry() {
@@ -357,27 +370,16 @@
             const idProof = document.getElementById('idProof').value;
             const commission = document.getElementById('commission').value;
 
-            if(amount === "" || details === "") {
-                alert("कृपया रक्कम आणि ग्राहकाचे नाव नक्की भरा!");
-                return;
-            }
+            if(amount === "" || details === "") { alert("कृपया रक्कम आणि ग्राहकाचे नाव नक्की भरा!"); return; }
 
             if (service === "Money Transfer" && Number(amount) > 10000 && idProof.trim() === "") {
-                alert("CA नियमानुसार: ₹10,000+ मनी ट्रान्सफरसाठी पॅन किंवा आधार क्रमांक आवश्यक आहे!");
-                return; 
+                alert("₹10,000+ मनी ट्रान्सफरसाठी पॅन किंवा आधार क्रमांक आवश्यक आहे!"); return; 
             }
 
             db.collection("transactions").add({
-                service: service,
-                amount: Number(amount),
-                details: details,
-                mobile: mobile || "-", 
-                state: state || "-",
-                district: district || "-",
-                village: village || "-",
-                payStatus: payStatus,
-                purpose: purpose || "-",
-                idProof: idProof || "-",
+                service, amount: Number(amount), details, mobile: mobile || "-", 
+                state: state || "-", district: district || "-", village: village || "-", 
+                payStatus, purpose: purpose || "-", idProof: idProof || "-",
                 commission: Number(commission) || 0, 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
@@ -389,16 +391,12 @@
                 document.getElementById('purpose').value = "";
                 document.getElementById('idProof').value = "";
                 document.getElementById('commission').value = "";
-            }).catch((error) => {
-                alert("Error: " + error.message);
-            });
+            }).catch((error) => { alert("Error: " + error.message); });
         }
 
         function deleteEntry(docId) {
             if(confirm("तुम्हाला नक्की ही नोंद डिलीट करायची आहे का?")) {
-                db.collection("transactions").doc(docId).delete().catch((error) => {
-                    alert("Error: " + error);
-                });
+                db.collection("transactions").doc(docId).delete();
             }
         }
 
@@ -416,14 +414,8 @@
             const table = document.getElementById("entriesTable");
             table.innerHTML = ""; 
             
-            let todayIncome = 0;
-            let todayExpense = 0;
-            let monthlyIncome = 0;
-            
-            let finoBal = 0;      
-            let payworldBal = 0;  
-            let upiBal = 0;      
-            let cashBal = 0;     
+            let todayIncome = 0, todayExpense = 0, monthlyIncome = 0;
+            let finoBal = 0, payworldBal = 0, upiBal = 0, mahapowerBal = 0, cashBal = 0;     
 
             const now = new Date();
             const todayDateStr = now.toLocaleDateString('en-IN'); 
@@ -431,41 +423,33 @@
             const currentYear = now.getFullYear();
 
             dataList.forEach((data) => {
-                let dateStr = "Loading...";
-                let isToday = false;
-                let isThisMonth = false;
-                let docDate = null;
+                let dateStr = "Loading...", isToday = false, isThisMonth = false;
 
                 if (data.timestamp) {
-                    docDate = data.timestamp.toDate();
+                    const docDate = data.timestamp.toDate();
                     dateStr = docDate.toLocaleString('en-IN'); 
-                    
-                    if(docDate.toLocaleDateString('en-IN') === todayDateStr) {
-                        isToday = true;
-                    }
-                    if(docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) {
-                        isThisMonth = true;
-                    }
+                    if(docDate.toLocaleDateString('en-IN') === todayDateStr) isToday = true;
+                    if(docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) isThisMonth = true;
                 }
 
                 const amt = parseFloat(data.amount) || 0;
                 const comm = parseFloat(data.commission) || 0;
 
-                // वॉलेट आणि कॅशचे हिशोब मोजणी
-                if(data.service === "Fino Opening") { finoBal += amt; }
-                else if(data.service === "Payworld Opening") { payworldBal += amt; }
-                else if(data.service === "UPI Opening") { upiBal += amt; }
-                else if(data.service === "Cash Opening") { cashBal += amt; }
+                // हिशोब मोजणी
+                if(data.service === "Fino Opening") finoBal += amt;
+                else if(data.service === "Payworld Opening") payworldBal += amt;
+                else if(data.service === "UPI Opening") upiBal += amt;
+                else if(data.service === "Mahapower Opening") mahapowerBal += amt;
+                else if(data.service === "Cash Opening") cashBal += amt;
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
                 else if(data.service === "Money Transfer") { upiBal -= amt; cashBal += amt; }
                 else if(data.service === "Shop Expense") { cashBal -= amt; }
 
                 if(isToday) {
-                    if(data.service === "Shop Expense") { todayExpense += amt; } 
-                    else if(!data.service.includes("Opening")) { todayIncome += comm; }
+                    if(data.service === "Shop Expense") todayExpense += amt; 
+                    else if(!data.service.includes("Opening")) todayIncome += comm;
                 }
-
                 if(isThisMonth && data.service !== "Shop Expense" && !data.service.includes("Opening")) {
                     monthlyIncome += comm;
                 }
@@ -479,9 +463,16 @@
                 }
 
                 const status = data.payStatus === "Udhar" ? "<span style='color:red; font-weight:bold;'>Udhar</span>" : "Paid";
-                const pur = data.purpose ? data.purpose : "-";
-                const idp = data.idProof ? data.idProof : "-";
-                const comDisp = data.commission ? data.commission : "0";
+                
+                // + आणि - नुसार हिरवा आणि लाल रंग देणे
+                let amtDisplay = `₹ ${data.amount}`;
+                let commDisplay = `₹ ${data.commission || 0}`;
+
+                if(data.service === "Shop Expense") {
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`;
+                } else if(!data.service.includes("Opening")) {
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
+                }
 
                 const row = `<tr>
                                 <td>${dateStr}</td>
@@ -490,19 +481,19 @@
                                 <td>${mob}</td>
                                 <td>${fullAddress}</td>
                                 <td>${status}</td>
-                                <td>${pur}</td>
-                                <td>${idp}</td>
-                                <td>₹ ${data.amount}</td>
-                                <td>₹ ${comDisp}</td>
+                                <td>${data.purpose || "-"}</td>
+                                <td>${data.idProof || "-"}</td>
+                                <td>${amtDisplay}</td>
+                                <td class="text-green">+ ${commDisplay}</td>
                                 <td class="no-print"><button class="delete-btn" onclick="deleteEntry('${data.id}')">Delete</button></td>
                              </tr>`;
                 table.innerHTML += row;
             });
 
-            // वरच्या 4 वॉलेट्सचे बॅलन्स अपडेट करणे
             document.getElementById('finoBalance').innerText = "₹ " + finoBal;
             document.getElementById('payworldBalance').innerText = "₹ " + payworldBal;
             document.getElementById('upiBalance').innerText = "₹ " + upiBal;
+            document.getElementById('mahapowerBalance').innerText = "₹ " + mahapowerBal;
             document.getElementById('cashBalance').innerText = "₹ " + cashBal;
 
             document.getElementById('todayIncome').innerText = "₹ " + todayIncome;
@@ -511,26 +502,19 @@
         }
 
         function filterData() {
-            const fromDateVal = document.getElementById('fromDate').value;
-            const toDateVal = document.getElementById('toDate').value;
+            const f = document.getElementById('fromDate').value, t = document.getElementById('toDate').value;
+            if(!f || !t) return;
+            const fromDate = new Date(f); fromDate.setHours(0,0,0,0);
+            const toDate = new Date(t); toDate.setHours(23,59,59,999);
 
-            if(!fromDateVal || !toDateVal) return;
-
-            const fromDate = new Date(fromDateVal);
-            fromDate.setHours(0,0,0,0);
-
-            const toDate = new Date(toDateVal);
-            toDate.setHours(23,59,59,999);
-
-            const filtered = allTransactions.filter(item => {
+            renderTable(allTransactions.filter(item => {
                 if(!item.timestamp) return false;
-                const itemDate = item.timestamp.toDate();
-                return itemDate >= fromDate && itemDate <= toDate;
-            });
-
-            renderTable(filtered);
+                const d = item.timestamp.toDate();
+                return d >= fromDate && d <= toDate;
+            }));
         }
 
+        function resetFileter() { resetFilter(); }
         function resetFilter() {
             document.getElementById('fromDate').value = "";
             document.getElementById('toDate').value = "";
