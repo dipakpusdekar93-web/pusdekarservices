@@ -9,7 +9,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #0052cc, #4389f2);
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -17,23 +17,21 @@
             min-height: 100vh;
         }
 
-        /* Main Wrapper Box */
         .main-wrapper {
             background: white;
             width: 100%;
-            max-width: 900px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 1100px;
+            border-radius: 18px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             display: flex;
             flex-wrap: wrap;
         }
 
-        /* Left Side: Shop Branding & Details */
         .shop-info-side {
-            flex: 1.3;
+            flex: 1.4;
             background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 25px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -42,91 +40,100 @@
 
         .shop-info-side h1 {
             color: #0052cc;
-            font-size: 24px;
-            margin: 0 0 3px 0;
+            font-size: 32px;
+            margin: 0 0 5px 0;
             font-weight: 800;
+            letter-spacing: 0.5px;
         }
 
         .shop-info-side h3 {
             color: #495057;
-            font-size: 14px;
-            margin: 0 0 12px 0;
+            font-size: 16px;
+            margin: 0 0 20px 0;
             font-weight: 600;
         }
 
         .shop-details {
-            font-size: 12px;
-            color: #444;
-            line-height: 1.5;
-            margin-bottom: 12px;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 20px;
         }
 
         .shop-details p {
-            margin: 4px 0;
+            margin: 6px 0;
         }
 
-        /* Services Tags Section */
         .services-tags {
-            margin-bottom: 12px;
+            margin-bottom: 20px;
         }
         .services-tags h4 {
-            margin: 0 0 5px 0;
-            font-size: 12px;
+            margin: 0 0 8px 0;
+            font-size: 13px;
             color: #0052cc;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .tag-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 6px;
         }
         .tag {
             background: #e2e8f0;
-            color: #333;
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 4px;
+            color: #1e293b;
+            font-size: 11px;
+            padding: 5px 10px;
+            border-radius: 5px;
             font-weight: 600;
         }
 
-        /* Logo / Partner Badges at Bottom */
+        /* Original Logo Badges Section */
         .partner-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1px dashed #ccc;
+            gap: 12px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #cbd5e1;
+            align-items: center;
         }
-        .badge {
-            background: #fff;
-            border: 1px solid #cbd5e1;
-            padding: 3px 6px;
-            border-radius: 4px;
-            font-size: 10px;
+        .brand-logo {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            padding: 6px 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
             font-weight: bold;
-            color: #1e293b;
+            color: #334155;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+        .brand-logo img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
         }
 
-        /* Sliding Running Ticker */
         .ticker-box {
             background: #fff3cd;
             color: #856404;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 11px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: bold;
             border: 1px dashed #ffeeba;
-            margin-top: 10px;
+            margin-top: 20px;
             overflow: hidden;
             white-space: nowrap;
         }
         .ticker-box marquee { width: 100%; }
 
-        /* Right Side: Login Corner Tab */
         .login-side {
             flex: 1;
-            padding: 30px 25px;
+            padding: 50px 40px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -134,42 +141,44 @@
         }
 
         .login-side h2 {
-            margin-bottom: 5px;
-            color: #333;
-            font-size: 20px;
+            margin-bottom: 8px;
+            color: #222;
+            font-size: 26px;
+            font-weight: 700;
         }
 
         .login-side p {
             color: #666;
-            font-size: 12px;
-            margin-bottom: 20px;
+            font-size: 13px;
+            margin-bottom: 25px;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
         label {
             display: block;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             color: #444;
-            font-size: 12px;
+            font-size: 13px;
         }
 
         input {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 14px 16px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
             box-sizing: border-box;
-            font-size: 13px;
-            transition: border-color 0.2s;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
         input:focus {
             border-color: #0052cc;
+            box-shadow: 0 0 0 3px rgba(0, 82, 204, 0.15);
             outline: none;
         }
 
@@ -177,41 +186,41 @@
             background: #28a745;
             color: white;
             border: none;
-            padding: 11px;
-            border-radius: 6px;
+            padding: 14px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 16px;
             width: 100%;
             font-weight: bold;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
-            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 5px;
         }
 
         .login-btn:hover {
             background: #218838;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         #errorMsg {
             color: #dc3545;
-            font-size: 12px;
-            margin-top: 10px;
+            font-size: 13px;
+            margin-top: 15px;
             font-weight: bold;
             display: none;
         }
 
         .footer-note {
             text-align: center;
-            margin-top: 15px;
-            font-size: 11px;
+            margin-top: 25px;
+            font-size: 12px;
             color: #888;
         }
 
-        /* Responsive design for mobile */
-        @media (max-width: 768px) {
-            .main-wrapper { flex-direction: column; }
-            .shop-info-side { border-right: none; border-bottom: 1px solid #dee2e6; padding: 20px; }
-            .login-side { padding: 25px 20px; }
+        @media (max-width: 850px) {
+            .main-wrapper { flex-direction: column; max-width: 100%; }
+            .shop-info-side { border-right: none; border-bottom: 1px solid #dee2e6; padding: 25px; }
+            .login-side { padding: 30px 25px; }
         }
     </style>
 </head>
@@ -244,20 +253,32 @@
                     </div>
                 </div>
 
-                <!-- Partner Badges (LIC, Bank, Aadhaar, PAN, AEPS) -->
+                <!-- Original Partner Brand Logos -->
                 <div class="partner-badges">
-                    <span class="badge">🏦 Bank Services</span>
-                    <span class="badge">💳 AEPS</span>
-                    <span class="badge">🛡️ LIC</span>
-                    <span class="badge">🆔 Aadhaar</span>
-                    <span class="badge">📄 PAN Card</span>
-                    <span class="badge">⚡ Mahavitaran</span>
+                    <div class="brand-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/SBI-Logo.svg" alt="SBI"> SBI
+                    </div>
+                    <div class="brand-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e9/Axis_Bank_Logo.svg" alt="Axis"> Axis Bank
+                    </div>
+                    <div class="brand-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Aadhaar_Logo.svg" alt="Aadhaar"> Aadhaar
+                    </div>
+                    <div class="brand-logo">
+                        <img src="https://www.svgrepo.com/show/303251/insurance-lic-logo.svg" alt="LIC"> LIC
+                    </div>
+                    <div class="brand-logo">
+                        <img src="https://www.svgrepo.com/show/353600/upi.svg" alt="UPI"> AEPS / UPI
+                    </div>
+                    <div class="brand-logo">
+                        <img src="https://www.svgrepo.com/show/508719/id-card.svg" alt="PAN"> PAN Card
+                    </div>
                 </div>
             </div>
 
             <!-- Sliding Running Ticker -->
             <div class="ticker-box">
-                <marquee behavior="scroll" direction="left">✨ आपले सरकार सेतू केंद्र, कास्ट व्हॅलिडिटी, राजपत्र आणि सर्व बँकिंग सेवा योग्य व दरात उपलब्ध! स्वागत आहे... ✨</marquee>
+                <marquee behavior="scroll" direction="left">✨ आपले सरकार सेतू केंद्र, कास्ट व्हॅलिडिटी, राजपत्र आणि सर्व बँकिंग सेवा योग्य दरात उपलब्ध! स्वागत आहे... ✨</marquee>
             </div>
         </div>
 
