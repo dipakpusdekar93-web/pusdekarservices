@@ -10,13 +10,13 @@
         .logout-btn { background: #ff3366; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .logout-btn:hover { background: #e60039; }
         
-        /* Total Balance Grand Card */
+        /* Grand Total Available Balance Card */
         .grand-total-card { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .grand-total-card h4 { margin: 0 0 5px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .grand-total-card h2 { margin: 0; font-size: 32px; font-weight: bold; }
 
-        /* Colorful 5 Wallet Cards */
-        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-top: 15px; }
+        /* Wallet Cards Grid */
+        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
         .w-card { background: white; padding: 18px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
         .w-card:hover { transform: translateY(-3px); }
         .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -28,8 +28,14 @@
         .card-payworld { border-top: 5px solid #ff9900; background: linear-gradient(to bottom, #ffffff, #fffdf0); }
         .card-payworld h4 { color: #b36b00; }
 
-        .card-upi { border-top: 5px solid #6f42c1; background: linear-gradient(to bottom, #ffffff, #f8f4ff); }
+        .card-upi { border-top: 5px solid #6f42c1; background: linear-gradient(to bottom, #ffffff, #f8f4ff); grid-column: span 1; }
         .card-upi h4 { color: #6f42c1; }
+
+        /* UPI Box Aatle 4 Chote Sub-Boxes */
+        .sub-banks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; border-top: 1px dashed #d1c4e9; padding-top: 10px; }
+        .sub-bank { background: #f3e5f5; padding: 6px; border-radius: 6px; text-align: center; }
+        .sub-bank span { display: block; font-size: 10px; color: #5e35b1; font-weight: bold; text-transform: uppercase; }
+        .sub-bank strong { font-size: 14px; color: #311b92; }
 
         .card-mahapower { border-top: 5px solid #17a2b8; background: linear-gradient(to bottom, #ffffff, #eef9fb); }
         .card-mahapower h4 { color: #17a2b8; }
@@ -95,7 +101,7 @@
         <h2 id="grandTotalBalance">₹ 0</h2>
     </div>
 
-    <!-- 5 Colorful Wallets & Cash Display Cards -->
+    <!-- Wallets & Cash Display Cards -->
     <div class="wallet-cards">
         <div class="w-card card-fino">
             <h4>Fino Wallet</h4>
@@ -105,10 +111,32 @@
             <h4>Payworld Wallet</h4>
             <h3 id="payworldBalance">₹ 0</h3>
         </div>
+        
+        <!-- Main UPI Box with 4 Sub-Bank Boxes -->
         <div class="w-card card-upi">
-            <h4>UPI Wallet</h4>
+            <h4>UPI Wallet (Total)</h4>
             <h3 id="upiBalance">₹ 0</h3>
+            
+            <div class="sub-banks-grid">
+                <div class="sub-bank">
+                    <span>Axis Bank</span>
+                    <strong id="axisBalance">₹ 0</strong>
+                </div>
+                <div class="sub-bank">
+                    <span>SBI</span>
+                    <strong id="sbiBalance">₹ 0</strong>
+                </div>
+                <div class="sub-bank">
+                    <span>Bank of India</span>
+                    <strong id="boiBalance">₹ 0</strong>
+                </div>
+                <div class="sub-bank">
+                    <span>Union Bank</span>
+                    <strong id="unionBalance">₹ 0</strong>
+                </div>
+            </div>
         </div>
+
         <div class="w-card card-mahapower">
             <h4>Mahapower Wallet</h4>
             <h3 id="mahapowerBalance">₹ 0</h3>
@@ -129,7 +157,6 @@
             <h4>आजचा एकूण खर्च</h4>
             <h3 id="todayExpense">₹ 0</h3>
         </div>
-        .card monthly h3 { color: #0061f2; margin: 0; font-size: 22px; }
         <div class="card monthly">
             <h4>या महिन्याची एकूण कमाई</h4>
             <h3 id="monthlyIncome">₹ 0</h3>
@@ -141,11 +168,14 @@
         <h3 style="margin-top: 0; color: #17a2b8;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
         <div class="form-row">
             <div class="form-group">
-                <label>कोणते वॉलेट किंवा गल्ला निवडा</label>
+                <label>कोणते वॉलेट किंवा बँक निवडा</label>
                 <select id="adjWallet">
                     <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
                     <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
-                    <option value="UPI Opening">UPI Wallet ॲडजस्टमेंट</option>
+                    <option value="Axis Opening">Axis Bank UPI ॲडजस्टमेंट</option>
+                    <option value="SBI Opening">SBI UPI ॲडजस्टमेंट</option>
+                    <option value="BOI Opening">Bank of India UPI ॲडजस्टमेंट</option>
+                    <option value="Union Opening">Union Bank UPI ॲडजस्टमेंट</option>
                     <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
                     <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                 </select>
@@ -165,7 +195,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label>सर्व्हिसचा प्रकार (Service Type)</label>
-                <select id="serviceType" onchange="toggleExpenseSource()">
+                <select id="serviceType" onchange="toggleFormFields()">
                     <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                     <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
                     <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
@@ -183,13 +213,29 @@
             </div>
         </div>
 
+        <!-- बँक निवडण्याचा बॉक्स (जेव्हा Money Transfer किंवा UPI Cash Given असेल) -->
+        <div class="form-row" id="bankSelectRow" style="display: none; background: #f0f4ff; padding: 10px; border-radius: 6px; border: 1px dashed #0052cc;">
+            <div class="form-group">
+                <label style="color: #0052cc; font-weight: bold;">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
+                <select id="upiBank">
+                    <option value="Axis">Axis Bank</option>
+                    <option value="SBI">SBI</option>
+                    <option value="BOI">Bank of India</option>
+                    <option value="Union">Union Bank</option>
+                </select>
+            </div>
+        </div>
+
         <!-- खर्चासाठी माध्यम निवडण्याचा बॉक्स -->
         <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff3f3; padding: 10px; border-radius: 6px; border: 1px dashed #dc3545;">
             <div class="form-group">
                 <label style="color: #dc3545; font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
                 <select id="expenseSource">
                     <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                    <option value="UPI">UPI Wallet (बँक अकाउंट)</option>
+                    <option value="Axis">Axis Bank UPI</option>
+                    <option value="SBI">SBI UPI</option>
+                    <option value="BOI">Bank of India UPI</option>
+                    <option value="Union">Union Bank UPI</option>
                     <option value="Fino">Fino Wallet</option>
                     <option value="Payworld">Payworld Wallet</option>
                     <option value="Mahapower">Mahapower Wallet</option>
@@ -329,13 +375,22 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        function toggleExpenseSource() {
+        // फॉर्ममधील बॉक्स कधी दाखवायचे हे ठरवणारी फंक्शन
+        function toggleFormFields() {
             const serviceType = document.getElementById('serviceType').value;
-            const expenseRow = document.getElementById('expenseSourceRow');
-            if(serviceType === "Shop Expense") {
-                expenseRow.style.display = "flex";
+            const bankSelectRow = document.getElementById('bankSelectRow');
+            const expenseSourceRow = document.getElementById('expenseSourceRow');
+
+            if(serviceType === "Money Transfer" || serviceType === "UPI Cash Given") {
+                bankSelectRow.style.display = "flex";
             } else {
-                expenseRow.style.display = "none";
+                bankSelectRow.style.display = "none";
+            }
+
+            if(serviceType === "Shop Expense") {
+                expenseSourceRow.style.display = "flex";
+            } else {
+                expenseSourceRow.style.display = "none";
             }
         }
 
@@ -368,6 +423,7 @@
             db.collection("transactions").add({
                 service: adjWallet,
                 amount: Number(amount),
+                bankSource: "-",
                 expenseFrom: "-",
                 details: "Opening/Adjustment",
                 mobile: "-", district: "-", village: "-", state: "-",
@@ -376,13 +432,14 @@
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
                 document.getElementById('adjAmount').value = "";
-                alert("वॉलेट बॅलन्स यशस्वीरित्या अपडेट झाला!");
+                alert("बॅलन्स यशस्वीरित्या अपडेट झाला!");
             }).catch((error) => { alert("Error: " + error.message); });
         }
 
         function saveEntry() {
             const service = document.getElementById('serviceType').value;
             const amount = document.getElementById('amount').value;
+            const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-";
             const expenseSource = service === "Shop Expense" ? document.getElementById('expenseSource').value : "-";
             const details = document.getElementById('details').value;
             const mobile = document.getElementById('mobile').value;
@@ -399,7 +456,8 @@
             db.collection("transactions").add({
                 service, 
                 amount: Number(amount), 
-                expenseFrom: expenseSource,
+                bankSource,
+                expenseSource,
                 details, 
                 mobile: mobile || "-", 
                 state: state || "-", district: district || "-", village: village || "-", 
@@ -415,6 +473,7 @@
                 document.getElementById('purpose').value = "";
                 document.getElementById('idProof').value = "";
                 document.getElementById('commission').value = "";
+                document.getElementById('bankSelectRow').style.display = "none";
                 document.getElementById('expenseSourceRow').style.display = "none";
                 document.getElementById('serviceType').selectedIndex = 0;
             }).catch((error) => { alert("Error: " + error.message); });
@@ -441,7 +500,8 @@
             table.innerHTML = ""; 
             
             let todayIncome = 0, todayExpense = 0, monthlyIncome = 0;
-            let finoBal = 0, payworldBal = 0, upiBal = 0, mahapowerBal = 0, cashBal = 0;     
+            let finoBal = 0, payworldBal = 0, mahapowerBal = 0, cashBal = 0;     
+            let axisBal = 0, sbiBal = 0, boiBal = 0, unionBal = 0;
 
             const now = new Date();
             const todayDateStr = now.toLocaleDateString('en-IN'); 
@@ -460,25 +520,44 @@
 
                 const amt = parseFloat(data.amount) || 0;
                 const comm = parseFloat(data.commission) || 0;
-                const src = data.expenseFrom || "Cash";
+                const bSrc = data.bankSource || "Axis";
+                const eSrc = data.expenseSource || "Cash";
 
-                // अचूक हिशोब मोजणी
+                // ओपनिंग आणि ट्रान्झॅक्शन हिशोब
                 if(data.service === "Fino Opening") finoBal += amt;
                 else if(data.service === "Payworld Opening") payworldBal += amt;
-                else if(data.service === "UPI Opening") upiBal += amt;
+                else if(data.service === "Axis Opening") axisBal += amt;
+                else if(data.service === "SBI Opening") sbiBal += amt;
+                else if(data.service === "BOI Opening") boiBal += amt;
+                else if(data.service === "Union Opening") unionBal += amt;
                 else if(data.service === "Mahapower Opening") mahapowerBal += amt;
                 else if(data.service === "Cash Opening") cashBal += amt;
                 
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
-                else if(data.service === "Money Transfer") { upiBal -= amt; cashBal += amt; }
-                else if(data.service === "UPI Cash Given") { upiBal += amt; cashBal -= amt; }
                 
+                else if(data.service === "Money Transfer") {
+                    if(bSrc === "Axis") axisBal -= amt;
+                    else if(bSrc === "SBI") sbiBal -= amt;
+                    else if(bSrc === "BOI") boiBal -= amt;
+                    else if(bSrc === "Union") unionBal -= amt;
+                    cashBal += amt; 
+                }
+                else if(data.service === "UPI Cash Given") {
+                    if(bSrc === "Axis") axisBal += amt;
+                    else if(bSrc === "SBI") sbiBal += amt;
+                    else if(bSrc === "BOI") boiBal += amt;
+                    else if(bSrc === "Union") unionBal += amt;
+                    cashBal -= amt;
+                }
                 else if(data.service === "Shop Expense") {
-                    if(src === "UPI") upiBal -= amt;
-                    else if(src === "Fino") finoBal -= amt;
-                    else if(src === "Payworld") payworldBal -= amt;
-                    else if(src === "Mahapower") mahapowerBal -= amt;
+                    if(eSrc === "Axis") axisBal -= amt;
+                    else if(eSrc === "SBI") sbiBal -= amt;
+                    else if(eSrc === "BOI") boiBal -= amt;
+                    else if(eSrc === "Union") unionBal -= amt;
+                    else if(eSrc === "Fino") finoBal -= amt;
+                    else if(eSrc === "Payworld") payworldBal -= amt;
+                    else if(eSrc === "Mahapower") mahapowerBal -= amt;
                     else cashBal -= amt; 
                 }
 
@@ -503,8 +582,10 @@
                 let amtDisplay = `₹ ${data.amount}`;
                 let serviceDisplay = data.service;
 
-                if(data.service === "Shop Expense") {
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${src})</span>`;
+                if(data.service === "Money Transfer" || data.service === "UPI Cash Given") {
+                    serviceDisplay += ` (${bSrc})`;
+                } else if(data.service === "Shop Expense") {
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`;
                 } else if(!data.service.includes("Opening")) {
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
                 }
@@ -525,13 +606,22 @@
                 table.innerHTML += row;
             });
 
-            // सर्व वॉलेट्स आणि कॅशची बेरीज करून 'Grand Total' काढणे
-            const grandTotal = finoBal + payworldBal + upiBal + mahapowerBal + cashBal;
+            // एकूण UPI बॅलन्स (४ बँकांची बेरीज)
+            const totalUpiBal = axisBal + sbiBal + boiBal + unionBal;
+            // सर्व काही मिळून ग्रँड टोटल
+            const grandTotal = finoBal + payworldBal + totalUpiBal + mahapowerBal + cashBal;
 
             document.getElementById('grandTotalBalance').innerText = "₹ " + grandTotal;
             document.getElementById('finoBalance').innerText = "₹ " + finoBal;
             document.getElementById('payworldBalance').innerText = "₹ " + payworldBal;
-            document.getElementById('upiBalance').innerText = "₹ " + upiBal;
+            document.getElementById('upiBalance').innerText = "₹ " + totalUpiBal;
+            
+            // छोट्या 4 बँकांचे स्वतंत्र बॅलन्स अपडेट करणे
+            document.getElementById('axisBalance').innerText = "₹ " + axisBal;
+            document.getElementById('sbiBalance').innerText = "₹ " + sbiBal;
+            document.getElementById('boiBalance').innerText = "₹ " + boiBal;
+            document.getElementById('unionBalance').innerText = "₹ " + unionBal;
+
             document.getElementById('mahapowerBalance').innerText = "₹ " + mahapowerBal;
             document.getElementById('cashBalance').innerText = "₹ " + cashBal;
 
