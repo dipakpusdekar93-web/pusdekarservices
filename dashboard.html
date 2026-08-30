@@ -185,6 +185,12 @@
                 <input type="number" id="adjAmount" placeholder="उदा. 5000">
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>नरेशन / टीप (Narration / तपशील)</label>
+                <input type="text" id="adjNarration" placeholder="उदा. बँकेत भरण्यासाठी कॅश दिली">
+            </div>
+        </div>
         <button class="adj-btn" onclick="saveAdjustment()">Update Balance / Add Amount</button>
     </div>
 
@@ -213,7 +219,7 @@
             </div>
         </div>
 
-        <!-- बँक निवडण्याचा बॉक्स (जेव्हा Money Transfer किंवा UPI Cash Given असेल) -->
+        <!-- बँक निवडण्याचा बॉक्स -->
         <div class="form-row" id="bankSelectRow" style="display: none; background: #f0f4ff; padding: 10px; border-radius: 6px; border: 1px dashed #0052cc;">
             <div class="form-group">
                 <label style="color: #0052cc; font-weight: bold;">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
@@ -305,6 +311,13 @@
             </div>
         </div>
 
+        <div class="form-row">
+            <div class="form-group">
+                <label>नरेशन / टीप (Narration)</label>
+                <input type="text" id="entryNarration" placeholder="व्यवहाराविषयी विशेष टीप">
+            </div>
+        </div>
+
         <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
     </div>
 
@@ -337,7 +350,7 @@
                     <th>मोबाईल</th>
                     <th>पत्ता</th>
                     <th>स्थिती</th>
-                    <th>कारण</th>
+                    <th>कारण / नरेशन</th>
                     <th>पॅन/आधार</th>
                     <th>रक्कम (₹)</th>
                     <th>कमिशन (₹)</th>
@@ -375,7 +388,6 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // फॉर्ममधील बॉक्स कधी दाखवायचे हे ठरवणारी फंक्शन
         function toggleFormFields() {
             const serviceType = document.getElementById('serviceType').value;
             const bankSelectRow = document.getElementById('bankSelectRow');
@@ -417,6 +429,7 @@
         function saveAdjustment() {
             const adjWallet = document.getElementById('adjWallet').value;
             const amount = document.getElementById('adjAmount').value;
+            const narration = document.getElementById('adjNarration').value;
 
             if(amount === "") { alert("कृपया ॲडजस्टमेंट रक्कम भरा!"); return; }
 
@@ -424,14 +437,15 @@
                 service: adjWallet,
                 amount: Number(amount),
                 bankSource: "-",
-                expenseFrom: "-",
-                details: "Opening/Adjustment",
+                expenseSource: "-",
+                details: narration ? `Opening/Adjustment (${narration})` : "Opening/Adjustment",
                 mobile: "-", district: "-", village: "-", state: "-",
                 payStatus: "Paid", purpose: "Wallet Adjustment", idProof: "-",
                 commission: 0, 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
                 document.getElementById('adjAmount').value = "";
+                document.getElementById('adjNarration').value = "";
                 alert("बॅलन्स यशस्वीरित्या अपडेट झाला!");
             }).catch((error) => { alert("Error: " + error.message); });
         }
@@ -450,6 +464,7 @@
             const purpose = document.getElementById('purpose').value;
             const idProof = document.getElementById('idProof').value;
             const commission = document.getElementById('commission').value;
+            const narration = document.getElementById('entryNarration').value;
 
             if(amount === "" || details === "") { alert("कृपया रक्कम आणि ग्राहकाचे नाव नक्की भरा!"); return; }
 
@@ -462,7 +477,8 @@
                 mobile: mobile || "-", 
                 state: state || "-", district: district || "-", village: village || "-", 
                 payStatus, purpose: purpose || "-", idProof: idProof || "-",
-                commission: Number(commission) || 0, 
+                commission: Number(commission) || 0,
+                narration: narration || "-", 
                 timestamp: firebase.firestore.FieldValue.serverTimestamp() 
             }).then(() => {
                 document.getElementById('amount').value = "";
@@ -473,6 +489,7 @@
                 document.getElementById('purpose').value = "";
                 document.getElementById('idProof').value = "";
                 document.getElementById('commission').value = "";
+                document.getElementById('entryNarration').value = "";
                 document.getElementById('bankSelectRow').style.display = "none";
                 document.getElementById('expenseSourceRow').style.display = "none";
                 document.getElementById('serviceType').selectedIndex = 0;
@@ -523,7 +540,6 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                // ओपनिंग आणि ट्रान्झॅक्शन हिशोब
                 if(data.service === "Fino Opening") finoBal += amt;
                 else if(data.service === "Payworld Opening") payworldBal += amt;
                 else if(data.service === "Axis Opening") axisBal += amt;
@@ -590,6 +606,11 @@
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
                 }
 
+                let purposeText = data.purpose || "-";
+                if(data.narration && data.narration !== "-") {
+                    purposeText += ` <br><small style="color: #666;">📝 ${data.narration}</small>`;
+                }
+
                 const row = `<tr>
                                 <td>${dateStr}</td>
                                 <td>${serviceDisplay}</td>
@@ -597,7 +618,7 @@
                                 <td>${mob}</td>
                                 <td>${fullAddress}</td>
                                 <td>${status}</td>
-                                <td>${data.purpose || "-"}</td>
+                                <td>${purposeText}</td>
                                 <td>${data.idProof || "-"}</td>
                                 <td>${amtDisplay}</td>
                                 <td class="text-green">+ ₹ ${data.commission || 0}</td>
@@ -606,9 +627,7 @@
                 table.innerHTML += row;
             });
 
-            // एकूण UPI बॅलन्स (४ बँकांची बेरीज)
             const totalUpiBal = axisBal + sbiBal + boiBal + unionBal;
-            // सर्व काही मिळून ग्रँड टोटल
             const grandTotal = finoBal + payworldBal + totalUpiBal + mahapowerBal + cashBal;
 
             document.getElementById('grandTotalBalance').innerText = "₹ " + grandTotal;
@@ -616,7 +635,6 @@
             document.getElementById('payworldBalance').innerText = "₹ " + payworldBal;
             document.getElementById('upiBalance').innerText = "₹ " + totalUpiBal;
             
-            // छोट्या 4 बँकांचे स्वतंत्र बॅलन्स अपडेट करणे
             document.getElementById('axisBalance').innerText = "₹ " + axisBal;
             document.getElementById('sbiBalance').innerText = "₹ " + sbiBal;
             document.getElementById('boiBalance').innerText = "₹ " + boiBal;
