@@ -10,12 +10,10 @@
         .logout-btn { background: #ff3366; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
         .logout-btn:hover { background: #e60039; }
         
-        /* Grand Total Available Balance Card */
         .grand-total-card { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .grand-total-card h4 { margin: 0 0 5px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
         .grand-total-card h2 { margin: 0; font-size: 32px; font-weight: bold; }
 
-        /* Wallet Cards Grid */
         .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
         .w-card { background: white; padding: 18px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
         .w-card:hover { transform: translateY(-3px); }
@@ -31,7 +29,6 @@
         .card-upi { border-top: 5px solid #6f42c1; background: linear-gradient(to bottom, #ffffff, #f8f4ff); grid-column: span 1; }
         .card-upi h4 { color: #6f42c1; }
 
-        /* UPI Box Aatle 4 Chote Sub-Boxes */
         .sub-banks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; border-top: 1px dashed #d1c4e9; padding-top: 10px; }
         .sub-bank { background: #f3e5f5; padding: 6px; border-radius: 6px; text-align: center; }
         .sub-bank span { display: block; font-size: 10px; color: #5e35b1; font-weight: bold; text-transform: uppercase; }
@@ -204,6 +201,7 @@
                 <select id="serviceType" onchange="toggleFormFields()">
                     <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                     <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
+                    <option value="Fino Cash Deposit">Fino Cash Deposit (ग्राहक कॅश देऊन फino ने पैसे घेणे)</option>
                     <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
                     <option value="Payworld Services">Payworld Services (Wallet)</option>
                     <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
@@ -552,6 +550,9 @@
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
                 
+                // नवीन फिफ्चर: फिफो कॅश डिपॉझिट (फिनोचे वॉलेट कमी होईल आणि कॅश गल्ल्यात वाढेल)
+                else if(data.service === "Fino Cash Deposit") { finoBal -= amt; cashBal += amt; }
+                
                 else if(data.service === "Money Transfer") {
                     if(bSrc === "Axis") axisBal -= amt;
                     else if(bSrc === "SBI") sbiBal -= amt;
@@ -602,6 +603,8 @@
                     serviceDisplay += ` (${bSrc})`;
                 } else if(data.service === "Shop Expense") {
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`;
+                } else if(data.service === "Fino Cash Deposit") {
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (Fino Wallet)</span>`;
                 } else if(!data.service.includes("Opening")) {
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
                 }
