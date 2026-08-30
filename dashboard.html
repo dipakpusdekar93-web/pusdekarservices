@@ -3,384 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Digital - Complete Management System</title>
+    <title>Pusdekar Digital - DigiSmart Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f7; margin: 0; padding: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0061f2, #60efff); color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .logout-btn { background: #ff3366; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; }
-        .logout-btn:hover { background: #e60039; }
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-color: #f8fafc;
+            --sidebar-width: 260px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: #334155;
+        }
+
+        /* Sidebar Styling (DigiSmart Style) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100%;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .sidebar-menu li {
+            padding: 12px 25px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li:hover, .sidebar-menu li.active {
+            background: #eef2ff;
+            color: var(--primary);
+            border-right: 4px solid var(--primary);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        .logout-btn { 
+            background: var(--danger); 
+            color: white; 
+            border: none; 
+            padding: 8px 18px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            font-weight: bold; 
+        }
+        .logout-btn:hover { background: #dc2626; }
         
-        .grand-total-card { background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .grand-total-card h4 { margin: 0 0 5px 0; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        .grand-total-card h2 { margin: 0; font-size: 32px; font-weight: bold; }
+        /* Grand Total Card */
+        .grand-total-card { 
+            background: linear-gradient(135deg, #10b981, #059669); 
+            color: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            text-align: center; 
+            margin-bottom: 25px; 
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); 
+        }
+        .grand-total-card h4 { margin: 0 0 5px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .grand-total-card h2 { margin: 0; font-size: 36px; font-weight: bold; }
 
-        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-        .w-card { background: white; padding: 18px; border-radius: 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
-        .w-card:hover { transform: translateY(-3px); }
-        .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .w-card h3 { margin: 0; font-size: 22px; font-weight: bold; }
+        /* Wallet Cards Grid */
+        .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .w-card { background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.2s; border: 1px solid #e2e8f0; }
+        .w-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .w-card h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; }
+        .w-card h3 { margin: 0; font-size: 24px; font-weight: bold; color: #1e293b; }
 
-        .card-fino { border-top: 5px solid #0052cc; background: linear-gradient(to bottom, #ffffff, #f0f4ff); }
-        .card-fino h4 { color: #0052cc; }
-        
-        .card-payworld { border-top: 5px solid #ff9900; background: linear-gradient(to bottom, #ffffff, #fffdf0); }
-        .card-payworld h4 { color: #b36b00; }
+        .card-fino { border-top: 4px solid #2563eb; }
+        .card-payworld { border-top: 4px solid #d97706; }
+        .card-upi { border-top: 4px solid #7c3aed; }
+        .card-mahapower { border-top: 4px solid #0891b2; }
+        .card-cash { border-top: 4px solid #059669; }
 
-        .card-upi { border-top: 5px solid #6f42c1; background: linear-gradient(to bottom, #ffffff, #f8f4ff); grid-column: span 1; }
-        .card-upi h4 { color: #6f42c1; }
+        .sub-banks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 10px; }
+        .sub-bank { background: #f8fafc; padding: 6px; border-radius: 6px; text-align: center; }
+        .sub-bank span { display: block; font-size: 10px; color: #64748b; font-weight: bold; text-transform: uppercase; }
+        .sub-bank strong { font-size: 13px; color: #1e293b; }
 
-        .sub-banks-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 12px; border-top: 1px dashed #d1c4e9; padding-top: 10px; }
-        .sub-bank { background: #f3e5f5; padding: 6px; border-radius: 6px; text-align: center; }
-        .sub-bank span { display: block; font-size: 10px; color: #5e35b1; font-weight: bold; text-transform: uppercase; }
-        .sub-bank strong { font-size: 14px; color: #311b92; }
+        /* Summary Income Cards */
+        .summary-cards { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .card { background: white; padding: 20px; border-radius: 12px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .card h4 { margin: 0 0 8px 0; color: #64748b; font-size: 13px; }
+        .card.income h3 { color: var(--success); margin: 0; font-size: 24px; }
+        .card.expense h3 { color: var(--danger); margin: 0; font-size: 24px; }
+        .card.monthly h3 { color: var(--primary); margin: 0; font-size: 24px; }
 
-        .card-mahapower { border-top: 5px solid #17a2b8; background: linear-gradient(to bottom, #ffffff, #eef9fb); }
-        .card-mahapower h4 { color: #17a2b8; }
-
-        .card-cash { border-top: 5px solid #28a745; background: linear-gradient(to bottom, #ffffff, #f0fff4); }
-        .card-cash h4 { color: #28a745; }
-
-        .summary-cards { display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
-        .card { background: white; padding: 15px; border-radius: 12px; flex: 1; min-width: 200px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .card h4 { margin: 0 0 8px 0; color: #555; font-size: 14px; }
-        .card.income h3 { color: #28a745; margin: 0; font-size: 22px; }
-        .card.expense h3 { color: #dc3545; margin: 0; font-size: 22px; }
-        .card.monthly h3 { color: #0061f2; margin: 0; font-size: 22px; }
-
-        .container { background: white; padding: 25px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        /* Forms & Containers */
+        .container { background: white; padding: 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
         .form-group { flex: 1; min-width: 220px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; color: #444; font-size: 13px; }
-        select, input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        label { display: block; font-weight: 600; margin-bottom: 5px; color: #475569; font-size: 13px; }
+        select, input { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-size: 14px; background: #fff; }
+        select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
         
-        .save-btn { background: #28a745; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
-        .save-btn:hover { background: #218838; }
+        .save-btn { background: var(--success); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; transition: background 0.2s; }
+        .save-btn:hover { background: #059669; }
 
-        .adj-btn { background: #17a2b8; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; }
-        .adj-btn:hover { background: #138496; }
+        .adj-btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; width: 100%; font-weight: bold; transition: background 0.2s; }
+        .adj-btn:hover { background: var(--primary-dark); }
         
-        .filter-section { background: white; padding: 15px 25px; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
-        .print-btn { background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; height: 41px; }
-        .print-btn:hover { background: #5a6268; }
+        .filter-section { background: white; padding: 20px 25px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-end; }
+        .print-btn { background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; height: 41px; transition: background 0.2s; }
+        .print-btn:hover { background: #475569; }
 
-        .table-responsive { overflow-x: auto; margin-top: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        table { width: 100%; border-collapse: collapse; background: white; min-width: 1000px; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: left; font-size: 13px; }
-        th { background-color: #0061f2; color: white; white-space: nowrap; }
+        /* Tables */
+        .table-responsive { overflow-x: auto; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th, td { border-bottom: 1px solid #e2e8f0; padding: 14px 16px; text-align: left; font-size: 13px; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
         
-        .text-green { color: #28a745; font-weight: bold; }
-        .text-red { color: #dc3545; font-weight: bold; }
+        .text-green { color: var(--success); font-weight: bold; }
+        .text-red { color: var(--danger); font-weight: bold; }
 
-        .delete-btn { background: #ff3366; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        .delete-btn:hover { background: #e60039; }
+        .delete-btn { background: #fee2e2; color: var(--danger); border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: bold; transition: background 0.2s; }
+        .delete-btn:hover { background: #fecaca; }
 
         @media print {
-            .no-print { display: none !important; }
-            body { padding: 0; background-color: white; }
-            table { box-shadow: none; width: 100%; border: 1px solid #000; }
+            .sidebar, .no-print { display: none !important; }
+            .main-content { margin-left: 0; padding: 0; }
+            body { background-color: white; }
+            table { border: 1px solid #000; }
             th, td { border: 1px solid #000; color: #000; padding: 6px; font-size: 11px; }
-            th { background-color: #f2f2f2 !important; color: #000; }
-            .header { background: none; color: black; padding: 0; border: none; text-align: center; margin-bottom: 15px;}
-            .header h2 { font-size: 20px; border-bottom: 2px solid black; padding-bottom: 8px;}
+            th { background-color: #f2f2f2 !important; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h2>Pusdekar Digital - Daily Management</h2>
-        <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
+    <!-- DigiSmart Style Sidebar -->
+    <div class="sidebar no-print">
+        <div class="sidebar-brand">
+            <span>⚡ Pusdekar Digital</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active">📊 डॅशबोर्ड (Dashboard)</li>
+            <li onclick="window.scrollTo({top: 800, behavior: 'smooth'})">💸 नवीन व्यवहार (New Entry)</li>
+            <li onclick="window.scrollTo({top: 400, behavior: 'smooth'})">☀️ ॲडजस्टमेंट (Adjustment)</li>
+            <li onclick="window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'})">📑 ट्रान्झॅक्शन रिपोर्ट</li>
+        </ul>
     </div>
 
-    <!-- Grand Total Available Balance Card -->
-    <div class="grand-total-card">
-        <h4>💰 एकूण उपलब्ध बॅलन्स (Total Business Balance)</h4>
-        <h2 id="grandTotalBalance">₹ 0</h2>
-    </div>
-
-    <!-- Wallets & Cash Display Cards -->
-    <div class="wallet-cards">
-        <div class="w-card card-fino">
-            <h4>Fino Wallet</h4>
-            <h3 id="finoBalance">₹ 0</h3>
-        </div>
-        <div class="w-card card-payworld">
-            <h4>Payworld Wallet</h4>
-            <h3 id="payworldBalance">₹ 0</h3>
-        </div>
-        
-        <!-- Main UPI Box with 4 Sub-Bank Boxes -->
-        <div class="w-card card-upi">
-            <h4>UPI Wallet (Total)</h4>
-            <h3 id="upiBalance">₹ 0</h3>
-            
-            <div class="sub-banks-grid">
-                <div class="sub-bank">
-                    <span id="labelAxis">Axis Bank</span>
-                    <strong id="axisBalance">₹ 0</strong>
-                </div>
-                <div class="sub-bank">
-                    <span id="labelSbi">SBI</span>
-                    <strong id="sbiBalance">₹ 0</strong>
-                </div>
-                <div class="sub-bank">
-                    <span id="labelBoi">Bank of India</span>
-                    <strong id="boiBalance">₹ 0</strong>
-                </div>
-                <div class="sub-bank">
-                    <span id="labelUnion">Union Bank</span>
-                    <strong id="unionBalance">₹ 0</strong>
-                </div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h2 style="margin:0; font-size: 22px; color: #1e293b;">Daily Management System</h2>
+                <span style="font-size: 13px; color: #64748b;">Welcome back, Master Admin</span>
             </div>
+            <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
-        <div class="w-card card-mahapower">
-            <h4>Mahapower Wallet</h4>
-            <h3 id="mahapowerBalance">₹ 0</h3>
+        <!-- Grand Total Balance Card -->
+        <div class="grand-total-card">
+            <h4>💰 एकूण उपलब्ध बॅलन्स (Total Business Balance)</h4>
+            <h2 id="grandTotalBalance">₹ 0</h2>
         </div>
-        <div class="w-card card-cash">
-            <h4>Cash in Hand (रोख गल्ला)</h4>
-            <h3 id="cashBalance">₹ 0</h3>
-        </div>
-    </div>
 
-    <!-- Summary Income Cards -->
-    <div class="summary-cards no-print">
-        <div class="card income">
-            <h4>आजची एकूण कमाई (कमिशन)</h4>
-            <h3 id="todayIncome">₹ 0</h3>
-        </div>
-        <div class="card expense">
-            <h4>आजचा एकूण खर्च</h4>
-            <h3 id="todayExpense">₹ 0</h3>
-        </div>
-        <div class="card monthly">
-            <h4>या महिन्याची एकूण कमाई</h4>
-            <h3 id="monthlyIncome">₹ 0</h3>
-        </div>
-    </div>
-
-    <!-- Bank / Wallet Name Settings Panel (नवीन फिचर: नाव बदलण्याची सोय) -->
-    <div class="container no-print" style="border-left: 5px solid #6f42c1; background: #faf5ff;">
-        <h3 style="margin-top: 0; color: #6f42c1;">⚙️ UPI बँक/वॉलेटची नावे बदला (Rename Wallets)</h3>
-        <div class="form-row">
-            <div class="form-group">
-                <label>बंक १ चे नाव (Default: Axis)</label>
-                <input type="text" id="renameAxis" placeholder="उदा. QR Code 1 / Axis">
+        <!-- Wallets & Cash Display Cards -->
+        <div class="wallet-cards">
+            <div class="w-card card-fino">
+                <h4>Fino Wallet</h4>
+                <h3 id="finoBalance">₹ 0</h3>
             </div>
-            <div class="form-group">
-                <label>बंक २ चे नाव (Default: SBI)</label>
-                <input type="text" id="renameSbi" placeholder="उदा. PhonePe / SBI">
-            </div>
-            <div class="form-group">
-                <label>बंक ३ चे नाव (Default: BOI)</label>
-                <input type="text" id="renameBoi" placeholder="उदा. GPay / BOI">
-            </div>
-            <div class="form-group">
-                <label>बंक ४ चे नाव (Default: Union)</label>
-                <input type="text" id="renameUnion" placeholder="उदा. Paytm / Union">
-            </div>
-        </div>
-        <button class="adj-btn" style="background: #6f42c1;" onclick="saveWalletNames()">Save Wallet Names</button>
-    </div>
-
-    <!-- Morning Opening Balance / Wallet Adjustment Form -->
-    <div class="container no-print" style="border-left: 5px solid #17a2b8;">
-        <h3 style="margin-top: 0; color: #17a2b8;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
-        <div class="form-row">
-            <div class="form-group">
-                <label>कोणते वॉलेट किंवा बँक निवडा</label>
-                <select id="adjWallet">
-                    <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
-                    <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
-                    <option value="Axis Opening" id="optAxis">Axis Bank UPI ॲडजस्टमेंट</option>
-                    <option value="SBI Opening" id="optSbi">SBI UPI ॲडजस्टमेंट</option>
-                    <option value="BOI Opening" id="optBoi">Bank of India UPI ॲडजस्टमेंट</option>
-                    <option value="Union Opening" id="optUnion">Union Bank UPI ॲडजस्टमेंट</option>
-                    <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
-                    <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>रक्कम टाका (Amount in ₹) *</label>
-                <input type="number" id="adjAmount" placeholder="उदा. 5000">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label>नरेशन / टीप (Narration / तपशील)</label>
-                <input type="text" id="adjNarration" placeholder="उदा. बँकेत भरण्यासाठी कॅश दिली">
-            </div>
-        </div>
-        <button class="adj-btn" onclick="saveAdjustment()">Update Balance / Add Amount</button>
-    </div>
-
-    <!-- Entry Form -->
-    <div class="container no-print">
-        <h3 style="margin-top: 0; color: #0061f2;">नवीन व्यवहार नोंद (New Entry)</h3>
-        
-        <div class="form-row">
-            <div class="form-group">
-                <label>सर्व्हिसचा प्रकार (Service Type)</label>
-                <select id="serviceType" onchange="toggleFormFields()">
-                    <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
-                    <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
-                    <option value="Fino Cash Deposit">Fino Cash Deposit (ग्राहक कॅश देऊन फिनो ने पैसे घेणे)</option>
-                    <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
-                    <option value="Payworld Services">Payworld Services (Wallet)</option>
-                    <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
-                    <option value="Printing & Xerox">Xerox / Printing / Banner</option>
-                    <option value="Bill Payment">Bill Payment / Recharge</option>
-                    <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
-                </select>
+            <div class="w-card card-payworld">
+                <h4>Payworld Wallet</h4>
+                <h3 id="payworldBalance">₹ 0</h3>
             </div>
             
-            <div class="form-group">
-                <label>रक्कम (Transaction Amount in ₹) *</label>
-                <input type="number" id="amount" placeholder="व्यवहाराची मूळ रक्कम">
+            <!-- Main UPI Box with 4 Sub-Bank Boxes -->
+            <div class="w-card card-upi">
+                <h4>UPI Wallet (Total)</h4>
+                <h3 id="upiBalance">₹ 0</h3>
+                
+                <div class="sub-banks-grid">
+                    <div class="sub-bank">
+                        <span id="labelAxis">Axis Bank</span>
+                        <strong id="axisBalance">₹ 0</strong>
+                    </div>
+                    <div class="sub-bank">
+                        <span id="labelSbi">SBI</span>
+                        <strong id="sbiBalance">₹ 0</strong>
+                    </div>
+                    <div class="sub-bank">
+                        <span id="labelBoi">Bank of India</span>
+                        <strong id="boiBalance">₹ 0</strong>
+                    </div>
+                    <div class="sub-bank">
+                        <span id="labelUnion">Union Bank</span>
+                        <strong id="unionBalance">₹ 0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-card card-mahapower">
+                <h4>Mahapower Wallet</h4>
+                <h3 id="mahapowerBalance">₹ 0</h3>
+            </div>
+            <div class="w-card card-cash">
+                <h4>Cash in Hand (रोख गल्ला)</h4>
+                <h3 id="cashBalance">₹ 0</h3>
             </div>
         </div>
 
-        <!-- बँक निवडण्याचा बॉक्स -->
-        <div class="form-row" id="bankSelectRow" style="display: none; background: #f0f4ff; padding: 10px; border-radius: 6px; border: 1px dashed #0052cc;">
-            <div class="form-group">
-                <label style="color: #0052cc; font-weight: bold;">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
-                <select id="upiBank">
-                    <option value="Axis" id="bankOptAxis">Axis Bank</option>
-                    <option value="SBI" id="bankOptSbi">SBI</option>
-                    <option value="BOI" id="bankOptBoi">Bank of India</option>
-                    <option value="Union" id="bankOptUnion">Union Bank</option>
-                </select>
+        <!-- Summary Income Cards -->
+        <div class="summary-cards no-print">
+            <div class="card income">
+                <h4>आजची एकूण कमाई (कमिशन)</h4>
+                <h3 id="todayIncome">₹ 0</h3>
+            </div>
+            <div class="card expense">
+                <h4>आजचा एकूण खर्च</h4>
+                <h3 id="todayExpense">₹ 0</h3>
+            </div>
+            <div class="card monthly">
+                <h4>या महिन्याची एकूण कमाई</h4>
+                <h3 id="monthlyIncome">₹ 0</h3>
             </div>
         </div>
 
-        <!-- खर्चासाठी माध्यम निवडण्याचा बॉक्स -->
-        <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff3f3; padding: 10px; border-radius: 6px; border: 1px dashed #dc3545;">
-            <div class="form-group">
-                <label style="color: #dc3545; font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
-                <select id="expenseSource">
-                    <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                    <option value="Axis" id="expOptAxis">Axis Bank UPI</option>
-                    <option value="SBI" id="expOptSbi">SBI UPI</option>
-                    <option value="BOI" id="expOptBoi">Bank of India UPI</option>
-                    <option value="Union" id="expOptUnion">Union Bank UPI</option>
-                    <option value="Fino">Fino Wallet</option>
-                    <option value="Payworld">Payworld Wallet</option>
-                    <option value="Mahapower">Mahapower Wallet</option>
-                </select>
+        <!-- Bank / Wallet Name Settings Panel -->
+        <div class="container no-print" style="border-left: 5px solid var(--primary);">
+            <h3 style="margin-top: 0; color: var(--primary);">⚙️ UPI बँक/वॉलेटची नावे बदला (Rename Wallets)</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>बंक १ चे नाव</label>
+                    <input type="text" id="renameAxis" placeholder="उदा. QR Code 1 / Axis">
+                </div>
+                <div class="form-group">
+                    <label>बंक २ चे नाव</label>
+                    <input type="text" id="renameSbi" placeholder="उदा. PhonePe / SBI">
+                </div>
+                <div class="form-group">
+                    <label>बंक ३ चे नाव</label>
+                    <input type="text" id="renameBoi" placeholder="उदा. GPay / BOI">
+                </div>
+                <div class="form-group">
+                    <label>बंक ४ चे नाव</label>
+                    <input type="text" id="renameUnion" placeholder="उदा. Paytm / Union">
+                </div>
+            </div>
+            <button class="adj-btn" onclick="saveWalletNames()">Save Wallet Names</button>
+        </div>
+
+        <!-- Morning Opening Balance / Wallet Adjustment Form -->
+        <div class="container no-print" style="border-left: 5px solid #0891b2;">
+            <h3 style="margin-top: 0; color: #0891b2;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>कोणते वॉलेट किंवा बँक निवडा</label>
+                    <select id="adjWallet">
+                        <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
+                        <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
+                        <option value="Axis Opening" id="optAxis">Axis Bank ॲडजस्टमेंट</option>
+                        <option value="SBI Opening" id="optSbi">SBI ॲडजस्टमेंट</option>
+                        <option value="BOI Opening" id="optBoi">Bank of India ॲडजस्टमेंट</option>
+                        <option value="Union Opening" id="optUnion">Union Bank ॲडजस्टमेंट</option>
+                        <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
+                        <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>रक्कम टाका (Amount in ₹) *</label>
+                    <input type="number" id="adjAmount" placeholder="उदा. 5000">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>नरेशन / टीप (Narration / तपशील)</label>
+                    <input type="text" id="adjNarration" placeholder="उदा. बँकेत भरण्यासाठी कॅश दिली">
+                </div>
+            </div>
+            <button class="adj-btn" style="background: #0891b2;" onclick="saveAdjustment()">Update Balance / Add Amount</button>
+        </div>
+
+        <!-- Entry Form -->
+        <div class="container no-print">
+            <h3 style="margin-top: 0; color: var(--primary);">नवीन व्यवहार नोंद (New Entry)</h3>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>सर्व्हिसचा प्रकार (Service Type)</label>
+                    <select id="serviceType" onchange="toggleFormFields()">
+                        <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
+                        <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
+                        <option value="Fino Cash Deposit">Fino Cash Deposit (ग्राहक कॅश देऊन फिनो ने पैसे घेणे)</option>
+                        <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
+                        <option value="Payworld Services">Payworld Services (Wallet)</option>
+                        <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
+                        <option value="Printing & Xerox">Xerox / Printing / Banner</option>
+                        <option value="Bill Payment">Bill Payment / Recharge</option>
+                        <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>रक्कम (Transaction Amount in ₹) *</label>
+                    <input type="number" id="amount" placeholder="व्यवहाराची मूळ रक्कम">
+                </div>
+            </div>
+
+            <!-- बँक निवडण्याचा बॉक्स -->
+            <div class="form-row" id="bankSelectRow" style="display: none; background: #eef2ff; padding: 12px; border-radius: 8px; border: 1px dashed var(--primary);">
+                <div class="form-group">
+                    <label style="color: var(--primary); font-weight: bold;">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
+                    <select id="upiBank">
+                        <option value="Axis" id="bankOptAxis">Axis Bank</option>
+                        <option value="SBI" id="bankOptSbi">SBI</option>
+                        <option value="BOI" id="bankOptBoi">Bank of India</option>
+                        <option value="Union" id="bankOptUnion">Union Bank</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- खर्चासाठी माध्यम निवडण्याचा बॉक्स -->
+            <div class="form-row" id="expenseSourceRow" style="display: none; background: #fee2e2; padding: 12px; border-radius: 8px; border: 1px dashed var(--danger);">
+                <div class="form-group">
+                    <label style="color: var(--danger); font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
+                    <select id="expenseSource">
+                        <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                        <option value="Axis" id="expOptAxis">Axis Bank UPI</option>
+                        <option value="SBI" id="expOptSbi">SBI UPI</option>
+                        <option value="BOI" id="expOptBoi">Bank of India UPI</option>
+                        <option value="Union" id="expOptUnion">Union Bank UPI</option>
+                        <option value="Fino">Fino Wallet</option>
+                        <option value="Payworld">Payworld Wallet</option>
+                        <option value="Mahapower">Mahapower Wallet</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ग्राहक मोबाईल नंबर (Mobile Number)</label>
+                    <input type="tel" id="mobile" placeholder="नंबर टाकताच जुनी माहिती येईल" maxlength="10" onblur="searchCustomer()">
+                    <span id="searchMsg" style="color:var(--success); font-size:11px; display:none; margin-top: 4px;">✔️ जुना ग्राहक सापडला!</span>
+                </div>
+
+                <div class="form-group">
+                    <label>तपशील / ग्राहकाचे नाव (Customer Name) *</label>
+                    <input type="text" id="details" placeholder="ग्राहकाचे पूर्ण नाव">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>राज्य (State)</label>
+                    <select id="stateSelect">
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>जिल्हा (District)</label>
+                    <input type="text" id="districtInput" placeholder="उदा. वर्धा, नागपूर">
+                </div>
+                <div class="form-group">
+                    <label>गाव / तहसील (Village / Tehsil)</label>
+                    <input type="text" id="villageInput" placeholder="उदा. माढेळी, सिंधी">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>पेमेंट स्थिती (Payment Status)</label>
+                    <select id="payStatus">
+                        <option value="Paid">Paid (रोख/ऑनलाइन जमा)</option>
+                        <option value="Udhar">Udhar (उधारी / बाकी)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>व्यवहाराचे कारण (Purpose)</label>
+                    <input type="text" id="purpose" placeholder="उदा. चहापाणी, वीज बिल, इ.">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>पॅन / आधार क्रमांक (PAN/Aadhaar)</label>
+                    <input type="text" id="idProof" placeholder="₹10,000 च्या वर सक्तीचे">
+                </div>
+
+                <div class="form-group">
+                    <label>मिळालेले कमिशन (Commission in ₹)</label>
+                    <input type="number" id="commission" placeholder="तुमची कमाई">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>नरेशन / टीप (Narration)</label>
+                    <input type="text" id="entryNarration" placeholder="व्यवहाराविषयी विशेष टीप">
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
+        </div>
+
+        <!-- Date Filter & Print Section -->
+        <div class="filter-section no-print">
+            <div class="form-group" style="margin-bottom:0;">
+                <label>कुठून तारीख (From Date):</label>
+                <input type="date" id="fromDate" onchange="filterData()">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+                <label>कुठपर्यंत तारीख (To Date):</label>
+                <input type="date" id="toDate" onchange="filterData()">
+            </div>
+            <div>
+                <button class="print-btn" onclick="window.print()">🖨️ Print Statement</button>
+            </div>
+            <div>
+                <button class="print-btn" style="background:var(--primary);" onclick="resetFilter()">All Data</button>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label>ग्राहक मोबाईल नंबर (Mobile Number)</label>
-                <input type="tel" id="mobile" placeholder="नंबर टाकताच जुनी माहिती येईल" maxlength="10" onblur="searchCustomer()">
-                <span id="searchMsg" style="color:#28a745; font-size:11px; display:none;">✔️ जुना ग्राहक सापडला!</span>
-            </div>
-
-            <div class="form-group">
-                <label>तपशील / ग्राहकाचे नाव (Customer Name) *</label>
-                <input type="text" id="details" placeholder="ग्राहकाचे पूर्ण नाव">
-            </div>
+        <!-- Data Table -->
+        <div class="table-responsive">
+            <table id="reportTable">
+                <thead>
+                    <tr>
+                        <th>वेळ/तारीख</th>
+                        <th>सर्व्हिस</th>
+                        <th>नाव</th>
+                        <th>मोबाईल</th>
+                        <th>पत्ता</th>
+                        <th>स्थिती</th>
+                        <th>कारण / नरेशन</th>
+                        <th>पॅन/आधार</th>
+                        <th>रक्कम (₹)</th>
+                        <th>कमिशन (₹)</th>
+                        <th class="no-print">कृती</th>
+                    </tr>
+                </thead>
+                <tbody id="entriesTable"></tbody>
+            </table>
         </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>राज्य (State)</label>
-                <select id="stateSelect">
-                    <option value="Maharashtra">Maharashtra</option>
-                    <option value="Madhya Pradesh">Madhya Pradesh</option>
-                    <option value="Chhattisgarh">Chhattisgarh</option>
-                    <option value="Gujarat">Gujarat</option>
-                    <option value="Karnataka">Karnataka</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>जिल्हा (District)</label>
-                <input type="text" id="districtInput" placeholder="उदा. वर्धा, नागपूर">
-            </div>
-            <div class="form-group">
-                <label>गाव / तहसील (Village / Tehsil)</label>
-                <input type="text" id="villageInput" placeholder="उदा. माढेळी, सिंधी">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>पेमेंट स्थिती (Payment Status)</label>
-                <select id="payStatus">
-                    <option value="Paid">Paid (रोख/ऑनलाइन जमा)</option>
-                    <option value="Udhar">Udhar (उधारी / बाकी)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>व्यवहाराचे कारण (Purpose)</label>
-                <input type="text" id="purpose" placeholder="उदा. चहापाणी, वीज बिल, इ.">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>पॅन / आधार क्रमांक (PAN/Aadhaar)</label>
-                <input type="text" id="idProof" placeholder="₹10,000 च्या वर सक्तीचे">
-            </div>
-
-            <div class="form-group">
-                <label>मिळालेले कमिशन (Commission in ₹)</label>
-                <input type="number" id="commission" placeholder="तुमची कमाई">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>नरेशन / टीप (Narration)</label>
-                <input type="text" id="entryNarration" placeholder="व्यवहाराविषयी विशेष टीप">
-            </div>
-        </div>
-
-        <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
-    </div>
-
-    <!-- Date Filter & Print Section -->
-    <div class="filter-section no-print">
-        <div class="form-group" style="margin-bottom:0;">
-            <label>कुठून तारीख (From Date):</label>
-            <input type="date" id="fromDate" onchange="filterData()">
-        </div>
-        <div class="form-group" style="margin-bottom:0;">
-            <label>कुठपर्यंत तारीख (To Date):</label>
-            <input type="date" id="toDate" onchange="filterData()">
-        </div>
-        <div>
-            <button class="print-btn" onclick="window.print()">🖨️ Print Statement</button>
-        </div>
-        <div>
-            <button class="print-btn" style="background:#17a2b8;" onclick="resetFilter()">All Data</button>
-        </div>
-    </div>
-
-    <!-- Data Table -->
-    <div class="table-responsive">
-        <table id="reportTable">
-            <thead>
-                <tr>
-                    <th>वेळ/तारीख</th>
-                    <th>सर्व्हिस</th>
-                    <th>नाव</th>
-                    <th>मोबाईल</th>
-                    <th>पत्ता</th>
-                    <th>स्थिती</th>
-                    <th>कारण / नरेशन</th>
-                    <th>पॅन/आधार</th>
-                    <th>रक्कम (₹)</th>
-                    <th>कमिशन (₹)</th>
-                    <th class="no-print">कृती</th>
-                </tr>
-            </thead>
-            <tbody id="entriesTable"></tbody>
-        </table>
     </div>
 
     <!-- Firebase SDKs -->
@@ -410,7 +525,6 @@
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
         }
 
-        // लोड झाल्यावर युजरने सेव्ह केलेले बँक/वॉलेटचे नाव लोड करणे
         window.onload = function() {
             loadWalletNames();
         }
@@ -673,7 +787,6 @@
                 let amtDisplay = `₹ ${data.amount}`;
                 let serviceDisplay = data.service;
 
-                // डायनॅमिक बँक नावे टेबलमध्ये दाखवण्यासाठी
                 const axisCustomName = localStorage.getItem("wallet_axis") || "Axis Bank";
                 const sbiCustomName = localStorage.getItem("wallet_sbi") || "SBI";
                 const boiCustomName = localStorage.getItem("wallet_boi") || "Bank of India";
@@ -701,7 +814,7 @@
 
                 let purposeText = data.purpose || "-";
                 if(data.narration && data.narration !== "-") {
-                    purposeText += ` <br><small style="color: #666;">📝 ${data.narration}</small>`;
+                    purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
                 }
 
                 const row = `<tr>
