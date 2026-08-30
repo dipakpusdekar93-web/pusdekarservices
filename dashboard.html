@@ -116,19 +116,19 @@
             
             <div class="sub-banks-grid">
                 <div class="sub-bank">
-                    <span>Axis Bank</span>
+                    <span id="labelAxis">Axis Bank</span>
                     <strong id="axisBalance">₹ 0</strong>
                 </div>
                 <div class="sub-bank">
-                    <span>SBI</span>
+                    <span id="labelSbi">SBI</span>
                     <strong id="sbiBalance">₹ 0</strong>
                 </div>
                 <div class="sub-bank">
-                    <span>Bank of India</span>
+                    <span id="labelBoi">Bank of India</span>
                     <strong id="boiBalance">₹ 0</strong>
                 </div>
                 <div class="sub-bank">
-                    <span>Union Bank</span>
+                    <span id="labelUnion">Union Bank</span>
                     <strong id="unionBalance">₹ 0</strong>
                 </div>
             </div>
@@ -160,6 +160,30 @@
         </div>
     </div>
 
+    <!-- Bank / Wallet Name Settings Panel (नवीन फिचर: नाव बदलण्याची सोय) -->
+    <div class="container no-print" style="border-left: 5px solid #6f42c1; background: #faf5ff;">
+        <h3 style="margin-top: 0; color: #6f42c1;">⚙️ UPI बँक/वॉलेटची नावे बदला (Rename Wallets)</h3>
+        <div class="form-row">
+            <div class="form-group">
+                <label>बंक १ चे नाव (Default: Axis)</label>
+                <input type="text" id="renameAxis" placeholder="उदा. QR Code 1 / Axis">
+            </div>
+            <div class="form-group">
+                <label>बंक २ चे नाव (Default: SBI)</label>
+                <input type="text" id="renameSbi" placeholder="उदा. PhonePe / SBI">
+            </div>
+            <div class="form-group">
+                <label>बंक ३ चे नाव (Default: BOI)</label>
+                <input type="text" id="renameBoi" placeholder="उदा. GPay / BOI">
+            </div>
+            <div class="form-group">
+                <label>बंक ४ चे नाव (Default: Union)</label>
+                <input type="text" id="renameUnion" placeholder="उदा. Paytm / Union">
+            </div>
+        </div>
+        <button class="adj-btn" style="background: #6f42c1;" onclick="saveWalletNames()">Save Wallet Names</button>
+    </div>
+
     <!-- Morning Opening Balance / Wallet Adjustment Form -->
     <div class="container no-print" style="border-left: 5px solid #17a2b8;">
         <h3 style="margin-top: 0; color: #17a2b8;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट (Opening Balance Setup)</h3>
@@ -169,10 +193,10 @@
                 <select id="adjWallet">
                     <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
                     <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
-                    <option value="Axis Opening">Axis Bank UPI ॲडजस्टमेंट</option>
-                    <option value="SBI Opening">SBI UPI ॲडजस्टमेंट</option>
-                    <option value="BOI Opening">Bank of India UPI ॲडजस्टमेंट</option>
-                    <option value="Union Opening">Union Bank UPI ॲडजस्टमेंट</option>
+                    <option value="Axis Opening" id="optAxis">Axis Bank UPI ॲडजस्टमेंट</option>
+                    <option value="SBI Opening" id="optSbi">SBI UPI ॲडजस्टमेंट</option>
+                    <option value="BOI Opening" id="optBoi">Bank of India UPI ॲडजस्टमेंट</option>
+                    <option value="Union Opening" id="optUnion">Union Bank UPI ॲडजस्टमेंट</option>
                     <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
                     <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                 </select>
@@ -201,7 +225,7 @@
                 <select id="serviceType" onchange="toggleFormFields()">
                     <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                     <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
-                    <option value="Fino Cash Deposit">Fino Cash Deposit (ग्राहक कॅश देऊन फino ने पैसे घेणे)</option>
+                    <option value="Fino Cash Deposit">Fino Cash Deposit (ग्राहक कॅश देऊन फिनो ने पैसे घेणे)</option>
                     <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
                     <option value="Payworld Services">Payworld Services (Wallet)</option>
                     <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
@@ -222,10 +246,10 @@
             <div class="form-group">
                 <label style="color: #0052cc; font-weight: bold;">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
                 <select id="upiBank">
-                    <option value="Axis">Axis Bank</option>
-                    <option value="SBI">SBI</option>
-                    <option value="BOI">Bank of India</option>
-                    <option value="Union">Union Bank</option>
+                    <option value="Axis" id="bankOptAxis">Axis Bank</option>
+                    <option value="SBI" id="bankOptSbi">SBI</option>
+                    <option value="BOI" id="bankOptBoi">Bank of India</option>
+                    <option value="Union" id="bankOptUnion">Union Bank</option>
                 </select>
             </div>
         </div>
@@ -236,10 +260,10 @@
                 <label style="color: #dc3545; font-weight: bold;">हा खर्च कोणत्या माध्यमातून केला? (Expense From)</label>
                 <select id="expenseSource">
                     <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                    <option value="Axis">Axis Bank UPI</option>
-                    <option value="SBI">SBI UPI</option>
-                    <option value="BOI">Bank of India UPI</option>
-                    <option value="Union">Union Bank UPI</option>
+                    <option value="Axis" id="expOptAxis">Axis Bank UPI</option>
+                    <option value="SBI" id="expOptSbi">SBI UPI</option>
+                    <option value="BOI" id="expOptBoi">Bank of India UPI</option>
+                    <option value="Union" id="expOptUnion">Union Bank UPI</option>
                     <option value="Fino">Fino Wallet</option>
                     <option value="Payworld">Payworld Wallet</option>
                     <option value="Mahapower">Mahapower Wallet</option>
@@ -384,6 +408,58 @@
 
         function logoutUser() {
             firebase.auth().signOut().then(() => { window.location.href = "login.html"; });
+        }
+
+        // लोड झाल्यावर युजरने सेव्ह केलेले बँक/वॉलेटचे नाव लोड करणे
+        window.onload = function() {
+            loadWalletNames();
+        }
+
+        function saveWalletNames() {
+            const axisName = document.getElementById('renameAxis').value || "Axis Bank";
+            const sbiName = document.getElementById('renameSbi').value || "SBI";
+            const boiName = document.getElementById('renameBoi').value || "Bank of India";
+            const unionName = document.getElementById('renameUnion').value || "Union Bank";
+
+            localStorage.setItem("wallet_axis", axisName);
+            localStorage.setItem("wallet_sbi", sbiName);
+            localStorage.setItem("wallet_boi", boiName);
+            localStorage.setItem("wallet_union", unionName);
+
+            loadWalletNames();
+            alert("बँक/वॉलेटची नावे यशस्वीरित्या बदलली!");
+        }
+
+        function loadWalletNames() {
+            const axisName = localStorage.getItem("wallet_axis") || "Axis Bank";
+            const sbiName = localStorage.getItem("wallet_sbi") || "SBI";
+            const boiName = localStorage.getItem("wallet_boi") || "Bank of India";
+            const unionName = localStorage.getItem("wallet_union") || "Union Bank";
+
+            document.getElementById('labelAxis').innerText = axisName;
+            document.getElementById('labelSbi').innerText = sbiName;
+            document.getElementById('labelBoi').innerText = boiName;
+            document.getElementById('labelUnion').innerText = unionName;
+
+            document.getElementById('optAxis').innerText = axisName + " ॲडजस्टमेंट";
+            document.getElementById('optSbi').innerText = sbiName + " ॲडजस्टमेंट";
+            document.getElementById('optBoi').innerText = boiName + " ॲडजस्टमेंट";
+            document.getElementById('optUnion').innerText = unionName + " ॲडजस्टमेंट";
+
+            document.getElementById('bankOptAxis').innerText = axisName;
+            document.getElementById('bankOptSbi').innerText = sbiName;
+            document.getElementById('bankOptBoi').innerText = boiName;
+            document.getElementById('bankOptUnion').innerText = unionName;
+
+            document.getElementById('expOptAxis').innerText = axisName + " UPI";
+            document.getElementById('expOptSbi').innerText = sbiName + " UPI";
+            document.getElementById('expOptBoi').innerText = boiName + " UPI";
+            document.getElementById('expOptUnion').innerText = unionName + " UPI";
+
+            document.getElementById('renameAxis').value = axisName === "Axis Bank" ? "" : axisName;
+            document.getElementById('renameSbi').value = sbiName === "SBI" ? "" : sbiName;
+            document.getElementById('renameBoi').value = boiName === "Bank of India" ? "" : boiName;
+            document.getElementById('renameUnion').value = unionName === "Union Bank" ? "" : unionName;
         }
 
         function toggleFormFields() {
@@ -549,8 +625,6 @@
                 
                 else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
                 else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
-                
-                // नवीन फिफ्चर: फिफो कॅश डिपॉझिट (फिनोचे वॉलेट कमी होईल आणि कॅश गल्ल्यात वाढेल)
                 else if(data.service === "Fino Cash Deposit") { finoBal -= amt; cashBal += amt; }
                 
                 else if(data.service === "Money Transfer") {
@@ -599,10 +673,26 @@
                 let amtDisplay = `₹ ${data.amount}`;
                 let serviceDisplay = data.service;
 
+                // डायनॅमिक बँक नावे टेबलमध्ये दाखवण्यासाठी
+                const axisCustomName = localStorage.getItem("wallet_axis") || "Axis Bank";
+                const sbiCustomName = localStorage.getItem("wallet_sbi") || "SBI";
+                const boiCustomName = localStorage.getItem("wallet_boi") || "Bank of India";
+                const unionCustomName = localStorage.getItem("wallet_union") || "Union Bank";
+
                 if(data.service === "Money Transfer" || data.service === "UPI Cash Given") {
-                    serviceDisplay += ` (${bSrc})`;
+                    let dispBank = bSrc;
+                    if(bSrc === "Axis") dispBank = axisCustomName;
+                    else if(bSrc === "SBI") dispBank = sbiCustomName;
+                    else if(bSrc === "BOI") dispBank = boiCustomName;
+                    else if(bSrc === "Union") dispBank = unionCustomName;
+                    serviceDisplay += ` (${dispBank})`;
                 } else if(data.service === "Shop Expense") {
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`;
+                    let dispExp = eSrc;
+                    if(eSrc === "Axis") dispExp = axisCustomName;
+                    else if(eSrc === "SBI") dispExp = sbiCustomName;
+                    else if(eSrc === "BOI") dispExp = boiCustomName;
+                    else if(eSrc === "Union") dispExp = unionCustomName;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
                 } else if(data.service === "Fino Cash Deposit") {
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (Fino Wallet)</span>`;
                 } else if(!data.service.includes("Opening")) {
