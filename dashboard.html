@@ -220,7 +220,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="active" onclick="switchTab('dashboard')">📊 डॅशबोर्ड (Dashboard)</li>
-            <li onclick="switchTab('statement')">📑 स्टेटमेंट आणि रिपोर्ट्स</li>
+            <li onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट</li>
         </ul>
     </div>
 
@@ -728,17 +728,23 @@
                 if (data.timestamp) { dateStr = data.timestamp.toDate().toLocaleString('en-IN'); }
 
                 const amt = parseFloat(data.amount) || 0;
+                const comm = parseFloat(data.commission) || 0;
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                // Running Balance calculation logic entry-wise
-                if(data.service.includes("Opening") || data.service === "Money Transfer" || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "UPI Cash Given") {
-                    // For deposits / business inflows adding to net worth or standard tracking
-                    if(data.service.includes("Opening") || data.service === "Fino Payment Bank" || data.service === "Payworld Services") {
-                        runningBal += amt;
-                    } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
-                        runningBal -= amt;
-                    }
+                // LEDGER LOGIC: 
+                // Opening & Adjustments affect total net balance directly by 'amt'.
+                // Services like Fino, Payworld, Money Transfer are internal transfers between wallet and cash, 
+                // so they DO NOT change total net worth except via 'Expenses' (-) or 'Commissions' (+).
+                if(data.service.includes("Opening")) {
+                    runningBal += amt;
+                } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
+                    runningBal -= amt;
+                }
+
+                // Add Commission earned to running balance as it's pure profit/cash addition to business
+                if(comm > 0) {
+                    runningBal += comm;
                 }
 
                 let serviceDisplay = data.service;
