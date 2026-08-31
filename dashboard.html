@@ -220,7 +220,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="active" onclick="switchTab('dashboard')">📊 डॅशबोर्ड (Dashboard)</li>
-            <li onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट</li>
+            <li onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट व वॉलेट रिपोर्ट</li>
         </ul>
     </div>
 
@@ -237,7 +237,7 @@
         <!-- Top Navigation Switcher Tabs -->
         <div class="tab-nav no-print">
             <button class="tab-btn active" id="btnDashboard" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व एंट्री फॉर्म</button>
-            <button class="tab-btn" id="btnStatement" onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट व रनिंग बॅलन्स</button>
+            <button class="tab-btn" id="btnStatement" onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट व वॉलेट रिपोर्ट्स</button>
         </div>
 
         <!-- ================= VIEW 1: DASHBOARD ================= -->
@@ -402,9 +402,24 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: STATEMENT & RUNNING BALANCE ================= -->
+        <!-- ================= VIEW 2: STATEMENT & WALLET REPORTS ================= -->
         <div id="viewStatement" class="view-section">
             <div class="filter-section">
+                <!-- Wallet Wise Filter Dropdown -->
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>खाते / वॉलेट निवडा (Wallet Wise Filter):</label>
+                    <select id="walletFilter" onchange="filterData()">
+                        <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
+                        <option value="Fino">Fino Wallet</option>
+                        <option value="Payworld">Payworld Wallet</option>
+                        <option value="Axis">Axis Bank</option>
+                        <option value="SBI">SBI Bank</option>
+                        <option value="BOI">Bank of India (BOI)</option>
+                        <option value="Union">Union Bank</option>
+                        <option value="Mahapower">Mahapower Wallet</option>
+                        <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                    </select>
+                </div>
                 <div class="form-group" style="margin-bottom:0;">
                     <label>कुठून तारीख (From Date):</label>
                     <input type="date" id="fromDate" onchange="filterData()">
@@ -710,7 +725,7 @@
             document.getElementById('todayExpense').innerText = "₹ " + todayExpense;
             document.getElementById('monthlyIncome').innerText = "₹ " + monthlyIncome;
 
-            renderStatementTable(dataList);
+            filterData();
         }
 
         function renderStatementTable(dataList) {
@@ -732,17 +747,12 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                // LEDGER LOGIC: 
-                // Opening & Adjustments affect total net balance directly by 'amt'.
-                // Services like Fino, Payworld, Money Transfer are internal transfers between wallet and cash, 
-                // so they DO NOT change total net worth except via 'Expenses' (-) or 'Commissions' (+).
                 if(data.service.includes("Opening")) {
                     runningBal += amt;
                 } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
                     runningBal -= amt;
                 }
 
-                // Add Commission earned to running balance as it's pure profit/cash addition to business
                 if(comm > 0) {
                     runningBal += comm;
                 }
@@ -786,20 +796,49 @@
         }
 
         function filterData() {
-            const f = document.getElementById('fromDate').value, t = document.getElementById('toDate').value;
-            if(!f || !t) return;
-            const fromDate = new Date(f); fromDate.setHours(0,0,0,0);
-            const toDate = new Date(t); toDate.setHours(23,59,59,999);
+            const selectedWallet = document.getElementById('walletFilter').value;
+            const f = document.getElementById('fromDate').value;
+            const t = document.getElementById('toDate').value;
 
-            const filtered = allTransactions.filter(item => {
-                if(!item.timestamp) return false;
-                const d = item.timestamp.toDate();
-                return d >= fromDate && d <= toDate;
+            let filtered = allTransactions.filter(item => {
+                let matchWallet = true;
+                if(selectedWallet !== "All") {
+                    if(selectedWallet === "Fino") {
+                        matchWallet = item.service.includes("Fino");
+                    } else if(selectedWallet === "Payworld") {
+                        matchWallet = item.service.includes("Payworld");
+                    } else if(selectedWallet === "Axis") {
+                        matchWallet = (item.service.includes("Axis") || item.bankSource === "Axis" || item.expenseSource === "Axis");
+                    } else if(selectedWallet === "SBI") {
+                        matchWallet = (item.service.includes("SBI") || item.bankSource === "SBI" || item.expenseSource === "SBI");
+                    } else if(selectedWallet === "BOI") {
+                        matchWallet = (item.service.includes("BOI") || item.bankSource === "BOI" || item.expenseSource === "BOI");
+                    } else if(selectedWallet === "Union") {
+                        matchWallet = (item.service.includes("Union") || item.bankSource === "Union" || item.expenseSource === "Union");
+                    } else if(selectedWallet === "Mahapower") {
+                        matchWallet = item.service.includes("Mahapower");
+                    } else if(selectedWallet === "Cash") {
+                        matchWallet = (item.service.includes("Cash") || item.expenseSource === "Cash");
+                    }
+                }
+                return matchWallet;
             });
+
+            if(f && t) {
+                const fromDate = new Date(f); fromDate.setHours(0,0,0,0);
+                const toDate = new Date(t); toDate.setHours(23,59,59,999);
+                filtered = filtered.filter(item => {
+                    if(!item.timestamp) return false;
+                    const d = item.timestamp.toDate();
+                    return d >= fromDate && d <= toDate;
+                });
+            }
+
             renderStatementTable(filtered);
         }
 
         function resetFilter() {
+            document.getElementById('walletFilter').value = "All";
             document.getElementById('fromDate').value = "";
             document.getElementById('toDate').value = "";
             renderStatementTable(allTransactions);
