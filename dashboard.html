@@ -117,14 +117,16 @@
         
         /* Grand Total Card */
         .grand-total-card { 
-            background: linear-gradient(135deg, #059669, #047857); 
             color: white; 
             padding: 25px; 
             border-radius: 12px; 
             text-align: center; 
             margin-bottom: 25px; 
-            box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.2); 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0, 0.1); 
         }
+        .bg-admin { background: linear-gradient(135deg, #059669, #047857); }
+        .bg-emp { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
+
         .grand-total-card h4 { margin: 0 0 6px 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .grand-total-card h2 { margin: 0; font-size: 38px; font-weight: 700; }
 
@@ -190,13 +192,19 @@
 </head>
 <body>
 
-    <!-- Professional Sidebar with Dedicated Tabs -->
+    <!-- Professional Sidebar -->
     <div class="sidebar no-print">
         <div class="sidebar-brand">
             <span>⚡ Pusdekar Digital</span>
         </div>
         <ul class="sidebar-menu">
-            <li class="active" id="menuDashboard" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व एंट्री फॉर्म</li>
+            <!-- Admin Only Tab -->
+            <li class="active" id="menuAdminDash" onclick="switchTab('adminDash')">📊 मुख्य डॅशबोर्ड (Admin)</li>
+            
+            <!-- Employee Tab (Visible to Admin & Employee) -->
+            <li id="menuEmpDash" onclick="switchTab('empDash')">👤 कर्मचारी डॅशबोर्ड</li>
+            
+            <!-- Admin Only Tabs -->
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट व रिपोर्ट्स</li>
             <li id="menuSettings" onclick="switchTab('settings')">⚙️ बँक व वॉलेट सेटिंग्स</li>
         </ul>
@@ -212,72 +220,80 @@
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD ================= -->
-        <div id="viewDashboard" class="view-section active-view">
-            
-            <!-- ADMIN ONLY: Grand Total Card -->
-            <div class="grand-total-card" id="adminGrandTotal">
+        <!-- ================= VIEW 1: MAIN ADMIN DASHBOARD ================= -->
+        <div id="viewAdminDash" class="view-section active-view">
+            <div class="grand-total-card bg-admin">
                 <h4>💰 एकूण उपलब्ध बॅलन्स (Total Business Balance)</h4>
-                <h2 id="grandTotalBalance">₹ 0</h2>
+                <h2 id="adminGrandTotalBal">₹ 0</h2>
             </div>
-
-            <!-- Wallets & Cash Display Cards -->
             <div class="wallet-cards">
-                <!-- EVERYONE: Fino, Paynearby, UPI, Cash -->
-                <div class="w-card card-fino">
-                    <h4 id="labelFino">Fino Wallet</h4>
-                    <h3 id="finoBalance">₹ 0</h3>
-                </div>
-                <div class="w-card card-payworld">
-                    <h4 id="labelPayworld">Paynearby Wallet</h4>
-                    <h3 id="payworldBalance">₹ 0</h3>
-                </div>
-                
+                <div class="w-card card-fino"><h4 class="lbl-fino">Fino Wallet</h4><h3 id="adminFinoBal">₹ 0</h3></div>
+                <div class="w-card card-payworld"><h4 class="lbl-payworld">Paynearby Wallet</h4><h3 id="adminPayworldBal">₹ 0</h3></div>
                 <div class="w-card card-upi">
                     <h4>UPI Wallet (Total)</h4>
-                    <h3 id="upiBalance">₹ 0</h3>
+                    <h3 id="adminUpiBal">₹ 0</h3>
                     <div class="sub-banks-grid">
-                        <div class="sub-bank"><span id="labelAxis">Axis Bank</span><strong id="axisBalance">₹ 0</strong></div>
-                        <div class="sub-bank" id="sub-bank-sbi"><span id="labelSbi">SBI</span><strong id="sbiBalance">₹ 0</strong></div>
-                        <div class="sub-bank"><span id="labelBoi">Bank of India</span><strong id="boiBalance">₹ 0</strong></div>
-                        <div class="sub-bank"><span id="labelUnion">Union Bank</span><strong id="unionBalance">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-axis">Axis Bank</span><strong id="adminAxisBal">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-sbi">SBI</span><strong id="adminSbiBal">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-boi">Bank of India</span><strong id="adminBoiBal">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-union">Union Bank</span><strong id="adminUnionBal">₹ 0</strong></div>
                     </div>
                 </div>
-
-                <!-- ADMIN ONLY: Mahapower -->
-                <div class="w-card card-mahapower" id="card-mahapower">
-                    <h4 id="labelMahapower">Mahapower Wallet</h4>
-                    <h3 id="mahapowerBalance">₹ 0</h3>
-                </div>
-
-                <div class="w-card card-cash">
-                    <h4>Cash in Hand (रोख गल्ला)</h4>
-                    <h3 id="cashBalance">₹ 0</h3>
-                </div>
+                <div class="w-card card-mahapower"><h4 class="lbl-mahapower">Mahapower Wallet</h4><h3 id="adminMahapowerBal">₹ 0</h3></div>
+                <div class="w-card card-cash"><h4>Cash in Hand (रोख गल्ला)</h4><h3 id="adminCashBal">₹ 0</h3></div>
             </div>
-
-            <!-- ADMIN ONLY: Summary Income & Expense Cards -->
-            <div class="summary-cards" id="adminSummaryCards">
-                <div class="card income"><h4>आजची एकूण कमाई (कमिशन)</h4><h3 id="todayIncome">₹ 0</h3></div>
-                <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="todayExpense">₹ 0</h3></div>
-                <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="monthlyIncome">₹ 0</h3></div>
-                <div class="card monthly" style="border-top: 4px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthlyExpense" style="color:var(--danger);">₹ 0</h3></div>
+            <div class="summary-cards">
+                <div class="card income"><h4>आजची एकूण कमाई (कमिशन)</h4><h3 id="adminTodayInc">₹ 0</h3></div>
+                <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="adminTodayExp">₹ 0</h3></div>
+                <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="adminMonthInc">₹ 0</h3></div>
+                <div class="card monthly" style="border-top: 4px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="adminMonthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
+        </div>
 
-            <!-- EVERYONE: Morning Opening Balance / Wallet Adjustment Form -->
+        <!-- ================= VIEW 2: EMPLOYEE DASHBOARD ================= -->
+        <div id="viewEmpDash" class="view-section">
+            <div class="grand-total-card bg-emp">
+                <h4>👤 कर्मचारी उपलब्ध बॅलन्स (Employee Total)</h4>
+                <h2 id="empGrandTotalBal">₹ 0</h2>
+            </div>
+            <div class="wallet-cards">
+                <div class="w-card card-fino"><h4 class="lbl-fino">Fino Wallet</h4><h3 id="empFinoBal">₹ 0</h3></div>
+                <div class="w-card card-payworld"><h4 class="lbl-payworld">Paynearby Wallet</h4><h3 id="empPayworldBal">₹ 0</h3></div>
+                <div class="w-card card-upi">
+                    <h4>UPI Wallet (Total)</h4>
+                    <h3 id="empUpiBal">₹ 0</h3>
+                    <div class="sub-banks-grid" style="grid-template-columns: repeat(3, 1fr);">
+                        <div class="sub-bank"><span class="lbl-axis">Axis Bank</span><strong id="empAxisBal">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-boi">Bank of India</span><strong id="empBoiBal">₹ 0</strong></div>
+                        <div class="sub-bank"><span class="lbl-union">Union Bank</span><strong id="empUnionBal">₹ 0</strong></div>
+                    </div>
+                </div>
+                <div class="w-card card-cash"><h4>Cash in Hand (रोख गल्ला)</h4><h3 id="empCashBal">₹ 0</h3></div>
+            </div>
+            <div class="summary-cards">
+                <div class="card income"><h4>आजची कमाई (कमिशन)</h4><h3 id="empTodayInc">₹ 0</h3></div>
+                <div class="card expense"><h4>आजचा खर्च</h4><h3 id="empTodayExp">₹ 0</h3></div>
+                <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="empMonthInc">₹ 0</h3></div>
+                <div class="card monthly" style="border-top: 4px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="empMonthExp" style="color:var(--danger);">₹ 0</h3></div>
+            </div>
+        </div>
+
+        <!-- ================= SHARED FORMS (Always Visible on Dashboards) ================= -->
+        <div id="dashboardForms" class="view-section active-view">
+            <!-- Adjustments Form -->
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label>कोणते वॉलेट किंवा बँक निवडा</label>
                         <select id="adjWallet">
-                            <option value="Fino Opening" id="adjOptFino">Fino Wallet ॲडजस्टमेंट</option>
-                            <option value="Payworld Opening" id="adjOptPayworld">Paynearby Wallet ॲडजस्टमेंट</option>
-                            <option value="Axis Opening" id="optAxis">Axis Bank ॲडजस्टमेंट</option>
-                            <option value="SBI Opening" id="optSbi" class="admin-only-opt">SBI ॲडजस्टमेंट</option>
-                            <option value="BOI Opening" id="optBoi">Bank of India ॲडजस्टमेंट</option>
-                            <option value="Union Opening" id="optUnion">Union Bank ॲडजस्टमेंट</option>
-                            <option value="Mahapower Opening" id="adjOptMahapower" class="admin-only-opt">Mahapower Wallet ॲडजस्टमेंट</option>
+                            <option value="Fino Opening" class="lbl-fino-opt">Fino Wallet ॲडजस्टमेंट</option>
+                            <option value="Payworld Opening" class="lbl-payworld-opt">Paynearby Wallet ॲडजस्टमेंट</option>
+                            <option value="Axis Opening" class="lbl-axis-opt">Axis Bank ॲडजस्टमेंट</option>
+                            <option value="SBI Opening" class="admin-only-opt lbl-sbi-opt">SBI ॲडजस्टमेंट</option>
+                            <option value="BOI Opening" class="lbl-boi-opt">Bank of India ॲडजस्टमेंट</option>
+                            <option value="Union Opening" class="lbl-union-opt">Union Bank ॲडजस्टमेंट</option>
+                            <option value="Mahapower Opening" class="admin-only-opt lbl-mahapower-opt">Mahapower Wallet ॲडजस्टमेंट</option>
                             <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                         </select>
                     </div>
@@ -289,7 +305,7 @@
                 <button class="adj-btn" style="background: #0891b2;" onclick="saveAdjustment()">Update Balance</button>
             </div>
 
-            <!-- EVERYONE: Entry Form -->
+            <!-- Entry Form -->
             <div class="container">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">नवीन व्यवहार नोंद (New Entry)</h3>
                 <div class="form-row">
@@ -315,10 +331,10 @@
                     <div class="form-group">
                         <label style="color: var(--primary);">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
                         <select id="upiBank">
-                            <option value="Axis" id="bankOptAxis">Axis Bank</option>
-                            <option value="SBI" id="bankOptSbi" class="admin-only-opt">SBI</option>
-                            <option value="BOI" id="bankOptBoi">Bank of India</option>
-                            <option value="Union" id="bankOptUnion">Union Bank</option>
+                            <option value="Axis" class="lbl-axis">Axis Bank</option>
+                            <option value="SBI" class="admin-only-opt lbl-sbi">SBI</option>
+                            <option value="BOI" class="lbl-boi">Bank of India</option>
+                            <option value="Union" class="lbl-union">Union Bank</option>
                         </select>
                     </div>
                 </div>
@@ -328,13 +344,13 @@
                         <label style="color: var(--danger);">हा खर्च कोणत्या माध्यमातून केला?</label>
                         <select id="expenseSource">
                             <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                            <option value="Axis" id="expOptAxis">Axis Bank UPI</option>
-                            <option value="SBI" id="expOptSbi" class="admin-only-opt">SBI UPI</option>
-                            <option value="BOI" id="expOptBoi">Bank of India UPI</option>
-                            <option value="Union" id="expOptUnion">Union Bank UPI</option>
-                            <option value="Fino" id="expOptFino">Fino Wallet</option>
-                            <option value="Payworld" id="expOptPayworld">Paynearby Wallet</option>
-                            <option value="Mahapower" id="expOptMahapower" class="admin-only-opt">Mahapower Wallet</option>
+                            <option value="Axis" class="lbl-axis-upi">Axis Bank UPI</option>
+                            <option value="SBI" class="admin-only-opt lbl-sbi-upi">SBI UPI</option>
+                            <option value="BOI" class="lbl-boi-upi">Bank of India UPI</option>
+                            <option value="Union" class="lbl-union-upi">Union Bank UPI</option>
+                            <option value="Fino" class="lbl-fino">Fino Wallet</option>
+                            <option value="Payworld" class="lbl-payworld">Paynearby Wallet</option>
+                            <option value="Mahapower" class="admin-only-opt lbl-mahapower">Mahapower Wallet</option>
                         </select>
                     </div>
                 </div>
@@ -371,20 +387,20 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: STATEMENT & WALLET REPORTS ================= -->
+        <!-- ================= VIEW 3: STATEMENT & WALLET REPORTS ================= -->
         <div id="viewStatement" class="view-section">
             <div class="filter-section">
                 <div class="form-group" style="margin-bottom:0;">
                     <label>खाते / वॉलेट निवडा (Wallet Wise Filter):</label>
                     <select id="walletFilter" onchange="filterData()">
                         <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
-                        <option value="Fino" id="filterFino">Fino Wallet</option>
-                        <option value="Payworld" id="filterPayworld">Paynearby Wallet</option>
-                        <option value="Axis" id="filterAxis">Axis Bank</option>
-                        <option value="SBI" id="filterSbi" class="admin-only-opt">SBI Bank</option>
-                        <option value="BOI" id="filterBoi">Bank of India (BOI)</option>
-                        <option value="Union" id="filterUnion">Union Bank</option>
-                        <option value="Mahapower" id="filterMahapower" class="admin-only-opt">Mahapower Wallet</option>
+                        <option value="Fino" class="lbl-fino">Fino Wallet</option>
+                        <option value="Payworld" class="lbl-payworld">Paynearby Wallet</option>
+                        <option value="Axis" class="lbl-axis">Axis Bank</option>
+                        <option value="SBI" class="lbl-sbi">SBI Bank</option>
+                        <option value="BOI" class="lbl-boi">Bank of India (BOI)</option>
+                        <option value="Union" class="lbl-union">Union Bank</option>
+                        <option value="Mahapower" class="lbl-mahapower">Mahapower Wallet</option>
                         <option value="Cash">Cash in Hand (रोख गल्ला)</option>
                     </select>
                 </div>
@@ -424,7 +440,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 3: SETTINGS TAB ================= -->
+        <!-- ================= VIEW 4: SETTINGS TAB ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); max-width: 700px;">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 18px;">⚙️ मुख्य वॉलेट व UPI बँक नावे बदला (Wallet & Bank Settings)</h3>
@@ -483,26 +499,22 @@
                     userRole = "admin";
                     document.getElementById('userGreeting').innerText = "Welcome back, Master Admin (मालक)";
                     
-                    // ADMIN UI - Show everything
-                    document.getElementById('adminGrandTotal').style.display = 'block';
-                    document.getElementById('adminSummaryCards').style.display = 'flex';
-                    document.getElementById('card-mahapower').style.display = 'block';
-                    document.getElementById('sub-bank-sbi').style.display = 'block';
+                    // ADMIN UI
+                    document.getElementById('menuAdminDash').style.display = 'flex';
+                    document.getElementById('menuStatement').style.display = 'flex';
                     document.getElementById('menuSettings').style.display = 'flex';
-                    
                     document.querySelectorAll('.admin-only-opt').forEach(opt => opt.style.display = 'block');
+                    switchTab('adminDash'); // Default view for Admin
                 } else {
                     userRole = "employee";
                     document.getElementById('userGreeting').innerText = "Welcome back, Staff (कर्मचारी)";
                     
-                    // EMPLOYEE UI - Hide sensitive wallets and options
-                    document.getElementById('adminGrandTotal').style.display = 'none';
-                    document.getElementById('adminSummaryCards').style.display = 'none';
-                    document.getElementById('card-mahapower').style.display = 'none';
-                    document.getElementById('sub-bank-sbi').style.display = 'none';
+                    // EMPLOYEE UI
+                    document.getElementById('menuAdminDash').style.display = 'none';
+                    document.getElementById('menuStatement').style.display = 'none';
                     document.getElementById('menuSettings').style.display = 'none';
-                    
                     document.querySelectorAll('.admin-only-opt').forEach(opt => opt.style.display = 'none');
+                    switchTab('empDash'); // Default view for Employee
                 }
                 loadDataFromFirebase();
             }
@@ -513,31 +525,24 @@
         }
 
         function switchTab(tabName) {
-            const vDash = document.getElementById('viewDashboard');
-            const vState = document.getElementById('viewStatement');
-            const vSett = document.getElementById('viewSettings');
-            
-            const mDash = document.getElementById('menuDashboard');
-            const mState = document.getElementById('menuStatement');
-            const mSett = document.getElementById('menuSettings');
+            // Hide all views and reset menus
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
 
-            vDash.classList.remove('active-view');
-            vState.classList.remove('active-view');
-            vSett.classList.remove('active-view');
-            
-            mDash.classList.remove('active');
-            mState.classList.remove('active');
-            mSett.classList.remove('active');
-
-            if(tabName === 'dashboard') {
-                vDash.classList.add('active-view');
-                mDash.classList.add('active');
+            if(tabName === 'adminDash') {
+                document.getElementById('viewAdminDash').classList.add('active-view');
+                document.getElementById('dashboardForms').classList.add('active-view');
+                document.getElementById('menuAdminDash').classList.add('active');
+            } else if(tabName === 'empDash') {
+                document.getElementById('viewEmpDash').classList.add('active-view');
+                document.getElementById('dashboardForms').classList.add('active-view');
+                document.getElementById('menuEmpDash').classList.add('active');
             } else if(tabName === 'statement') {
-                vState.classList.add('active-view');
-                mState.classList.add('active');
+                document.getElementById('viewStatement').classList.add('active-view');
+                document.getElementById('menuStatement').classList.add('active');
             } else if(tabName === 'settings') {
-                vSett.classList.add('active-view');
-                mSett.classList.add('active');
+                document.getElementById('viewSettings').classList.add('active-view');
+                document.getElementById('menuSettings').classList.add('active');
             }
         }
 
@@ -546,88 +551,60 @@
         }
 
         function saveWalletNames() {
-            const finoName = document.getElementById('renameFino').value || "Fino Wallet";
-            const payworldName = document.getElementById('renamePayworld').value || "Paynearby Wallet";
-            const mahapowerName = document.getElementById('renameMahapower').value || "Mahapower Wallet";
-
-            const axisName = document.getElementById('renameAxis').value || "Axis Bank";
-            const sbiName = document.getElementById('renameSbi').value || "SBI";
-            const boiName = document.getElementById('renameBoi').value || "Bank of India";
-            const unionName = document.getElementById('renameUnion').value || "Union Bank";
-
-            localStorage.setItem("wallet_fino", finoName);
-            localStorage.setItem("wallet_payworld", payworldName);
-            localStorage.setItem("wallet_mahapower", mahapowerName);
-
-            localStorage.setItem("wallet_axis", axisName);
-            localStorage.setItem("wallet_sbi", sbiName);
-            localStorage.setItem("wallet_boi", boiName);
-            localStorage.setItem("wallet_union", unionName);
+            localStorage.setItem("wallet_fino", document.getElementById('renameFino').value || "Fino Wallet");
+            localStorage.setItem("wallet_payworld", document.getElementById('renamePayworld').value || "Paynearby Wallet");
+            localStorage.setItem("wallet_mahapower", document.getElementById('renameMahapower').value || "Mahapower Wallet");
+            localStorage.setItem("wallet_axis", document.getElementById('renameAxis').value || "Axis Bank");
+            localStorage.setItem("wallet_sbi", document.getElementById('renameSbi').value || "SBI");
+            localStorage.setItem("wallet_boi", document.getElementById('renameBoi').value || "Bank of India");
+            localStorage.setItem("wallet_union", document.getElementById('renameUnion').value || "Union Bank");
 
             loadWalletNames();
             alert("सर्व नावे यशस्वीरित्या बदलली!");
-            switchTab('dashboard');
+            switchTab('adminDash');
+        }
+
+        function updateLabels(className, text) {
+            document.querySelectorAll('.' + className).forEach(el => el.innerText = text);
         }
 
         function loadWalletNames() {
-            const finoName = localStorage.getItem("wallet_fino") || "Fino Wallet";
-            const payworldName = localStorage.getItem("wallet_payworld") || "Paynearby Wallet";
-            const mahapowerName = localStorage.getItem("wallet_mahapower") || "Mahapower Wallet";
+            const fName = localStorage.getItem("wallet_fino") || "Fino Wallet";
+            const pName = localStorage.getItem("wallet_payworld") || "Paynearby Wallet";
+            const mName = localStorage.getItem("wallet_mahapower") || "Mahapower Wallet";
+            const aName = localStorage.getItem("wallet_axis") || "Axis Bank";
+            const sName = localStorage.getItem("wallet_sbi") || "SBI";
+            const bName = localStorage.getItem("wallet_boi") || "Bank of India";
+            const uName = localStorage.getItem("wallet_union") || "Union Bank";
 
-            const axisName = localStorage.getItem("wallet_axis") || "Axis Bank";
-            const sbiName = localStorage.getItem("wallet_sbi") || "SBI";
-            const boiName = localStorage.getItem("wallet_boi") || "Bank of India";
-            const unionName = localStorage.getItem("wallet_union") || "Union Bank";
+            updateLabels('lbl-fino', fName);
+            updateLabels('lbl-payworld', pName);
+            updateLabels('lbl-mahapower', mName);
+            updateLabels('lbl-axis', aName);
+            updateLabels('lbl-sbi', sName);
+            updateLabels('lbl-boi', bName);
+            updateLabels('lbl-union', uName);
 
-            document.getElementById('labelFino').innerText = finoName;
-            document.getElementById('labelPayworld').innerText = payworldName;
-            document.getElementById('labelMahapower').innerText = mahapowerName;
+            updateLabels('lbl-fino-opt', fName + " ॲडजस्टमेंट");
+            updateLabels('lbl-payworld-opt', pName + " ॲडजस्टमेंट");
+            updateLabels('lbl-mahapower-opt', mName + " ॲडजस्टमेंट");
+            updateLabels('lbl-axis-opt', aName + " ॲडजस्टमेंट");
+            updateLabels('lbl-sbi-opt', sName + " ॲडजस्टमेंट");
+            updateLabels('lbl-boi-opt', bName + " ॲडजस्टमेंट");
+            updateLabels('lbl-union-opt', uName + " ॲडजस्टमेंट");
 
-            document.getElementById('adjOptFino').innerText = finoName + " ॲडजस्टमेंट";
-            document.getElementById('adjOptPayworld').innerText = payworldName + " ॲडजस्टमेंट";
-            document.getElementById('adjOptMahapower').innerText = mahapowerName + " ॲडजस्टमेंट";
+            updateLabels('lbl-axis-upi', aName + " UPI");
+            updateLabels('lbl-sbi-upi', sName + " UPI");
+            updateLabels('lbl-boi-upi', bName + " UPI");
+            updateLabels('lbl-union-upi', uName + " UPI");
 
-            document.getElementById('filterFino').innerText = finoName;
-            document.getElementById('filterPayworld').innerText = payworldName;
-            document.getElementById('filterMahapower').innerText = mahapowerName;
-
-            document.getElementById('expOptFino').innerText = finoName;
-            document.getElementById('expOptPayworld').innerText = payworldName;
-            document.getElementById('expOptMahapower').innerText = mahapowerName;
-
-            document.getElementById('labelAxis').innerText = axisName;
-            document.getElementById('labelSbi').innerText = sbiName;
-            document.getElementById('labelBoi').innerText = boiName;
-            document.getElementById('labelUnion').innerText = unionName;
-
-            document.getElementById('optAxis').innerText = axisName + " ॲडजस्टमेंट";
-            document.getElementById('optSbi').innerText = sbiName + " ॲडजस्टमेंट";
-            document.getElementById('optBoi').innerText = boiName + " ॲडजस्टमेंट";
-            document.getElementById('optUnion').innerText = unionName + " ॲडजस्टमेंट";
-
-            document.getElementById('filterAxis').innerText = axisName;
-            document.getElementById('filterSbi').innerText = sbiName;
-            document.getElementById('filterBoi').innerText = boiName;
-            document.getElementById('filterUnion').innerText = unionName;
-
-            document.getElementById('bankOptAxis').innerText = axisName;
-            document.getElementById('bankOptSbi').innerText = sbiName;
-            document.getElementById('bankOptBoi').innerText = boiName;
-            document.getElementById('bankOptUnion').innerText = unionName;
-
-            document.getElementById('expOptAxis').innerText = axisName + " UPI";
-            document.getElementById('expOptSbi').innerText = sbiName + " UPI";
-            document.getElementById('expOptBoi').innerText = boiName + " UPI";
-            document.getElementById('expOptUnion').innerText = unionName + " UPI";
-
-            document.getElementById('renameFino').value = finoName === "Fino Wallet" ? "" : finoName;
-            document.getElementById('renamePayworld').value = payworldName === "Paynearby Wallet" ? "" : payworldName;
-            document.getElementById('renameMahapower').value = mahapowerName === "Mahapower Wallet" ? "" : mahapowerName;
-
-            document.getElementById('renameAxis').value = axisName === "Axis Bank" ? "" : axisName;
-            document.getElementById('renameSbi').value = sbiName === "SBI" ? "" : sbiName;
-            document.getElementById('renameBoi').value = boiName === "Bank of India" ? "" : boiName;
-            document.getElementById('renameUnion').value = unionName === "Union Bank" ? "" : unionName;
+            document.getElementById('renameFino').value = fName === "Fino Wallet" ? "" : fName;
+            document.getElementById('renamePayworld').value = pName === "Paynearby Wallet" ? "" : pName;
+            document.getElementById('renameMahapower').value = mName === "Mahapower Wallet" ? "" : mName;
+            document.getElementById('renameAxis').value = aName === "Axis Bank" ? "" : aName;
+            document.getElementById('renameSbi').value = sName === "SBI" ? "" : sName;
+            document.getElementById('renameBoi').value = bName === "Bank of India" ? "" : bName;
+            document.getElementById('renameUnion').value = uName === "Union Bank" ? "" : uName;
         }
 
         function toggleFormFields() {
@@ -747,10 +724,10 @@
                 querySnapshot.forEach((doc) => {
                     let data = doc.data();
                     
-                    // SECURITY: If employee, completely hide Mahapower and SBI entries from their universe
+                    // SECURITY: For Employee, skip Mahapower and SBI entries completely
                     if(userRole === "employee") {
                         if(data.service.includes("Mahapower") || data.service.includes("SBI") || data.bankSource === "SBI" || data.expenseSource === "Mahapower" || data.expenseSource === "SBI") {
-                            return; // Skip this record completely
+                            return; 
                         }
                     }
                     allTransactions.push({ id: doc.id, ...data });
@@ -760,9 +737,9 @@
         }
 
         function processCalculations(dataList) {
-            let todayIncome = 0, todayExpense = 0, monthlyIncome = 0, monthlyExpense = 0;
-            let finoBal = 0, payworldBal = 0, mahapowerBal = 0, cashBal = 0;     
-            let axisBal = 0, sbiBal = 0, boiBal = 0, unionBal = 0;
+            let aIncT=0, aExpT=0, aIncM=0, aExpM=0;
+            let eIncT=0, eExpT=0, eIncM=0, eExpM=0;
+            let fBal=0, pBal=0, mBal=0, cBal=0, axBal=0, sbiBal=0, boiBal=0, unBal=0;
 
             const now = new Date();
             const todayDateStr = now.toLocaleDateString('en-IN'); 
@@ -782,60 +759,78 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                if(data.service === "Fino Opening") finoBal += amt;
-                else if(data.service === "Payworld Opening") payworldBal += amt;
-                else if(data.service === "Axis Opening") axisBal += amt;
+                // Check if this record belongs to employee's scope (excludes SBI/Mahapower)
+                let isEmpRec = !(data.service.includes("Mahapower") || data.service.includes("SBI") || data.bankSource === "SBI" || data.expenseSource === "Mahapower" || data.expenseSource === "SBI");
+
+                if(data.service === "Fino Opening") fBal += amt;
+                else if(data.service === "Payworld Opening") pBal += amt;
+                else if(data.service === "Axis Opening") axBal += amt;
                 else if(data.service === "SBI Opening") sbiBal += amt;
                 else if(data.service === "BOI Opening") boiBal += amt;
-                else if(data.service === "Union Opening") unionBal += amt;
-                else if(data.service === "Mahapower Opening") mahapowerBal += amt;
-                else if(data.service === "Cash Opening") cashBal += amt;
-                else if(data.service === "Fino Payment Bank") { finoBal += amt; cashBal -= amt; }
-                else if(data.service === "Payworld Services") { payworldBal += amt; cashBal -= amt; }
-                else if(data.service === "Mahapower Bill Collection") { mahapowerBal -= amt; cashBal += amt; }
-                else if(data.service === "Fino Cash Deposit") { finoBal -= amt; cashBal += amt; }
+                else if(data.service === "Union Opening") unBal += amt;
+                else if(data.service === "Mahapower Opening") mBal += amt;
+                else if(data.service === "Cash Opening") cBal += amt;
+                else if(data.service === "Fino Payment Bank") { fBal += amt; cBal -= amt; }
+                else if(data.service === "Payworld Services") { pBal += amt; cBal -= amt; }
+                else if(data.service === "Mahapower Bill Collection") { mBal -= amt; cBal += amt; }
+                else if(data.service === "Fino Cash Deposit") { fBal -= amt; cBal += amt; }
                 else if(data.service === "Money Transfer") {
-                    if(bSrc === "Axis") axisBal -= amt; else if(bSrc === "SBI") sbiBal -= amt; else if(bSrc === "BOI") boiBal -= amt; else if(bSrc === "Union") unionBal -= amt;
-                    cashBal += amt; 
+                    if(bSrc === "Axis") axBal -= amt; else if(bSrc === "SBI") sbiBal -= amt; else if(bSrc === "BOI") boiBal -= amt; else if(bSrc === "Union") unBal -= amt;
+                    cBal += amt; 
                 }
                 else if(data.service === "UPI Cash Given") {
-                    if(bSrc === "Axis") axisBal += amt; else if(bSrc === "SBI") sbiBal += amt; else if(bSrc === "BOI") boiBal += amt; else if(bSrc === "Union") unionBal += amt;
-                    cashBal -= amt;
+                    if(bSrc === "Axis") axBal += amt; else if(bSrc === "SBI") sbiBal += amt; else if(bSrc === "BOI") boiBal += amt; else if(bSrc === "Union") unBal += amt;
+                    cBal -= amt;
                 }
                 else if(data.service === "Shop Expense") {
-                    if(eSrc === "Axis") axisBal -= amt; else if(eSrc === "SBI") sbiBal -= amt; else if(eSrc === "BOI") boiBal -= amt; else if(eSrc === "Union") unionBal -= amt;
-                    else if(eSrc === "Fino") finoBal -= amt; else if(eSrc === "Payworld") payworldBal -= amt; else if(eSrc === "Mahapower") mahapowerBal -= amt;
-                    else cashBal -= amt; 
+                    if(eSrc === "Axis") axBal -= amt; else if(eSrc === "SBI") sbiBal -= amt; else if(eSrc === "BOI") boiBal -= amt; else if(eSrc === "Union") unBal -= amt;
+                    else if(eSrc === "Fino") fBal -= amt; else if(eSrc === "Payworld") pBal -= amt; else if(eSrc === "Mahapower") mBal -= amt;
+                    else cBal -= amt; 
                 }
 
                 if(isToday) {
-                    if(data.service === "Shop Expense") todayExpense += amt; 
-                    else if(!data.service.includes("Opening")) todayIncome += comm;
+                    if(data.service === "Shop Expense") { aExpT += amt; if(isEmpRec) eExpT += amt; }
+                    else if(!data.service.includes("Opening")) { aIncT += comm; if(isEmpRec) eIncT += comm; }
                 }
                 if(isThisMonth) {
-                    if(data.service === "Shop Expense") monthlyExpense += amt;
-                    else if(!data.service.includes("Opening")) monthlyIncome += comm;
+                    if(data.service === "Shop Expense") { aExpM += amt; if(isEmpRec) eExpM += amt; }
+                    else if(!data.service.includes("Opening")) { aIncM += comm; if(isEmpRec) eIncM += comm; }
                 }
             });
 
-            const totalUpiBal = axisBal + sbiBal + boiBal + unionBal;
-            const grandTotal = finoBal + payworldBal + totalUpiBal + mahapowerBal + cashBal;
+            // Set Admin UI
+            const adminTotalUpi = axBal + sbiBal + boiBal + unBal;
+            document.getElementById('adminGrandTotalBal').innerText = "₹ " + (fBal + pBal + adminTotalUpi + mBal + cBal);
+            document.getElementById('adminFinoBal').innerText = "₹ " + fBal;
+            document.getElementById('adminPayworldBal').innerText = "₹ " + pBal;
+            document.getElementById('adminMahapowerBal').innerText = "₹ " + mBal;
+            document.getElementById('adminUpiBal').innerText = "₹ " + adminTotalUpi;
+            document.getElementById('adminAxisBal').innerText = "₹ " + axBal;
+            document.getElementById('adminSbiBal').innerText = "₹ " + sbiBal;
+            document.getElementById('adminBoiBal').innerText = "₹ " + boiBal;
+            document.getElementById('adminUnionBal').innerText = "₹ " + unBal;
+            document.getElementById('adminCashBal').innerText = "₹ " + cBal;
+            
+            document.getElementById('adminTodayInc').innerText = "₹ " + aIncT;
+            document.getElementById('adminTodayExp').innerText = "₹ " + aExpT;
+            document.getElementById('adminMonthInc').innerText = "₹ " + aIncM;
+            document.getElementById('adminMonthExp').innerText = "₹ " + aExpM;
 
-            document.getElementById('grandTotalBalance').innerText = "₹ " + grandTotal;
-            document.getElementById('finoBalance').innerText = "₹ " + finoBal;
-            document.getElementById('payworldBalance').innerText = "₹ " + payworldBal;
-            document.getElementById('upiBalance').innerText = "₹ " + totalUpiBal;
-            document.getElementById('axisBalance').innerText = "₹ " + axisBal;
-            document.getElementById('sbiBalance').innerText = "₹ " + sbiBal;
-            document.getElementById('boiBalance').innerText = "₹ " + boiBal;
-            document.getElementById('unionBalance').innerText = "₹ " + unionBal;
-            document.getElementById('mahapowerBalance').innerText = "₹ " + mahapowerBal;
-            document.getElementById('cashBalance').innerText = "₹ " + cashBal;
+            // Set Employee UI
+            const empTotalUpi = axBal + boiBal + unBal;
+            document.getElementById('empGrandTotalBal').innerText = "₹ " + (fBal + pBal + empTotalUpi + cBal);
+            document.getElementById('empFinoBal').innerText = "₹ " + fBal;
+            document.getElementById('empPayworldBal').innerText = "₹ " + pBal;
+            document.getElementById('empUpiBal').innerText = "₹ " + empTotalUpi;
+            document.getElementById('empAxisBal').innerText = "₹ " + axBal;
+            document.getElementById('empBoiBal').innerText = "₹ " + boiBal;
+            document.getElementById('empUnionBal').innerText = "₹ " + unBal;
+            document.getElementById('empCashBal').innerText = "₹ " + cBal;
 
-            document.getElementById('todayIncome').innerText = "₹ " + todayIncome;
-            document.getElementById('todayExpense').innerText = "₹ " + todayExpense;
-            document.getElementById('monthlyIncome').innerText = "₹ " + monthlyIncome;
-            document.getElementById('monthlyExpense').innerText = "₹ " + monthlyExpense;
+            document.getElementById('empTodayInc').innerText = "₹ " + eIncT;
+            document.getElementById('empTodayExp').innerText = "₹ " + eExpT;
+            document.getElementById('empMonthInc').innerText = "₹ " + eIncM;
+            document.getElementById('empMonthExp').innerText = "₹ " + eExpM;
 
             filterData();
         }
