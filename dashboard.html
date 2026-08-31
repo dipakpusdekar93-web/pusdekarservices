@@ -207,21 +207,22 @@
         <div class="header">
             <div>
                 <h2 style="margin:0; font-size: 20px; color: #0f172a; font-weight: 700;">Daily Management System</h2>
-                <span style="font-size: 12.5px; color: #64748b;">Welcome back, Master Admin</span>
+                <span style="font-size: 12.5px; color: #64748b;" id="userGreeting">Loading User Info...</span>
             </div>
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
         <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
-            <!-- Grand Total Balance Card -->
-            <div class="grand-total-card">
+            
+            <!-- ADMIN ONLY: Grand Total Card -->
+            <div class="grand-total-card" id="adminGrandTotal">
                 <h4>💰 एकूण उपलब्ध बॅलन्स (Total Business Balance)</h4>
                 <h2 id="grandTotalBalance">₹ 0</h2>
             </div>
 
-            <!-- Wallets & Cash Display Cards -->
-            <div class="wallet-cards">
+            <!-- ADMIN ONLY: Wallets & Cash Display Cards -->
+            <div class="wallet-cards" id="adminWalletCards">
                 <div class="w-card card-fino">
                     <h4 id="labelFino">Fino Wallet</h4>
                     <h3 id="finoBalance">₹ 0</h3>
@@ -252,16 +253,16 @@
                 </div>
             </div>
 
-            <!-- Summary Income & Expense Cards -->
-            <div class="summary-cards">
+            <!-- ADMIN ONLY: Summary Income & Expense Cards -->
+            <div class="summary-cards" id="adminSummaryCards">
                 <div class="card income"><h4>आजची एकूण कमाई (कमिशन)</h4><h3 id="todayIncome">₹ 0</h3></div>
                 <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="todayExpense">₹ 0</h3></div>
                 <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="monthlyIncome">₹ 0</h3></div>
                 <div class="card monthly" style="border-top: 4px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthlyExpense" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
-            <!-- Morning Opening Balance / Wallet Adjustment Form -->
-            <div class="container" style="border-left: 4px solid #0891b2;">
+            <!-- ADMIN ONLY: Morning Opening Balance / Wallet Adjustment Form -->
+            <div class="container" id="adminAdjustmentForm" style="border-left: 4px solid #0891b2;">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
@@ -285,7 +286,7 @@
                 <button class="adj-btn" style="background: #0891b2;" onclick="saveAdjustment()">Update Balance</button>
             </div>
 
-            <!-- Entry Form -->
+            <!-- EVERYONE: Entry Form (Employee & Admin Both can see this) -->
             <div class="container">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">नवीन व्यवहार नोंद (New Entry)</h3>
                 <div class="form-row">
@@ -466,8 +467,40 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
+        let userRole = "employee"; // Default to employee for safety
+        
+        // भाऊ, इथे तुझा स्वतःचा (मालकाचा) ईमेल आयडी टाक. 
+        // या ईमेलने लॉगिन केल्यावरच तुला सर्व दुकानाचा हिशोब, सेटिंग्स आणि डिलीट बटन दिसेल!
+        const adminEmail = "dipakpusdekar93@gmail.com"; 
+
         firebase.auth().onAuthStateChanged((user) => {
-            if (!user) { window.location.href = "login.html"; }
+            if (!user) { 
+                window.location.href = "login.html"; 
+            } else {
+                if(user.email === adminEmail) {
+                    userRole = "admin";
+                    document.getElementById('userGreeting').innerText = "Welcome back, Master Admin (मालक)";
+                    
+                    // Show all elements to Admin
+                    document.getElementById('adminGrandTotal').style.display = 'block';
+                    document.getElementById('adminWalletCards').style.display = 'grid';
+                    document.getElementById('adminSummaryCards').style.display = 'flex';
+                    document.getElementById('adminAdjustmentForm').style.display = 'block';
+                    document.getElementById('menuStatement').style.display = 'flex';
+                    document.getElementById('menuSettings').style.display = 'flex';
+                } else {
+                    userRole = "employee";
+                    document.getElementById('userGreeting').innerText = "Welcome back, Staff (कर्मचारी)";
+                    
+                    // Hide sensitive elements from Employee
+                    document.getElementById('adminGrandTotal').style.display = 'none';
+                    document.getElementById('adminWalletCards').style.display = 'none';
+                    document.getElementById('adminSummaryCards').style.display = 'none';
+                    document.getElementById('adminAdjustmentForm').style.display = 'none';
+                    document.getElementById('menuStatement').style.display = 'none';
+                    document.getElementById('menuSettings').style.display = 'none';
+                }
+            }
         });
 
         function logoutUser() {
@@ -694,6 +727,10 @@
         }
 
         function deleteEntry(docId) {
+            if(userRole !== "admin") {
+                alert("नोंद डिलीट करण्याचा अधिकार फक्त मालकाला आहे!");
+                return;
+            }
             if(confirm("नोंद डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
         }
 
@@ -788,7 +825,6 @@
             filterData();
         }
 
-        // RULE 1 & 2 IMPLEMENTED ACCURATELY FOR STATEMENTS
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries");
             table.innerHTML = ""; 
@@ -810,8 +846,8 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
+                // RULE 2: In "All Statement", Grand Total/Running Balance grows by Commission (+) and reduces by Shop Expenses (-)
                 if (selectedWallet === "All") {
-                    // All Statement: Only grows by Commission (+) and reduces by Shop Expenses (-)
                     if(data.service.includes("Opening")) {
                         runningBal += amt;
                     } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
@@ -821,7 +857,7 @@
                         runningBal += comm;
                     }
                 } else {
-                    // Specific Wallet Statement: Shows actual money flow (plus/minus) and remaining balance of that wallet
+                    // RULE 1: In Specific Wallet Statement, show actual money flow (plus/minus) and remaining balance of that wallet
                     let impactAmt = 0;
 
                     if (selectedWallet === "Fino") {
@@ -888,6 +924,8 @@
                     purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
                 }
 
+                let deleteBtnHtml = userRole === "admin" ? `<button class="delete-btn" onclick="deleteEntry('${data.id}')">Delete</button>` : `<span style="font-size:10px;color:#94a3b8;">No Access</span>`;
+
                 const row = `<tr>
                                 <td>${dateStr}</td>
                                 <td>${serviceDisplay}</td>
@@ -897,7 +935,7 @@
                                 <td>${amtDisplay}</td>
                                 <td class="text-green">+ ₹ ${data.commission || 0}</td>
                                 <td><strong>₹ ${runningBal}</strong></td>
-                                <td class="no-print"><button class="delete-btn" onclick="deleteEntry('${data.id}')">Delete</button></td>
+                                <td class="no-print">${deleteBtnHtml}</td>
                              </tr>`;
                 table.innerHTML += row;
             });
