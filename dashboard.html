@@ -796,7 +796,9 @@
             const table = document.getElementById("statementTableEntries");
             table.innerHTML = ""; 
 
+            const selectedWallet = document.getElementById('walletFilter').value;
             let runningBal = 0;
+
             const axisCustomName = localStorage.getItem("wallet_axis") || "Axis Bank";
             const sbiCustomName = localStorage.getItem("wallet_sbi") || "SBI";
             const boiCustomName = localStorage.getItem("wallet_boi") || "Bank of India";
@@ -811,15 +813,54 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                if(data.service.includes("Opening") || data.service === "Money Transfer" || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "UPI Cash Given") {
-                    if(data.service.includes("Opening") || data.service === "Fino Payment Bank" || data.service === "Payworld Services") {
+                // ACCURATE WALLET-SPECIFIC LEDGER RUNNING BALANCE LOGIC
+                if (selectedWallet === "All") {
+                    if(data.service.includes("Opening")) {
                         runningBal += amt;
                     } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
                         runningBal -= amt;
                     }
-                }
-                if(comm > 0) {
-                    runningBal += comm;
+                    if(comm > 0) {
+                        runningBal += comm;
+                    }
+                } else {
+                    // Specific Wallet Running Balance calculation based on actual money flow in that account
+                    let impactAmt = 0;
+
+                    if (selectedWallet === "Fino") {
+                        if (data.service === "Fino Opening") impactAmt = amt;
+                        else if (data.service === "Fino Payment Bank") impactAmt = amt; // Added to Fino
+                        else if (data.service === "Fino Cash Deposit") impactAmt = -amt; // Deducted from Fino
+                        else if (data.service === "Shop Expense" && eSrc === "Fino") impactAmt = -amt;
+                    } 
+                    else if (selectedWallet === "Payworld") {
+                        if (data.service === "Payworld Opening") impactAmt = amt;
+                        else if (data.service === "Payworld Services") impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === "Payworld") impactAmt = -amt;
+                    } 
+                    else if (selectedWallet === "Mahapower") {
+                        if (data.service === "Mahapower Opening") impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === "Mahapower") impactAmt = -amt;
+                    } 
+                    else if (selectedWallet === "Cash") {
+                        if (data.service === "Cash Opening") impactAmt = amt;
+                        else if (data.service === "Fino Payment Bank") impactAmt = -amt; // Cash given out
+                        else if (data.service === "Payworld Services") impactAmt = -amt;
+                        else if (data.service === "Fino Cash Deposit") impactAmt = amt; // Cash received
+                        else if (data.service === "Money Transfer") impactAmt = amt; // Cash received from customer
+                        else if (data.service === "UPI Cash Given") impactAmt = -amt; // Cash given to customer
+                        else if (data.service === "Shop Expense" && eSrc === "Cash") impactAmt = -amt;
+                    } 
+                    else {
+                        // Specific Bank (Axis, SBI, BOI, Union)
+                        let bankKey = selectedWallet;
+                        if (data.service === `${bankKey} Opening`) impactAmt = amt;
+                        else if (data.service === "Money Transfer" && bSrc === bankKey) impactAmt = -amt;
+                        else if (data.service === "UPI Cash Given" && bSrc === bankKey) impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === bankKey) impactAmt = -amt;
+                    }
+
+                    runningBal += impactAmt;
                 }
 
                 let serviceDisplay = data.service;
@@ -883,7 +924,7 @@
                     } else if(selectedWallet === "Mahapower") {
                         matchWallet = (item.service.includes("Mahapower") || item.expenseSource === "Mahapower");
                     } else if(selectedWallet === "Cash") {
-                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.service === "Printing & Xerox" || item.expenseSource === "Cash");
+                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.expenseSource === "Cash");
                     }
                 }
                 return matchWallet;
@@ -908,6 +949,3 @@
             document.getElementById('toDate').value = "";
             renderStatementTable(allTransactions);
         }
-    </script>
-</body>
-</html>
