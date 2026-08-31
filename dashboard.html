@@ -221,14 +221,15 @@
                 <h2 id="grandTotalBalance">₹ 0</h2>
             </div>
 
-            <!-- ADMIN ONLY: Wallets & Cash Display Cards -->
-            <div class="wallet-cards" id="adminWalletCards">
+            <!-- Wallets & Cash Display Cards -->
+            <div class="wallet-cards">
+                <!-- EVERYONE: Fino, Paynearby, UPI, Cash -->
                 <div class="w-card card-fino">
                     <h4 id="labelFino">Fino Wallet</h4>
                     <h3 id="finoBalance">₹ 0</h3>
                 </div>
                 <div class="w-card card-payworld">
-                    <h4 id="labelPayworld">Payworld Wallet</h4>
+                    <h4 id="labelPayworld">Paynearby Wallet</h4>
                     <h3 id="payworldBalance">₹ 0</h3>
                 </div>
                 
@@ -237,16 +238,18 @@
                     <h3 id="upiBalance">₹ 0</h3>
                     <div class="sub-banks-grid">
                         <div class="sub-bank"><span id="labelAxis">Axis Bank</span><strong id="axisBalance">₹ 0</strong></div>
-                        <div class="sub-bank"><span id="labelSbi">SBI</span><strong id="sbiBalance">₹ 0</strong></div>
+                        <div class="sub-bank" id="sub-bank-sbi"><span id="labelSbi">SBI</span><strong id="sbiBalance">₹ 0</strong></div>
                         <div class="sub-bank"><span id="labelBoi">Bank of India</span><strong id="boiBalance">₹ 0</strong></div>
                         <div class="sub-bank"><span id="labelUnion">Union Bank</span><strong id="unionBalance">₹ 0</strong></div>
                     </div>
                 </div>
 
-                <div class="w-card card-mahapower">
+                <!-- ADMIN ONLY: Mahapower -->
+                <div class="w-card card-mahapower" id="card-mahapower">
                     <h4 id="labelMahapower">Mahapower Wallet</h4>
                     <h3 id="mahapowerBalance">₹ 0</h3>
                 </div>
+
                 <div class="w-card card-cash">
                     <h4>Cash in Hand (रोख गल्ला)</h4>
                     <h3 id="cashBalance">₹ 0</h3>
@@ -261,20 +264,20 @@
                 <div class="card monthly" style="border-top: 4px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthlyExpense" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
-            <!-- ADMIN ONLY: Morning Opening Balance / Wallet Adjustment Form -->
-            <div class="container" id="adminAdjustmentForm" style="border-left: 4px solid #0891b2;">
+            <!-- EVERYONE: Morning Opening Balance / Wallet Adjustment Form -->
+            <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <label>कोणते वॉलेट किंवा बँक निवडा</label>
                         <select id="adjWallet">
                             <option value="Fino Opening" id="adjOptFino">Fino Wallet ॲडजस्टमेंट</option>
-                            <option value="Payworld Opening" id="adjOptPayworld">Payworld Wallet ॲडजस्टमेंट</option>
+                            <option value="Payworld Opening" id="adjOptPayworld">Paynearby Wallet ॲडजस्टमेंट</option>
                             <option value="Axis Opening" id="optAxis">Axis Bank ॲडजस्टमेंट</option>
-                            <option value="SBI Opening" id="optSbi">SBI ॲडजस्टमेंट</option>
+                            <option value="SBI Opening" id="optSbi" class="admin-only-opt">SBI ॲडजस्टमेंट</option>
                             <option value="BOI Opening" id="optBoi">Bank of India ॲडजस्टमेंट</option>
                             <option value="Union Opening" id="optUnion">Union Bank ॲडजस्टमेंट</option>
-                            <option value="Mahapower Opening" id="adjOptMahapower">Mahapower Wallet ॲडजस्टमेंट</option>
+                            <option value="Mahapower Opening" id="adjOptMahapower" class="admin-only-opt">Mahapower Wallet ॲडजस्टमेंट</option>
                             <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                         </select>
                     </div>
@@ -286,7 +289,7 @@
                 <button class="adj-btn" style="background: #0891b2;" onclick="saveAdjustment()">Update Balance</button>
             </div>
 
-            <!-- EVERYONE: Entry Form (Employee & Admin Both can see this) -->
+            <!-- EVERYONE: Entry Form -->
             <div class="container">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 16px;">नवीन व्यवहार नोंद (New Entry)</h3>
                 <div class="form-row">
@@ -297,8 +300,8 @@
                             <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
                             <option value="Fino Cash Deposit">Fino Cash Deposit (कॅश देऊन फिनो ने घेणे)</option>
                             <option value="Fino Payment Bank">Fino Payment Bank (Wallet)</option>
-                            <option value="Payworld Services">Payworld Services (Wallet)</option>
-                            <option value="Mahapower Bill Collection">Mahapower Bill Collection (वीज बिल)</option>
+                            <option value="Payworld Services">Paynearby Services (Wallet)</option>
+                            <option value="Mahapower Bill Collection" class="admin-only-opt">Mahapower Bill Collection (वीज बिल)</option>
                             <option value="PAN / Aadhaar Services">PAN / Aadhaar Services</option>
                             <option value="Printing & Xerox">Xerox / Printing / Banner</option>
                             <option value="Bill Payment">Bill Payment / Recharge</option>
@@ -313,7 +316,7 @@
                         <label style="color: var(--primary);">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
                         <select id="upiBank">
                             <option value="Axis" id="bankOptAxis">Axis Bank</option>
-                            <option value="SBI" id="bankOptSbi">SBI</option>
+                            <option value="SBI" id="bankOptSbi" class="admin-only-opt">SBI</option>
                             <option value="BOI" id="bankOptBoi">Bank of India</option>
                             <option value="Union" id="bankOptUnion">Union Bank</option>
                         </select>
@@ -326,12 +329,12 @@
                         <select id="expenseSource">
                             <option value="Cash">Cash in Hand (रोख गल्ला)</option>
                             <option value="Axis" id="expOptAxis">Axis Bank UPI</option>
-                            <option value="SBI" id="expOptSbi">SBI UPI</option>
+                            <option value="SBI" id="expOptSbi" class="admin-only-opt">SBI UPI</option>
                             <option value="BOI" id="expOptBoi">Bank of India UPI</option>
                             <option value="Union" id="expOptUnion">Union Bank UPI</option>
                             <option value="Fino" id="expOptFino">Fino Wallet</option>
-                            <option value="Payworld" id="expOptPayworld">Payworld Wallet</option>
-                            <option value="Mahapower" id="expOptMahapower">Mahapower Wallet</option>
+                            <option value="Payworld" id="expOptPayworld">Paynearby Wallet</option>
+                            <option value="Mahapower" id="expOptMahapower" class="admin-only-opt">Mahapower Wallet</option>
                         </select>
                     </div>
                 </div>
@@ -376,12 +379,12 @@
                     <select id="walletFilter" onchange="filterData()">
                         <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
                         <option value="Fino" id="filterFino">Fino Wallet</option>
-                        <option value="Payworld" id="filterPayworld">Payworld Wallet</option>
+                        <option value="Payworld" id="filterPayworld">Paynearby Wallet</option>
                         <option value="Axis" id="filterAxis">Axis Bank</option>
-                        <option value="SBI" id="filterSbi">SBI Bank</option>
+                        <option value="SBI" id="filterSbi" class="admin-only-opt">SBI Bank</option>
                         <option value="BOI" id="filterBoi">Bank of India (BOI)</option>
                         <option value="Union" id="filterUnion">Union Bank</option>
-                        <option value="Mahapower" id="filterMahapower">Mahapower Wallet</option>
+                        <option value="Mahapower" id="filterMahapower" class="admin-only-opt">Mahapower Wallet</option>
                         <option value="Cash">Cash in Hand (रोख गल्ला)</option>
                     </select>
                 </div>
@@ -430,7 +433,7 @@
                 <h4 style="color: var(--primary); margin-bottom: 8px;">मुख्य वॉलेट्स (Main Wallets)</h4>
                 <div class="form-row">
                     <div class="form-group"><label>फिनो वॉलेटचे नाव</label><input type="text" id="renameFino" placeholder="Fino Wallet"></div>
-                    <div class="form-group"><label>पेवर्ल्ड वॉलेटचे नाव</label><input type="text" id="renamePayworld" placeholder="Payworld Wallet"></div>
+                    <div class="form-group"><label>पेनियमबाय वॉलेटचे नाव</label><input type="text" id="renamePayworld" placeholder="Paynearby Wallet"></div>
                     <div class="form-group"><label>महापावर वॉलेटचे नाव</label><input type="text" id="renameMahapower" placeholder="Mahapower Wallet"></div>
                 </div>
 
@@ -467,11 +470,10 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
-        let userRole = "employee"; // Default to employee for safety
+        let userRole = "employee"; 
         
         // भाऊ, इथे तुझा स्वतःचा (मालकाचा) ईमेल आयडी टाक. 
-        // या ईमेलने लॉगिन केल्यावरच तुला सर्व दुकानाचा हिशोब, सेटिंग्स आणि डिलीट बटन दिसेल!
-        const adminEmail = "dipakpusdekar93@gmail.com"; 
+        const adminEmail = "tuza_email_id_ithetak@gmail.com"; 
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { 
@@ -481,25 +483,28 @@
                     userRole = "admin";
                     document.getElementById('userGreeting').innerText = "Welcome back, Master Admin (मालक)";
                     
-                    // Show all elements to Admin
+                    // ADMIN UI - Show everything
                     document.getElementById('adminGrandTotal').style.display = 'block';
-                    document.getElementById('adminWalletCards').style.display = 'grid';
                     document.getElementById('adminSummaryCards').style.display = 'flex';
-                    document.getElementById('adminAdjustmentForm').style.display = 'block';
-                    document.getElementById('menuStatement').style.display = 'flex';
+                    document.getElementById('card-mahapower').style.display = 'block';
+                    document.getElementById('sub-bank-sbi').style.display = 'block';
                     document.getElementById('menuSettings').style.display = 'flex';
+                    
+                    document.querySelectorAll('.admin-only-opt').forEach(opt => opt.style.display = 'block');
                 } else {
                     userRole = "employee";
                     document.getElementById('userGreeting').innerText = "Welcome back, Staff (कर्मचारी)";
                     
-                    // Hide sensitive elements from Employee
+                    // EMPLOYEE UI - Hide sensitive wallets and options
                     document.getElementById('adminGrandTotal').style.display = 'none';
-                    document.getElementById('adminWalletCards').style.display = 'none';
                     document.getElementById('adminSummaryCards').style.display = 'none';
-                    document.getElementById('adminAdjustmentForm').style.display = 'none';
-                    document.getElementById('menuStatement').style.display = 'none';
+                    document.getElementById('card-mahapower').style.display = 'none';
+                    document.getElementById('sub-bank-sbi').style.display = 'none';
                     document.getElementById('menuSettings').style.display = 'none';
+                    
+                    document.querySelectorAll('.admin-only-opt').forEach(opt => opt.style.display = 'none');
                 }
+                loadDataFromFirebase();
             }
         });
 
@@ -542,7 +547,7 @@
 
         function saveWalletNames() {
             const finoName = document.getElementById('renameFino').value || "Fino Wallet";
-            const payworldName = document.getElementById('renamePayworld').value || "Payworld Wallet";
+            const payworldName = document.getElementById('renamePayworld').value || "Paynearby Wallet";
             const mahapowerName = document.getElementById('renameMahapower').value || "Mahapower Wallet";
 
             const axisName = document.getElementById('renameAxis').value || "Axis Bank";
@@ -566,7 +571,7 @@
 
         function loadWalletNames() {
             const finoName = localStorage.getItem("wallet_fino") || "Fino Wallet";
-            const payworldName = localStorage.getItem("wallet_payworld") || "Payworld Wallet";
+            const payworldName = localStorage.getItem("wallet_payworld") || "Paynearby Wallet";
             const mahapowerName = localStorage.getItem("wallet_mahapower") || "Mahapower Wallet";
 
             const axisName = localStorage.getItem("wallet_axis") || "Axis Bank";
@@ -616,7 +621,7 @@
             document.getElementById('expOptUnion').innerText = unionName + " UPI";
 
             document.getElementById('renameFino').value = finoName === "Fino Wallet" ? "" : finoName;
-            document.getElementById('renamePayworld').value = payworldName === "Payworld Wallet" ? "" : payworldName;
+            document.getElementById('renamePayworld').value = payworldName === "Paynearby Wallet" ? "" : payworldName;
             document.getElementById('renameMahapower').value = mahapowerName === "Mahapower Wallet" ? "" : mahapowerName;
 
             document.getElementById('renameAxis').value = axisName === "Axis Bank" ? "" : axisName;
@@ -736,13 +741,23 @@
 
         let allTransactions = [];
 
-        db.collection("transactions").orderBy("timestamp", "asc").onSnapshot((querySnapshot) => {
-            allTransactions = [];
-            querySnapshot.forEach((doc) => {
-                allTransactions.push({ id: doc.id, ...doc.data() });
+        function loadDataFromFirebase() {
+            db.collection("transactions").orderBy("timestamp", "asc").onSnapshot((querySnapshot) => {
+                allTransactions = [];
+                querySnapshot.forEach((doc) => {
+                    let data = doc.data();
+                    
+                    // SECURITY: If employee, completely hide Mahapower and SBI entries from their universe
+                    if(userRole === "employee") {
+                        if(data.service.includes("Mahapower") || data.service.includes("SBI") || data.bankSource === "SBI" || data.expenseSource === "Mahapower" || data.expenseSource === "SBI") {
+                            return; // Skip this record completely
+                        }
+                    }
+                    allTransactions.push({ id: doc.id, ...data });
+                });
+                processCalculations(allTransactions);
             });
-            processCalculations(allTransactions);
-        });
+        }
 
         function processCalculations(dataList) {
             let todayIncome = 0, todayExpense = 0, monthlyIncome = 0, monthlyExpense = 0;
@@ -846,7 +861,6 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                // RULE 2: In "All Statement", Grand Total/Running Balance grows by Commission (+) and reduces by Shop Expenses (-)
                 if (selectedWallet === "All") {
                     if(data.service.includes("Opening")) {
                         runningBal += amt;
@@ -857,7 +871,6 @@
                         runningBal += comm;
                     }
                 } else {
-                    // RULE 1: In Specific Wallet Statement, show actual money flow (plus/minus) and remaining balance of that wallet
                     let impactAmt = 0;
 
                     if (selectedWallet === "Fino") {
