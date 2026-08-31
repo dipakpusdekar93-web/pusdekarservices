@@ -424,7 +424,7 @@
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); max-width: 700px;">
                 <h3 style="margin-top: 0; color: #0f172a; font-size: 18px;">⚙️ मुख्य वॉलेट व UPI बँक नावे बदला (Wallet & Bank Settings)</h3>
-                <p style="color: #64748b; font-size: 13px;">इथे तुम्ही मुख्य वॉलेट्स (Fino, Payworld, Mahapower) आणि बँकांची नावे बदलू शकता.</p>
+                <p style="color: #64748b; font-size: 13px;">इथे तुम्ही मुख्य वॉलेट्स आणि बँकांची नावे बदलू शकता.</p>
                 
                 <h4 style="color: var(--primary); margin-bottom: 8px;">मुख्य वॉलेट्स (Main Wallets)</h4>
                 <div class="form-row">
@@ -527,7 +527,7 @@
             localStorage.setItem("wallet_union", unionName);
 
             loadWalletNames();
-            alert("सर्व वॉलेट्स आणि बँकांची नावे यशस्वीरित्या बदलली!");
+            alert("सर्व नावे यशस्वीरित्या बदलली!");
             switchTab('dashboard');
         }
 
@@ -541,12 +541,10 @@
             const boiName = localStorage.getItem("wallet_boi") || "Bank of India";
             const unionName = localStorage.getItem("wallet_union") || "Union Bank";
 
-            // Main Wallets Labels
             document.getElementById('labelFino').innerText = finoName;
             document.getElementById('labelPayworld').innerText = payworldName;
             document.getElementById('labelMahapower').innerText = mahapowerName;
 
-            // Adjustments & Filters
             document.getElementById('adjOptFino').innerText = finoName + " ॲडजस्टमेंट";
             document.getElementById('adjOptPayworld').innerText = payworldName + " ॲडजस्टमेंट";
             document.getElementById('adjOptMahapower').innerText = mahapowerName + " ॲडजस्टमेंट";
@@ -559,7 +557,6 @@
             document.getElementById('expOptPayworld').innerText = payworldName;
             document.getElementById('expOptMahapower').innerText = mahapowerName;
 
-            // Banks Labels
             document.getElementById('labelAxis').innerText = axisName;
             document.getElementById('labelSbi').innerText = sbiName;
             document.getElementById('labelBoi').innerText = boiName;
@@ -585,7 +582,6 @@
             document.getElementById('expOptBoi').innerText = boiName + " UPI";
             document.getElementById('expOptUnion').innerText = unionName + " UPI";
 
-            // Settings Inputs
             document.getElementById('renameFino').value = finoName === "Fino Wallet" ? "" : finoName;
             document.getElementById('renamePayworld').value = payworldName === "Payworld Wallet" ? "" : payworldName;
             document.getElementById('renameMahapower').value = mahapowerName === "Mahapower Wallet" ? "" : mahapowerName;
@@ -792,11 +788,14 @@
             filterData();
         }
 
+        // RULE 1 & 2 IMPLEMENTED ACCURATELY FOR STATEMENTS
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries");
             table.innerHTML = ""; 
 
+            const selectedWallet = document.getElementById('walletFilter').value;
             let runningBal = 0;
+
             const axisCustomName = localStorage.getItem("wallet_axis") || "Axis Bank";
             const sbiCustomName = localStorage.getItem("wallet_sbi") || "SBI";
             const boiCustomName = localStorage.getItem("wallet_boi") || "Bank of India";
@@ -811,15 +810,59 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                if(data.service.includes("Opening") || data.service === "Money Transfer" || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "UPI Cash Given") {
-                    if(data.service.includes("Opening") || data.service === "Fino Payment Bank" || data.service === "Payworld Services") {
+                if (selectedWallet === "All") {
+                    // All Statement: Only grows by Commission (+) and reduces by Shop Expenses (-)
+                    if(data.service.includes("Opening")) {
                         runningBal += amt;
                     } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
                         runningBal -= amt;
                     }
-                }
-                if(comm > 0) {
-                    runningBal += comm;
+                    if(comm > 0) {
+                        runningBal += comm;
+                    }
+                } else {
+                    // Specific Wallet Statement: Shows actual money flow (plus/minus) and remaining balance of that wallet
+                    let impactAmt = 0;
+
+                    if (selectedWallet === "Fino") {
+                        if (data.service === "Fino Opening") impactAmt = amt;
+                        else if (data.service === "Fino Payment Bank") impactAmt = amt; 
+                        else if (data.service === "Fino Cash Deposit") impactAmt = -amt; 
+                        else if (data.service === "Shop Expense" && eSrc === "Fino") impactAmt = -amt;
+                        if(comm > 0) impactAmt += comm;
+                    } 
+                    else if (selectedWallet === "Payworld") {
+                        if (data.service === "Payworld Opening") impactAmt = amt;
+                        else if (data.service === "Payworld Services") impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === "Payworld") impactAmt = -amt;
+                        if(comm > 0) impactAmt += comm;
+                    } 
+                    else if (selectedWallet === "Mahapower") {
+                        if (data.service === "Mahapower Opening") impactAmt = amt;
+                        else if (data.service === "Mahapower Bill Collection") impactAmt = -amt;
+                        else if (data.service === "Shop Expense" && eSrc === "Mahapower") impactAmt = -amt;
+                    } 
+                    else if (selectedWallet === "Cash") {
+                        if (data.service === "Cash Opening") impactAmt = amt;
+                        else if (data.service === "Fino Payment Bank") impactAmt = -amt; 
+                        else if (data.service === "Payworld Services") impactAmt = -amt;
+                        else if (data.service === "Mahapower Bill Collection") impactAmt = amt;
+                        else if (data.service === "Fino Cash Deposit") impactAmt = amt; 
+                        else if (data.service === "Money Transfer") impactAmt = amt; 
+                        else if (data.service === "UPI Cash Given") impactAmt = -amt; 
+                        else if (data.service === "Printing & Xerox") impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === "Cash") impactAmt = -amt;
+                        if(comm > 0) impactAmt += comm;
+                    } 
+                    else {
+                        let bankKey = selectedWallet;
+                        if (data.service === `${bankKey} Opening`) impactAmt = amt;
+                        else if (data.service === "Money Transfer" && bSrc === bankKey) impactAmt = -amt;
+                        else if (data.service === "UPI Cash Given" && bSrc === bankKey) impactAmt = amt;
+                        else if (data.service === "Shop Expense" && eSrc === bankKey) impactAmt = -amt;
+                    }
+
+                    runningBal += impactAmt;
                 }
 
                 let serviceDisplay = data.service;
@@ -834,8 +877,8 @@
                     serviceDisplay += ` (${dispBank})`;
                 } else if(data.service === "Shop Expense") {
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`;
-                } else if(data.service === "Fino Cash Deposit") {
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (Fino)</span>`;
+                } else if(data.service === "Fino Cash Deposit" || data.service === "Mahapower Bill Collection") {
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${data.service.includes('Mahapower') ? 'Mahapower' : 'Fino'})</span>`;
                 } else if(!data.service.includes("Opening")) {
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`;
                 }
@@ -883,7 +926,7 @@
                     } else if(selectedWallet === "Mahapower") {
                         matchWallet = (item.service.includes("Mahapower") || item.expenseSource === "Mahapower");
                     } else if(selectedWallet === "Cash") {
-                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.service === "Printing & Xerox" || item.expenseSource === "Cash");
+                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Mahapower Bill Collection" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.service === "Printing & Xerox" || item.expenseSource === "Cash");
                     }
                 }
                 return matchWallet;
