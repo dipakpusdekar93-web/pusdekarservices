@@ -198,7 +198,7 @@
         <ul class="sidebar-menu">
             <li class="active" id="menuDashboard" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व एंट्री फॉर्म</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्वतंत्र स्टेटमेंट व रिपोर्ट्स</li>
-            <li id="menuSettings" onclick="switchTab('settings')">⚙️ UPI बँक/वॉलेट सेटिंग्स</li>
+            <li id="menuSettings" onclick="switchTab('settings')">⚙️ बँक व वॉलेट सेटिंग्स</li>
         </ul>
     </div>
 
@@ -223,11 +223,11 @@
             <!-- Wallets & Cash Display Cards -->
             <div class="wallet-cards">
                 <div class="w-card card-fino">
-                    <h4>Fino Wallet</h4>
+                    <h4 id="labelFino">Fino Wallet</h4>
                     <h3 id="finoBalance">₹ 0</h3>
                 </div>
                 <div class="w-card card-payworld">
-                    <h4>Payworld Wallet</h4>
+                    <h4 id="labelPayworld">Payworld Wallet</h4>
                     <h3 id="payworldBalance">₹ 0</h3>
                 </div>
                 
@@ -243,7 +243,7 @@
                 </div>
 
                 <div class="w-card card-mahapower">
-                    <h4>Mahapower Wallet</h4>
+                    <h4 id="labelMahapower">Mahapower Wallet</h4>
                     <h3 id="mahapowerBalance">₹ 0</h3>
                 </div>
                 <div class="w-card card-cash">
@@ -267,13 +267,13 @@
                     <div class="form-group">
                         <label>कोणते वॉलेट किंवा बँक निवडा</label>
                         <select id="adjWallet">
-                            <option value="Fino Opening">Fino Wallet ॲडजस्टमेंट</option>
-                            <option value="Payworld Opening">Payworld Wallet ॲडजस्टमेंट</option>
+                            <option value="Fino Opening" id="adjOptFino">Fino Wallet ॲडजस्टमेंट</option>
+                            <option value="Payworld Opening" id="adjOptPayworld">Payworld Wallet ॲडजस्टमेंट</option>
                             <option value="Axis Opening" id="optAxis">Axis Bank ॲडजस्टमेंट</option>
                             <option value="SBI Opening" id="optSbi">SBI ॲडजस्टमेंट</option>
                             <option value="BOI Opening" id="optBoi">Bank of India ॲडजस्टमेंट</option>
                             <option value="Union Opening" id="optUnion">Union Bank ॲडजस्टमेंट</option>
-                            <option value="Mahapower Opening">Mahapower Wallet ॲडजस्टमेंट</option>
+                            <option value="Mahapower Opening" id="adjOptMahapower">Mahapower Wallet ॲडजस्टमेंट</option>
                             <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
                         </select>
                     </div>
@@ -328,9 +328,9 @@
                             <option value="SBI" id="expOptSbi">SBI UPI</option>
                             <option value="BOI" id="expOptBoi">Bank of India UPI</option>
                             <option value="Union" id="expOptUnion">Union Bank UPI</option>
-                            <option value="Fino">Fino Wallet</option>
-                            <option value="Payworld">Payworld Wallet</option>
-                            <option value="Mahapower">Mahapower Wallet</option>
+                            <option value="Fino" id="expOptFino">Fino Wallet</option>
+                            <option value="Payworld" id="expOptPayworld">Payworld Wallet</option>
+                            <option value="Mahapower" id="expOptMahapower">Mahapower Wallet</option>
                         </select>
                     </div>
                 </div>
@@ -374,13 +374,13 @@
                     <label>खाते / वॉलेट निवडा (Wallet Wise Filter):</label>
                     <select id="walletFilter" onchange="filterData()">
                         <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
-                        <option value="Fino">Fino Wallet</option>
-                        <option value="Payworld">Payworld Wallet</option>
-                        <option value="Axis">Axis Bank</option>
-                        <option value="SBI">SBI Bank</option>
-                        <option value="BOI">Bank of India (BOI)</option>
-                        <option value="Union">Union Bank</option>
-                        <option value="Mahapower">Mahapower Wallet</option>
+                        <option value="Fino" id="filterFino">Fino Wallet</option>
+                        <option value="Payworld" id="filterPayworld">Payworld Wallet</option>
+                        <option value="Axis" id="filterAxis">Axis Bank</option>
+                        <option value="SBI" id="filterSbi">SBI Bank</option>
+                        <option value="BOI" id="filterBoi">Bank of India (BOI)</option>
+                        <option value="Union" id="filterUnion">Union Bank</option>
+                        <option value="Mahapower" id="filterMahapower">Mahapower Wallet</option>
                         <option value="Cash">Cash in Hand (रोख गल्ला)</option>
                     </select>
                 </div>
@@ -423,8 +423,17 @@
         <!-- ================= VIEW 3: SETTINGS TAB ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); max-width: 700px;">
-                <h3 style="margin-top: 0; color: #0f172a; font-size: 18px;">⚙️ UPI बँक व वॉलेटची नावे बदला (Rename Settings)</h3>
-                <p style="color: #64748b; font-size: 13px;">इथे तुम्ही तुमच्या बँकेची नावे बदलू शकता, जी संपूर्ण सिस्टीममध्ये अपडेट होतील.</p>
+                <h3 style="margin-top: 0; color: #0f172a; font-size: 18px;">⚙️ मुख्य वॉलेट व UPI बँक नावे बदला (Wallet & Bank Settings)</h3>
+                <p style="color: #64748b; font-size: 13px;">इथे तुम्ही मुख्य वॉलेट्स (Fino, Payworld, Mahapower) आणि बँकांची नावे बदलू शकता.</p>
+                
+                <h4 style="color: var(--primary); margin-bottom: 8px;">मुख्य वॉलेट्स (Main Wallets)</h4>
+                <div class="form-row">
+                    <div class="form-group"><label>फिनो वॉलेटचे नाव</label><input type="text" id="renameFino" placeholder="Fino Wallet"></div>
+                    <div class="form-group"><label>पेवर्ल्ड वॉलेटचे नाव</label><input type="text" id="renamePayworld" placeholder="Payworld Wallet"></div>
+                    <div class="form-group"><label>महापावर वॉलेटचे नाव</label><input type="text" id="renameMahapower" placeholder="Mahapower Wallet"></div>
+                </div>
+
+                <h4 style="color: var(--primary); margin: 15px 0 8px 0;">UPI बँक्स (Banks)</h4>
                 <div class="form-row">
                     <div class="form-group"><label>बँक १ चे नाव</label><input type="text" id="renameAxis" placeholder="Axis"></div>
                     <div class="form-group"><label>बँक २ चे नाव</label><input type="text" id="renameSbi" placeholder="SBI"></div>
@@ -433,7 +442,7 @@
                     <div class="form-group"><label>बँक ३ चे नाव</label><input type="text" id="renameBoi" placeholder="BOI"></div>
                     <div class="form-group"><label>बँक ४ चे नाव</label><input type="text" id="renameUnion" placeholder="Union"></div>
                 </div>
-                <button class="adj-btn" onclick="saveWalletNames()">Save Wallet Names</button>
+                <button class="adj-btn" onclick="saveWalletNames()">Save All Names</button>
             </div>
         </div>
     </div>
@@ -499,10 +508,18 @@
         }
 
         function saveWalletNames() {
+            const finoName = document.getElementById('renameFino').value || "Fino Wallet";
+            const payworldName = document.getElementById('renamePayworld').value || "Payworld Wallet";
+            const mahapowerName = document.getElementById('renameMahapower').value || "Mahapower Wallet";
+
             const axisName = document.getElementById('renameAxis').value || "Axis Bank";
             const sbiName = document.getElementById('renameSbi').value || "SBI";
             const boiName = document.getElementById('renameBoi').value || "Bank of India";
             const unionName = document.getElementById('renameUnion').value || "Union Bank";
+
+            localStorage.setItem("wallet_fino", finoName);
+            localStorage.setItem("wallet_payworld", payworldName);
+            localStorage.setItem("wallet_mahapower", mahapowerName);
 
             localStorage.setItem("wallet_axis", axisName);
             localStorage.setItem("wallet_sbi", sbiName);
@@ -510,16 +527,39 @@
             localStorage.setItem("wallet_union", unionName);
 
             loadWalletNames();
-            alert("बँक/वॉलेटची नावे यशस्वीरित्या बदलली!");
+            alert("सर्व वॉलेट्स आणि बँकांची नावे यशस्वीरित्या बदलली!");
             switchTab('dashboard');
         }
 
         function loadWalletNames() {
+            const finoName = localStorage.getItem("wallet_fino") || "Fino Wallet";
+            const payworldName = localStorage.getItem("wallet_payworld") || "Payworld Wallet";
+            const mahapowerName = localStorage.getItem("wallet_mahapower") || "Mahapower Wallet";
+
             const axisName = localStorage.getItem("wallet_axis") || "Axis Bank";
             const sbiName = localStorage.getItem("wallet_sbi") || "SBI";
             const boiName = localStorage.getItem("wallet_boi") || "Bank of India";
             const unionName = localStorage.getItem("wallet_union") || "Union Bank";
 
+            // Main Wallets Labels
+            document.getElementById('labelFino').innerText = finoName;
+            document.getElementById('labelPayworld').innerText = payworldName;
+            document.getElementById('labelMahapower').innerText = mahapowerName;
+
+            // Adjustments & Filters
+            document.getElementById('adjOptFino').innerText = finoName + " ॲडजस्टमेंट";
+            document.getElementById('adjOptPayworld').innerText = payworldName + " ॲडजस्टमेंट";
+            document.getElementById('adjOptMahapower').innerText = mahapowerName + " ॲडजस्टमेंट";
+
+            document.getElementById('filterFino').innerText = finoName;
+            document.getElementById('filterPayworld').innerText = payworldName;
+            document.getElementById('filterMahapower').innerText = mahapowerName;
+
+            document.getElementById('expOptFino').innerText = finoName;
+            document.getElementById('expOptPayworld').innerText = payworldName;
+            document.getElementById('expOptMahapower').innerText = mahapowerName;
+
+            // Banks Labels
             document.getElementById('labelAxis').innerText = axisName;
             document.getElementById('labelSbi').innerText = sbiName;
             document.getElementById('labelBoi').innerText = boiName;
@@ -530,6 +570,11 @@
             document.getElementById('optBoi').innerText = boiName + " ॲडजस्टमेंट";
             document.getElementById('optUnion').innerText = unionName + " ॲडजस्टमेंट";
 
+            document.getElementById('filterAxis').innerText = axisName;
+            document.getElementById('filterSbi').innerText = sbiName;
+            document.getElementById('filterBoi').innerText = boiName;
+            document.getElementById('filterUnion').innerText = unionName;
+
             document.getElementById('bankOptAxis').innerText = axisName;
             document.getElementById('bankOptSbi').innerText = sbiName;
             document.getElementById('bankOptBoi').innerText = boiName;
@@ -539,6 +584,11 @@
             document.getElementById('expOptSbi').innerText = sbiName + " UPI";
             document.getElementById('expOptBoi').innerText = boiName + " UPI";
             document.getElementById('expOptUnion').innerText = unionName + " UPI";
+
+            // Settings Inputs
+            document.getElementById('renameFino').value = finoName === "Fino Wallet" ? "" : finoName;
+            document.getElementById('renamePayworld').value = payworldName === "Payworld Wallet" ? "" : payworldName;
+            document.getElementById('renameMahapower').value = mahapowerName === "Mahapower Wallet" ? "" : mahapowerName;
 
             document.getElementById('renameAxis').value = axisName === "Axis Bank" ? "" : axisName;
             document.getElementById('renameSbi').value = sbiName === "SBI" ? "" : sbiName;
@@ -761,8 +811,8 @@
                 const bSrc = data.bankSource || "Axis";
                 const eSrc = data.expenseSource || "Cash";
 
-                if(data.service.includes("Opening") || data.service === "Money Transfer" || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "Mahapower Bill Collection" || data.service === "UPI Cash Given") {
-                    if(data.service.includes("Opening") || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "Mahapower Bill Collection") {
+                if(data.service.includes("Opening") || data.service === "Money Transfer" || data.service === "Fino Payment Bank" || data.service === "Payworld Services" || data.service === "UPI Cash Given") {
+                    if(data.service.includes("Opening") || data.service === "Fino Payment Bank" || data.service === "Payworld Services") {
                         runningBal += amt;
                     } else if(data.service === "Shop Expense" || data.service === "Fino Cash Deposit") {
                         runningBal -= amt;
@@ -833,7 +883,7 @@
                     } else if(selectedWallet === "Mahapower") {
                         matchWallet = (item.service.includes("Mahapower") || item.expenseSource === "Mahapower");
                     } else if(selectedWallet === "Cash") {
-                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Mahapower Bill Collection" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.service === "Printing & Xerox" || item.expenseSource === "Cash");
+                        matchWallet = (item.service.includes("Cash") || item.service === "Fino Payment Bank" || item.service === "Payworld Services" || item.service === "Money Transfer" || item.service === "UPI Cash Given" || item.service === "Printing & Xerox" || item.expenseSource === "Cash");
                     }
                 }
                 return matchWallet;
