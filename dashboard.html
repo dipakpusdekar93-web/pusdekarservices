@@ -356,7 +356,7 @@
                         </select>
                     </div>
                     <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="moName" placeholder="पूर्ण नाव"></div>
-                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल"></div>
+                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल" onblur="searchCustomer()"></div>
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="moVillage" placeholder="गाव"></div>
@@ -491,7 +491,7 @@
                 </div>
             </div>
 
-            <!-- NEW SETTING: WHATSAPP PROMO MESSAGE -->
+            <!-- WHATSAPP PROMO MESSAGE -->
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color:var(--warning);">💬 WhatsApp प्रमोशनल मेसेज (मार्केटिंग)</h3>
                 <p style="font-size:12px; color:#475569; margin-bottom: 12px;">हा मेसेज तुम्ही पाठवलेल्या प्रत्येक WhatsApp मेसेजच्या शेवटी आपोआप जोडला जाईल. तुम्ही इथे तुमच्या इतर सेवांची माहिती लिहून ती कधीही बदलू शकता.</p>
@@ -611,7 +611,7 @@
             });
 
             // Load Promo Message
-            const defaultPromo = "📌 आमच्या इतर सेवा: सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            const defaultPromo = "📌 *आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
             document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : defaultPromo;
         }
 
@@ -626,20 +626,14 @@
             } else if(st === "Shop Expense" || st === "Advance Received" || st === "Advance Used" || st === "Hand Loan Given" || st === "Hand Loan Returned") {
                 bRow.style.display = "none"; 
                 if(st === "Advance Received" || st === "Hand Loan Returned") {
-                    eLabel.innerHTML = "पैसे <b>कुठे जमा</b> झाले?";
-                    eLabel.style.color = "var(--success)";
-                    eRow.style.border = "1px dashed var(--success)";
-                    eRow.style.background = "#f0fdf4";
+                    eLabel.innerHTML = "पैसे <b>कुठे जमा</b> झाले?"; eLabel.style.color = "var(--success)";
+                    eRow.style.border = "1px dashed var(--success)"; eRow.style.background = "#f0fdf4";
                 } else {
-                    eLabel.innerHTML = "पैसे <b>कुठून दिले/काढले</b>?";
-                    eLabel.style.color = "var(--danger)";
-                    eRow.style.border = "1px dashed var(--danger)";
-                    eRow.style.background = "#fff5f5";
+                    eLabel.innerHTML = "पैसे <b>कुठून दिले/काढले</b>?"; eLabel.style.color = "var(--danger)";
+                    eRow.style.border = "1px dashed var(--danger)"; eRow.style.background = "#fff5f5";
                 }
                 eRow.style.display = "flex";
-            } else {
-                bRow.style.display = "none"; eRow.style.display = "none";
-            }
+            } else { bRow.style.display = "none"; eRow.style.display = "none"; }
         }
 
         function checkCAuditRule() {
@@ -652,24 +646,53 @@
         function calcUdhar() {
             let t = parseFloat(document.getElementById('moTotal').value) || 0;
             let p = parseFloat(document.getElementById('moPaid').value) || 0;
-            let pending = t - p;
-            document.getElementById('moPending').value = pending > 0 ? pending : 0;
+            document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0;
         }
 
+        // ================= PERMANENT CUSTOMER LOGIC =================
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value || document.getElementById('moMobile').value;
             if (mobile.length === 10) {
-                db.collection("transactions").where("mobile", "==", mobile).limit(1).get().then((querySnapshot) => {
-                    if (!querySnapshot.empty) {
-                        const data = querySnapshot.docs[0].data();
-                        document.getElementById('details').value = data.details || ""; document.getElementById('villageInput').value = data.village || "";
-                        document.getElementById('moName').value = data.details || ""; document.getElementById('moVillage').value = data.village || "";
-                        document.getElementById('searchMsg').style.display = "inline-block";
-                        setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
+                // First check in permanent customers collection
+                db.collection("customers").doc(mobile).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        fillCustomerFields(data);
+                    } else {
+                        // Fallback to old transactions if not in customers yet
+                        db.collection("transactions").where("mobile", "==", mobile).limit(1).get().then((querySnapshot) => {
+                            if (!querySnapshot.empty) {
+                                const data = querySnapshot.docs[0].data();
+                                fillCustomerFields({name: data.details, village: data.village, idProof: data.idProof});
+                            }
+                        });
                     }
                 });
             }
         }
+
+        function fillCustomerFields(data) {
+            if(document.getElementById('details')) document.getElementById('details').value = data.name || ""; 
+            if(document.getElementById('villageInput')) document.getElementById('villageInput').value = data.village || "";
+            if(document.getElementById('moName')) document.getElementById('moName').value = data.name || ""; 
+            if(document.getElementById('moVillage')) document.getElementById('moVillage').value = data.village || "";
+            if(document.getElementById('idProof') && data.idProof && data.idProof !== "-") document.getElementById('idProof').value = data.idProof;
+            
+            document.getElementById('searchMsg').style.display = "inline-block";
+            setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
+        }
+
+        function saveCustomerData(mobile, name, village, idProof) {
+            if(mobile && mobile !== "-" && mobile.length === 10) {
+                db.collection("customers").doc(mobile).set({
+                    name: name || "-",
+                    mobile: mobile,
+                    village: village || "-",
+                    idProof: idProof || "-"
+                }, { merge: true });
+            }
+        }
+        // ==========================================================
 
         function saveAdjustment() {
             const adjWallet = document.getElementById('adjWallet').value;
@@ -708,6 +731,7 @@
                 mobile, village, payStatus, purpose, idProof,
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
+                saveCustomerData(mobile, details, village, idProof); // Save Customer Permanently
                 document.getElementById('amount').value = ""; document.getElementById('details').value = ""; document.getElementById('mobile').value = ""; document.getElementById('villageInput').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
                 alert("व्यवहार सेव्ह झाला!");
             });
@@ -731,12 +755,13 @@
                 payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
                 commission: 0, narration: "Mahaonline Service", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
+                saveCustomerData(mobile, details, village, "-"); // Save Customer Permanently
                 document.getElementById('moName').value = ""; document.getElementById('moMobile').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
             });
         }
 
         function deleteEntry(docId) {
-            if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
+            if(confirm("ही नोंद कायमची डिलीट करायची का? (नोंद डिलीट झाली तरी ग्राहकाचा डेटा सुरक्षित राहील)")) { db.collection("transactions").doc(docId).delete(); }
         }
 
         function deleteAllEntries() {
@@ -750,29 +775,24 @@
         }
 
         function downloadExcel() {
-            let csv = [];
-            let rows = document.querySelectorAll("#reportTable tr");
+            let csv = []; let rows = document.querySelectorAll("#reportTable tr");
             for (let i = 0; i < rows.length; i++) {
                 let row = [], cols = rows[i].querySelectorAll("td, th");
                 for (let j = 0; j < cols.length; j++) {
                     if(j === 8) continue;
-                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " ");
-                    row.push('"' + data + '"');
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); row.push('"' + data + '"');
                 }
                 csv.push(row.join(","));
             }
             let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"});
-            let downloadLink = document.createElement("a");
-            downloadLink.download = "Pusdekar_Statement.csv";
-            downloadLink.href = window.URL.createObjectURL(csvFile);
-            downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
+            let downloadLink = document.createElement("a"); downloadLink.download = "Pusdekar_Statement.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile); downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink); downloadLink.click();
         }
 
         function getPromoText() {
             let promoMsg = localStorage.getItem("wa_promo_msg");
-            if(promoMsg === null) promoMsg = "📌 आमच्या इतर सेवा: सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            if(promoMsg === null) promoMsg = "📌 *आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
             return promoMsg.trim() !== "" ? `\n\n${promoMsg}` : "";
         }
 
@@ -807,7 +827,7 @@
 
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
-                    let waMsg = encodeURIComponent(`नमस्कार ${data.customerName},\nPusdekar Online Center कडून आपले पेंडिंग काम (${data.taskDetails}) बाकी आहे. कृपया संपर्क साधा.\nधन्यवाद!${promo}`);
+                    let waMsg = encodeURIComponent(`🔔 *Pusdekar Online Center* 🔔\n➖➖➖➖➖➖➖➖➖➖\nनमस्कार *${data.customerName}*,\nआपले खालील काम प्रलंबित (Pending) आहे:\n\n📝 *तपशील:* ${data.taskDetails}\n\nकृपया लवकरच संपर्क साधा.\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद!* 🙏`);
                     let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
 
                     table.innerHTML += `<tr>
@@ -836,10 +856,8 @@
 
         function loadDataFromFirebase() {
             db.collection("transactions").orderBy("timestamp", "asc").onSnapshot((querySnapshot) => {
-                allTransactions = [];
-                querySnapshot.forEach((doc) => { allTransactions.push({ id: doc.id, ...doc.data() }); });
-                processCalculations(allTransactions);
-                renderMahaonlineTable(allTransactions);
+                allTransactions = []; querySnapshot.forEach((doc) => { allTransactions.push({ id: doc.id, ...doc.data() }); });
+                processCalculations(allTransactions); renderMahaonlineTable(allTransactions);
             });
         }
 
@@ -880,24 +898,14 @@
                     else if(svc === "Money Transfer") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] -= amt; cBal += amt; }
                     else if(svc === "UPI Cash Given") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] += amt; cBal -= amt; }
                     else if(svc === "Advance Received" || svc === "Hand Loan Returned") {
-                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] += amt;
-                        else if(eSrc === "Fino") f1Bal += amt; else if(eSrc === "Fino2") f2Bal += amt; else if(eSrc === "Payworld") pwBal += amt; else if(eSrc === "Paynearby") pnBal += amt; else if(eSrc === "Mahapower") mBal += amt;
-                        else cBal += amt;
+                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] += amt; else if(eSrc === "Fino") f1Bal += amt; else if(eSrc === "Fino2") f2Bal += amt; else if(eSrc === "Payworld") pwBal += amt; else if(eSrc === "Paynearby") pnBal += amt; else if(eSrc === "Mahapower") mBal += amt; else cBal += amt;
                     }
                     else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
-                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] -= amt;
-                        else if(eSrc === "Fino") f1Bal -= amt; else if(eSrc === "Fino2") f2Bal -= amt; else if(eSrc === "Payworld") pwBal -= amt; else if(eSrc === "Paynearby") pnBal -= amt; else if(eSrc === "Mahapower") mBal -= amt;
-                        else cBal -= amt; 
+                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] -= amt; else if(eSrc === "Fino") f1Bal -= amt; else if(eSrc === "Fino2") f2Bal -= amt; else if(eSrc === "Payworld") pwBal -= amt; else if(eSrc === "Paynearby") pnBal -= amt; else if(eSrc === "Mahapower") mBal -= amt; else cBal -= amt; 
                     }
 
-                    if(isToday) { 
-                        if(svc === "Shop Expense") expT += amt; 
-                        else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incT += comm; 
-                    }
-                    if(isThisMonth) { 
-                        if(svc === "Shop Expense") expM += amt; 
-                        else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incM += comm; 
-                    }
+                    if(isToday) { if(svc === "Shop Expense") expT += amt; else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incT += comm; }
+                    if(isThisMonth) { if(svc === "Shop Expense") expM += amt; else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incM += comm; }
                 }
             });
 
@@ -927,8 +935,8 @@
                 
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
-                    let msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी (उधार): ₹${data.pendingAmount || 0}\nधन्यवाद!${promo}`);
-                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA</a>`;
+                    let msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *एकूण फी:* ₹${data.totalFee || 0}\n✅ *जमा:* ₹${data.amount}\n❗ *बाकी (उधार):* ₹${data.pendingAmount || 0}\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
+                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
                 
                 moTable.innerHTML += `<tr>
@@ -991,8 +999,7 @@
                 if(data.category === "Mahaonline") {
                     serviceDisplay = `<b>[Mahaonline]</b> ${svc}`;
                     let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; 
-                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`;
-                    isPlus = true;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true;
                 }
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
@@ -1000,13 +1007,11 @@
                 } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
-                    isMinus = true;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`; isMinus = true;
                 } else if(svc === "Advance Received" || svc === "Hand Loan Returned") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
-                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`;
-                    isPlus = true;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`; isPlus = true;
                 } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { 
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true;
                 } else if(!svc.includes("Opening")) { 
@@ -1047,11 +1052,11 @@
                 if(data.mobile && data.mobile !== "-") {
                     let msg = "";
                     if (data.category === "Mahaonline") {
-                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी (उधार): ₹${data.pendingAmount || 0}\nधन्यवाद!${promo}`);
+                        msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *एकूण फी:* ₹${data.totalFee || 0}\n✅ *जमा:* ₹${data.amount}\n❗ *बाकी (उधार):* ₹${data.pendingAmount || 0}\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
                     } else {
-                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center कडून आपल्या व्यवहाराची नोंद यशस्वी झाली आहे.\nरक्कम: ₹${data.amount}\nधन्यवाद!${promo}`);
+                        msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *रक्कम:* ₹${data.amount}\n✅ *स्थिती:* यशस्वी (Success)\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
                     }
-                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA</a>`;
+                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
                 table.innerHTML += `<tr>
