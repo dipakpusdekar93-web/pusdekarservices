@@ -82,8 +82,8 @@
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
         .form-group { flex: 1; min-width: 180px; }
         label { display: block; font-weight: 600; margin-bottom: 4px; color: #334155; font-size: 11.5px; }
-        select, input { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px; background: #fff; }
-        select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1); }
+        select, input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px; background: #fff; font-family: inherit; }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1); }
         
         .save-btn, .adj-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; transition: background 0.2s; }
         .save-btn:hover { background: #047857; }
@@ -105,6 +105,20 @@
         
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .delete-btn:hover { background: #f87171; color: white; }
+        .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .done-btn:hover { background: #34d399; color: white; }
+
+        /* POPUP MODAL CSS */
+        .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+        .modal-content { background-color: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; animation: slideDown 0.4s ease-out; }
+        @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
+        .close-popup:hover { color: var(--danger); }
+        
+        .popup-task-list { max-height: 350px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .popup-task-item { background: #fffbeb; border-left: 5px solid var(--warning); padding: 12px 15px; margin-bottom: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .popup-task-info h4 { margin: 0 0 5px 0; color: #0f172a; font-size: 14px; }
+        .popup-task-info p { margin: 0; font-size: 12px; color: #475569; line-height: 1.4; }
 
         @media print {
             .sidebar, .no-print { display: none !important; }
@@ -118,18 +132,21 @@
 </head>
 <body>
 
+    <!-- Professional Sidebar -->
     <div class="sidebar no-print">
         <div class="sidebar-brand">
             <span>⚡ Pusdekar Digital</span>
         </div>
         <ul class="sidebar-menu">
             <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 All-in-One डॅशबोर्ड</li>
+            <li id="menuPending" onclick="switchTab('pending')">🔔 पेंडिंग कामे (Reminders)</li>
             <li id="menuMahaonline" onclick="switchTab('mahaonline')">📝 महाऑनलाइन (सेतू)</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
             <li id="menuSettings" onclick="switchTab('settings')">⚙️ बँक व वॉलेट सेटिंग्स</li>
         </ul>
     </div>
 
+    <!-- Main Content Area -->
     <div class="main-content">
         <div class="header">
             <div>
@@ -256,6 +273,7 @@
                 <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
+            <!-- Adjustments Form -->
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
@@ -285,10 +303,41 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: MAHAONLINE ================= -->
-        <div id="viewMahaonline" class="view-section">
+        <!-- ================= VIEW 2: PENDING TASKS (NEW) ================= -->
+        <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
-                <h3>📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
+                <h3 style="color: var(--warning);">🔔 नवीन पेंडिंग काम जोडा</h3>
+                <div class="form-row">
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>काय काम आहे? (तपशील) *</label><textarea id="ptDetails" rows="2" placeholder="उदा. पॅन कार्डची प्रिंट काढायची आहे..."></textarea></div>
+                </div>
+                <button class="save-btn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="pendingTable">
+                    <thead>
+                        <tr>
+                            <th>तारीख</th>
+                            <th>ग्राहकाचे नाव</th>
+                            <th>मोबाईल</th>
+                            <th>कामाचा तपशील</th>
+                            <th>स्थिती</th>
+                            <th>कृती</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ================= VIEW 3: MAHAONLINE ================= -->
+        <div id="viewMahaonline" class="view-section">
+            <div class="container" style="border-left: 4px solid #8b5cf6;">
+                <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
                 
                 <div class="form-row">
                     <div class="form-group">
@@ -327,7 +376,7 @@
                         </select>
                     </div>
                 </div>
-                <button class="save-btn" style="background:var(--warning);" onclick="saveMahaonline()">Save Mahaonline Entry</button>
+                <button class="save-btn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
             </div>
 
             <div class="table-responsive">
@@ -350,7 +399,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 3: STATEMENT ================= -->
+        <!-- ================= VIEW 4: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -400,13 +449,12 @@
                     </thead>
                     <tbody id="statementTableEntries"></tbody>
                     <tfoot id="statementTotalFoot" style="background: #f8fafc; font-weight: bold; border-top: 2px solid #cbd5e1;">
-                        <!-- Calculated totals will appear here -->
                     </tfoot>
                 </table>
             </div>
         </div>
 
-        <!-- ================= VIEW 4: SETTINGS ================= -->
+        <!-- ================= VIEW 5: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
@@ -441,6 +489,18 @@
         </div>
     </div>
 
+    <!-- ================= MODAL FOR PENDING TASKS AUTO POPUP ================= -->
+    <div id="pendingModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-popup" onclick="closePopup()">&times;</span>
+            <h3 style="margin-top:0; color:var(--warning); border-bottom:1px solid #e2e8f0; padding-bottom:10px;">🔔 आजची पेंडिंग कामे (Reminders)</h3>
+            <p style="font-size:12px; color:#64748b;">भाऊ, खालील ग्राहकांचे काम अजून बाकी आहे. पूर्ण झाल्यावर '✔ काम झाले' वर क्लिक कर.</p>
+            <ul class="popup-task-list" id="popupTaskList">
+                <!-- Tasks will load here -->
+            </ul>
+        </div>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -460,14 +520,14 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
-        const adminEmail = "tuza_email_id_ithetak@gmail.com"; // Keep your main email here
-        
         const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
+        
+        let hasShownPopup = false; // To show popup only once per refresh
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
-            else { loadDataFromFirebase(); }
+            else { loadDataFromFirebase(); loadPendingTasks(); }
         });
 
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
@@ -477,6 +537,7 @@
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
 
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
+            else if(tabName === 'pending') { document.getElementById('viewPending').classList.add('active-view'); document.getElementById('menuPending').classList.add('active'); } 
             else if(tabName === 'mahaonline') { document.getElementById('viewMahaonline').classList.add('active-view'); document.getElementById('menuMahaonline').classList.add('active'); } 
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'settings') { document.getElementById('viewSettings').classList.add('active-view'); document.getElementById('menuSettings').classList.add('active'); }
@@ -632,33 +693,25 @@
             if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
         }
 
-        // NEW: ALL DELETE FACILITY
         function deleteAllEntries() {
             if(confirm("⚠️ सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) {
                 let code = prompt("सुरक्षेसाठी 'DELETE' असे टाइप करा:");
                 if(code === "DELETE") {
-                    allTransactions.forEach(t => {
-                        db.collection("transactions").doc(t.id).delete();
-                    });
+                    allTransactions.forEach(t => { db.collection("transactions").doc(t.id).delete(); });
                     alert("सर्व डेटा कायमचा डिलीट झाला आहे!");
-                } else {
-                    alert("शब्द चुकीचा आहे. डिलीट प्रक्रिया रद्द केली.");
-                }
+                } else { alert("शब्द चुकीचा आहे. डिलीट प्रक्रिया रद्द केली."); }
             }
         }
 
-        // NEW: EXCEL DOWNLOAD FACILITY
         function downloadExcel() {
             let csv = [];
             let rows = document.querySelectorAll("#reportTable tr");
             for (let i = 0; i < rows.length; i++) {
                 let row = [], cols = rows[i].querySelectorAll("td, th");
-                // Skip Action Column (index 8)
-                let len = cols.length;
-                if(i !== 0) len = len - 1; // Don't take button HTML
+                let len = i === 0 ? cols.length : cols.length - 1; // Skip action col for rows
                 for (let j = 0; j < cols.length; j++) {
                     if(j === 8) continue; // Skip Action column
-                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); // remove commas and newlines
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " ");
                     row.push('"' + data + '"');
                 }
                 csv.push(row.join(","));
@@ -672,6 +725,76 @@
             downloadLink.click();
         }
 
+        // ================= PENDING TASKS LOGIC =================
+        function addPendingTask() {
+            const name = document.getElementById('ptName').value;
+            const mobile = document.getElementById('ptMobile').value || "-";
+            const details = document.getElementById('ptDetails').value;
+
+            if(name === "" || details === "") { alert("कृपया ग्राहकाचे नाव आणि कामाचा तपशील भरा!"); return; }
+
+            db.collection("pendingTasks").add({
+                customerName: name, mobile: mobile, taskDetails: details,
+                status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
+                alert("पेंडिंग काम सेव्ह झाले!");
+            });
+        }
+
+        function markTaskDone(docId) {
+            db.collection("pendingTasks").doc(docId).update({ status: "Done" });
+        }
+
+        function deletePendingTask(docId) {
+            if(confirm("हे काम डिलीट करायचे का?")) { db.collection("pendingTasks").doc(docId).delete(); }
+        }
+
+        function closePopup() {
+            document.getElementById('pendingModal').style.display = 'none';
+        }
+
+        function loadPendingTasks() {
+            db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot((snapshot) => {
+                const table = document.getElementById('pendingTableBody');
+                const popupList = document.getElementById('popupTaskList');
+                table.innerHTML = ""; popupList.innerHTML = "";
+                let tasks = [];
+
+                snapshot.forEach((doc) => { tasks.push({ id: doc.id, ...doc.data() }); });
+                tasks.sort((a, b) => b.timestamp - a.timestamp); // Newest first
+
+                tasks.forEach(data => {
+                    let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
+                    
+                    // Add to Full Table
+                    table.innerHTML += `<tr>
+                        <td>${dateStr}</td><td><b>${data.customerName}</b></td><td>${data.mobile}</td>
+                        <td>${data.taskDetails}</td><td class="text-red">Pending</td>
+                        <td><button class="done-btn" onclick="markTaskDone('${data.id}')">✔ Done</button> <button class="delete-btn" onclick="deletePendingTask('${data.id}')">❌</button></td>
+                    </tr>`;
+
+                    // Add to Popup Modal
+                    popupList.innerHTML += `<li class="popup-task-item">
+                        <div class="popup-task-info">
+                            <h4>👤 ${data.customerName} (${data.mobile})</h4>
+                            <p>📝 ${data.taskDetails}</p>
+                        </div>
+                        <button class="done-btn" onclick="markTaskDone('${data.id}')">✔ काम झाले</button>
+                    </li>`;
+                });
+
+                // Show Auto Popup if there are tasks and we haven't shown it yet in this session
+                if(tasks.length > 0 && !hasShownPopup) {
+                    document.getElementById('pendingModal').style.display = 'block';
+                    hasShownPopup = true;
+                } else if(tasks.length === 0) {
+                    document.getElementById('pendingModal').style.display = 'none';
+                }
+            });
+        }
+
+        // ================= TRANSACTIONS LOGIC =================
         let allTransactions = [];
 
         function loadDataFromFirebase() {
@@ -765,7 +888,6 @@
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
             
-            // For Totals tracking
             let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
 
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
@@ -785,15 +907,14 @@
                     if(data.category === "Mahaonline") {
                         if(bSrc === selectedWallet) impactAmt = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impactAmt = amt;
                     } else {
-                        if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank") impactAmt = amt; else if (svc === "Fino Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino")) impactAmt = -amt; if(comm > 0) impactAmt += comm; }
-                        else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank") impactAmt = amt; else if (svc === "Fino2 Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino2")) impactAmt = -amt; if(comm > 0) impactAmt += comm; }
-                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services") impactAmt = amt; else if (svc === "Shop Expense" && eSrc === "Payworld") impactAmt = -amt; if(comm > 0) impactAmt += comm; }
-                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services") impactAmt = amt; else if (svc === "Shop Expense" && eSrc === "Paynearby") impactAmt = -amt; if(comm > 0) impactAmt += comm; }
+                        if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank") impactAmt = amt; else if (svc === "Fino Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino")) impactAmt = -amt; }
+                        else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank") impactAmt = amt; else if (svc === "Fino2 Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino2")) impactAmt = -amt; }
+                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services") impactAmt = amt; else if (svc === "Shop Expense" && eSrc === "Payworld") impactAmt = -amt; }
+                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services") impactAmt = amt; else if (svc === "Shop Expense" && eSrc === "Paynearby") impactAmt = -amt; }
                         else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impactAmt = amt; else if (svc === "Mahapower Bill Collection" || (svc === "Shop Expense" && eSrc === "Mahapower")) impactAmt = -amt; }
                         else if (selectedWallet === "Cash") {
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox") impactAmt = amt;
                             else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || (svc === "Shop Expense" && eSrc === "Cash")) impactAmt = -amt;
-                            if(comm > 0) impactAmt += comm;
                         } else {
                             if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impactAmt = amt;
                             else if ((svc === "Money Transfer" && bSrc === selectedWallet) || (svc === "Shop Expense" && eSrc === selectedWallet)) impactAmt = -amt;
@@ -808,8 +929,6 @@
                 if(serviceDisplay.includes("Mahapower")) serviceDisplay = serviceDisplay.replace("Mahapower", mp);
 
                 let amtDisplay = `₹ ${data.amount}`;
-                
-                // Determining + or - for the sum tracking
                 let isPlus = false; let isMinus = false;
 
                 if(data.category === "Mahaonline") {
@@ -820,23 +939,19 @@
                 }
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
-                    if(svc === "Money Transfer") isPlus = true; else isMinus = true; // Relative to Cash if not filtered, but we track based on impact above
+                    if(svc === "Money Transfer") isPlus = true; else isMinus = true; 
                 } else if(svc === "Shop Expense") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
                     isMinus = true;
                 } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { 
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; 
-                    isMinus = true;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true;
                 } else if(!svc.includes("Opening")) { 
-                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; 
-                    isPlus = true;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true;
                 }
 
-                // If 'All' is selected, use global +/-, if specific wallet, use exact impact
                 if(selectedWallet !== "All") {
-                    // Re-evaluate based on the wallet logic
                     let impact = 0;
                     if(data.category === "Mahaonline") {
                         if(bSrc === selectedWallet) impact = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impact = amt;
@@ -874,7 +989,6 @@
                 </tr>`;
             });
 
-            // Update Total Footer
             document.getElementById("statementTotalFoot").innerHTML = `<tr>
                 <td colspan="5" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td>
                 <td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td>
