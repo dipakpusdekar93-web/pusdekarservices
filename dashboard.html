@@ -205,9 +205,23 @@
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
-                    <div class="form-group"><label>ग्राहक मोबाईल</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल" onblur="searchCustomer()"></div>
-                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="details" placeholder="नाव"></div>
+                    
+                    <!-- DEDICATED MOBILE NUMBER TO AUTO-FILL DETAILS -->
+                    <div class="form-group">
+                        <label>ग्राहक मोबाईल (नंबर टाका)</label>
+                        <input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()">
+                        <span id="searchMsg" style="color:var(--success); font-size:11px; display:none; margin-top:2px;">✔️ जुना ग्राहक सापडला!</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>ग्राहकाचे नाव (ऑटो-फील)</label>
+                        <input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;">
+                    </div>
                 </div>
+
+                <!-- Hidden or background fields needed for saving -->
+                <input type="hidden" id="villageInput" value="-">
+                <input type="hidden" id="idProof" value="-">
 
                 <div class="form-row" id="bankSelectRow" style="display: none; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
                     <div class="form-group">
@@ -250,21 +264,15 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group"><label>गाव / तहसील</label><input type="text" id="villageInput" placeholder="गाव"></div>
                     <div class="form-group"><label>पेमेंट स्थिती</label>
                         <select id="payStatus"><option value="Paid">Paid (जमा)</option><option value="Udhar">Udhar (उधार)</option></select>
                     </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर"></div>
                     <div class="form-group"><label>कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                     <div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div>
                 </div>
 
                 <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
-                <span id="searchMsg" style="color:var(--success); font-size:11px; display:none; margin-top:5px;">✔️ जुना ग्राहक सापडला!</span>
             </div>
 
             <div class="summary-cards">
@@ -303,14 +311,22 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: CUSTOMERS LIST TAB (NEW) ================= -->
+        <!-- ================= VIEW 2: CUSTOMERS MANAGEMENT TAB ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
-                <h3 style="color: var(--primary);">👥 दुकानातील सर्व ग्राहकांची यादी (Customer Directory)</h3>
+                <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा किंवा एडिट करा (Customer Master)</h3>
                 <div class="form-row">
-                    <div class="form-group">
-                        <input type="text" id="customerSearchInput" placeholder="🔍 नाव किंवा मोबाईल नंबर टाкаून शोधा..." oninput="filterCustomerTable()">
-                    </div>
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर (१००% अचूक) *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी मोबाईल नंबर"></div>
+                    <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div>
+                    <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="आयडी नंबर"></div>
+                </div>
+                <button class="save-btn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह / अपडेट करा</button>
+            </div>
+
+            <div class="container filter-section">
+                <div class="form-group" style="margin-bottom:0;">
+                    <input type="text" id="customerSearchInput" placeholder="🔍 नाव किंवा मोबाईल नंबर टाकून शोधा..." oninput="filterCustomerTable()">
                 </div>
             </div>
 
@@ -377,11 +393,19 @@
                             <option value="Other Mahaonline">इतर सेवा (Other Mahaonline Services)</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="moName" placeholder="पूर्ण नाव"></div>
-                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल" onblur="searchCustomer()"></div>
+                    <!-- DEDICATED MOBILE FOR MAHAONLINE TO AUTO-FILL -->
+                    <div class="form-group">
+                        <label>मोबाईल नंबर (नंबर टाका)</label>
+                        <input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomerMaha()">
+                        <span id="searchMsgMo" style="color:var(--success); font-size:11px; display:none; margin-top:2px;">✔️ जुना ग्राहक सापडला!</span>
+                    </div>
+                    <div class="form-group">
+                        <label>ग्राहकाचे नाव (ऑटो-फील)</label>
+                        <input type="text" id="moName" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;">
+                    </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="moVillage" placeholder="गाव"></div>
+                    <div class="form-group"><label>गाव / पत्ता (ऑटो-फील)</label><input type="text" id="moVillage" placeholder="गाव" readonly style="background:#f8fafc;"></div>
                     <div class="form-group"><label>एकूण फी (Total ₹) *</label><input type="number" id="moTotal" placeholder="उदा. 150" oninput="calcUdhar()"></div>
                     <div class="form-group"><label>आज जमा रक्कम (Paid ₹) *</label><input type="number" id="moPaid" placeholder="उदा. 50" oninput="calcUdhar()"></div>
                     <div class="form-group"><label>बाकी (Pending ₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div>
@@ -483,7 +507,6 @@
 
         <!-- ================= VIEW 6: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
-            
             <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
                 <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
@@ -495,7 +518,6 @@
                         <div class="form-group"><label>Paynearby</label><input type="text" id="renamePaynearby" placeholder="Paynearby Wallet"></div><br>
                         <div class="form-group"><label>Mahapower</label><input type="text" id="renameMahapower" placeholder="Mahapower Wallet"></div>
                     </div>
-
                     <div style="flex:2; min-width:350px; background:#f5f3ff; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
                         <h4 style="color:#7c3aed; margin-top:0;">९ UPI बँका</h4>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
@@ -513,16 +535,13 @@
                 </div>
             </div>
 
-            <!-- WHATSAPP PROMO MESSAGE -->
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color:var(--warning);">WhatsApp प्रमोशनल मेसेज (मार्केटिंग)</h3>
-                <p style="font-size:12px; color:#475569; margin-bottom: 12px;">हा मेसेज तुम्ही पाठवलेल्या प्रत्येक WhatsApp मेसेजच्या शेवटी आपोआप जोडला जाईल. तुम्ही इथे तुमच्या इतर सेवांची माहिती लिहून ती कधीही बदलू शकता.</p>
                 <div class="form-group">
-                    <textarea id="promoMessage" rows="4" placeholder="उदा. आमच्याकडे पॅन कार्ड, राजपत्र, कास्ट व्हॅलिडिटी..."></textarea>
+                    <textarea id="promoMessage" rows="4" placeholder="उदा. आमच्याकडे पॅन कार्ड, राजपत्र..."></textarea>
                 </div>
                 <button class="save-btn" style="background:var(--success); margin-top:15px;" onclick="saveWalletNames()">Save All Settings & Message</button>
             </div>
-
         </div>
     </div>
 
@@ -667,43 +686,61 @@
             document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0;
         }
 
-        // ================= PERMANENT CUSTOMER LOGIC =================
+        // ================= CUSTOMER MASTER & AUTO-FILL =================
         function searchCustomer() {
-            const mobile = document.getElementById('mobile').value || document.getElementById('moMobile').value;
+            const mobile = document.getElementById('mobile').value;
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
-                        fillCustomerFields(data);
+                        document.getElementById('details').value = data.name || "";
+                        document.getElementById('villageInput').value = data.village || "-";
+                        document.getElementById('idProof').value = data.idProof || "-";
+                        document.getElementById('searchMsg').style.display = "inline-block";
+                        setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
                     } else {
-                        db.collection("transactions").where("mobile", "==", mobile).limit(1).get().then((querySnapshot) => {
-                            if (!querySnapshot.empty) {
-                                const data = querySnapshot.docs[0].data();
-                                fillCustomerFields({name: data.details, village: data.village, idProof: data.idProof});
-                            }
-                        });
+                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर आणि नाव सेव्ह करा.");
+                        document.getElementById('details').value = "";
                     }
                 });
             }
         }
 
-        function fillCustomerFields(data) {
-            if(document.getElementById('details')) document.getElementById('details').value = data.name || ""; 
-            if(document.getElementById('villageInput')) document.getElementById('villageInput').value = data.village || "";
-            if(document.getElementById('moName')) document.getElementById('moName').value = data.name || ""; 
-            if(document.getElementById('moVillage')) document.getElementById('moVillage').value = data.village || "";
-            if(document.getElementById('idProof') && data.idProof && data.idProof !== "-") document.getElementById('idProof').value = data.idProof;
-            
-            document.getElementById('searchMsg').style.display = "inline-block";
-            setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
+        function searchCustomerMaha() {
+            const mobile = document.getElementById('moMobile').value;
+            if (mobile.length === 10) {
+                db.collection("customers").doc(mobile).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById('moName').value = data.name || "";
+                        document.getElementById('moVillage').value = data.village || "-";
+                        document.getElementById('searchMsgMo').style.display = "inline-block";
+                        setTimeout(() => { document.getElementById('searchMsgMo').style.display = "none"; }, 3000);
+                    } else {
+                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर आणि नाव सेव्ह करा.");
+                        document.getElementById('moName').value = "";
+                    }
+                });
+            }
         }
 
-        function saveCustomerData(mobile, name, village, idProof) {
-            if(mobile && mobile !== "-" && mobile.length === 10) {
-                db.collection("customers").doc(mobile).set({
-                    name: name || "-", mobile: mobile, village: village || "-", idProof: idProof || "-"
-                }, { merge: true });
-            }
+        function addNewCustomerManually() {
+            const name = document.getElementById('cName').value;
+            const mobile = document.getElementById('cMobile').value;
+            const village = document.getElementById('cVillage').value || "-";
+            const idProof = document.getElementById('cIdProof').value || "-";
+
+            if(name === "" || mobile.length !== 10) { alert("कृपया ग्राहकाचे नाव आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
+
+            db.collection("customers").doc(mobile).set({
+                name: name, mobile: mobile, village: village, idProof: idProof
+            }, { merge: true }).then(() => {
+                document.getElementById('cName').value = "";
+                document.getElementById('cMobile').value = "";
+                document.getElementById('cVillage').value = "";
+                document.getElementById('cIdProof').value = "";
+                alert("ग्राहक यशस्वीरित्या सेव्ह झाला!");
+            });
         }
 
         let allCustomers = [];
@@ -725,7 +762,7 @@
                     <td>${c.village}</td>
                     <td>${c.idProof}</td>
                     <td class="no-print">
-                        <button class="adj-btn" style="padding:4px 8px; font-size:11px;" onclick="useCustomer('${c.mobile}', '${c.name}', '${c.village}', '${c.idProof}')">➕ एन्ट्री करा</button>
+                        <button class="delete-btn" style="background:#fee2e2; color:var(--danger);" onclick="deleteCustomer('${c.mobile}')">❌ डिलीट</button>
                     </td>
                 </tr>`;
             });
@@ -737,12 +774,10 @@
             renderCustomersTable(filtered);
         }
 
-        function useCustomer(mobile, name, village, idProof) {
-            switchTab('dashboard');
-            document.getElementById('mobile').value = mobile;
-            document.getElementById('details').value = name;
-            document.getElementById('villageInput').value = village;
-            if(idProof && idProof !== "-") document.getElementById('idProof').value = idProof;
+        function deleteCustomer(mobile) {
+            if(confirm("हा ग्राहक डिलीट करायचा का?")) {
+                db.collection("customers").doc(mobile).delete().then(() => { alert("ग्राहक डिलीट झाला!"); });
+            }
         }
         // ==========================================================
 
@@ -767,8 +802,8 @@
             const amount = document.getElementById('amount').value;
             const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-";
             const expenseSource = (service === "Shop Expense" || service.includes("Advance") || service.includes("Hand Loan")) ? document.getElementById('expenseSource').value : "-";
+            const mobile = document.getElementById('mobile').value;
             const details = document.getElementById('details').value;
-            const mobile = document.getElementById('mobile').value || "-";
             const village = document.getElementById('villageInput').value || "-";
             const payStatus = document.getElementById('payStatus').value;
             const purpose = document.getElementById('purpose').value || "-";
@@ -776,30 +811,29 @@
             const commission = document.getElementById('commission').value || 0;
             const narration = document.getElementById('entryNarration').value || "-";
 
-            if(amount === "" || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि नाव भरा!"); return; }
+            if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
             db.collection("transactions").add({
                 category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
                 mobile, village, payStatus, purpose, idProof,
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                saveCustomerData(mobile, details, village, idProof);
-                document.getElementById('amount').value = ""; document.getElementById('details').value = ""; document.getElementById('mobile').value = ""; document.getElementById('villageInput').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
+                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
                 alert("व्यवहार सेव्ह झाला!");
             });
         }
 
         function saveMahaonline() {
             const service = document.getElementById('moService').value;
+            const mobile = document.getElementById('moMobile').value;
             const details = document.getElementById('moName').value;
-            const mobile = document.getElementById('moMobile').value || "-";
             const village = document.getElementById('moVillage').value || "-";
             const totalAmount = document.getElementById('moTotal').value;
             const paidAmount = document.getElementById('moPaid').value;
             const pendingAmount = document.getElementById('moPending').value;
             const payMode = document.getElementById('moPayMode').value;
 
-            if(details === "" || totalAmount === "" || paidAmount === "") { alert("कृपया नाव आणि फी भरा!"); return; }
+            if(mobile.length !== 10 || details === "" || totalAmount === "" || paidAmount === "") { alert("कृपया बरोबर मोबाईल नंबर, नाव आणि फी भरा!"); return; }
 
             db.collection("transactions").add({
                 category: "Mahaonline", service: service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount),
@@ -807,13 +841,12 @@
                 payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
                 commission: 0, narration: "Mahaonline Service", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                saveCustomerData(mobile, details, village, "-");
-                document.getElementById('moName').value = ""; document.getElementById('moMobile').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
+                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
             });
         }
 
         function deleteEntry(docId) {
-            if(confirm("ही नोंद कायमची डिलीट करायची का? (नोंद डिलीट झाली तरी ग्राहकाचा डेटा सुरक्षित राहील)")) { db.collection("transactions").doc(docId).delete(); }
+            if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
         }
 
         function deleteAllEntries() {
@@ -970,12 +1003,12 @@
             document.getElementById('mBal').innerText = "₹ " + mBal; document.getElementById('cBal').innerText = "₹ " + cBal;
             document.getElementById('totalUpiBal').innerText = "₹ " + totalUpi;
             document.getElementById('todayInc').innerText = "₹ " + incT; document.getElementById('todayExp').innerText = "₹ " + expT;
-            document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = "₹ " + monthExpVal(incM, expM); // fixed reference
+            document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = monthExpVal(incM, expM);
 
             filterData();
         }
 
-        function monthExpVal(inc, exp) { return exp; }
+        function monthExpVal(inc, exp) { return "₹ " + exp; }
 
         function renderMahaonlineTable(dataList) {
             const moTable = document.getElementById("moTableBody"); moTable.innerHTML = "";
@@ -1116,6 +1149,7 @@
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
+                table.html += `...`; // standard formatting remains
                 table.innerHTML += `<tr>
                     <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b><br><small>${data.mobile}</small>${waEntryLink}</td>
                     <td>${data.payStatus}</td><td>${purposeText}</td><td>${amtDisplay}</td>
