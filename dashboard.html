@@ -155,6 +155,7 @@
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
+        <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
             <div class="grand-total-card">
@@ -255,12 +256,24 @@
                     </div>
                 </div>
 
+                <!-- ADDED MISSING FIELDS BACK HERE -->
                 <div class="form-row">
                     <div class="form-group"><label>गाव / तहसील</label><input type="text" id="villageInput" placeholder="गाव"></div>
-                    <div class="form-group"><label>कारण / नरेशन</label><input type="text" id="purpose" placeholder="कारण"></div>
-                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर"></div>
-                    <div class="form-group"><label>मिळालेले कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
+                    <div class="form-group"><label>पेमेंट स्थिती</label>
+                        <select id="payStatus">
+                            <option value="Paid">Paid (जमा)</option>
+                            <option value="Udhar">Udhar (उधार)</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
                 </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर"></div>
+                    <div class="form-group"><label>कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
+                    <div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div>
+                </div>
+
                 <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
                 <span id="searchMsg" style="color:var(--success); font-size:11px; display:none; margin-top:5px;">✔️ जुना ग्राहक सापडला!</span>
             </div>
@@ -301,6 +314,7 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 2: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">🔔 नवीन पेंडिंग काम जोडा</h3>
@@ -331,6 +345,7 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 3: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
@@ -395,6 +410,7 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 4: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -449,6 +465,7 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 5: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
@@ -483,6 +500,7 @@
         </div>
     </div>
 
+    <!-- ================= MODAL FOR PENDING TASKS AUTO POPUP ================= -->
     <div id="pendingModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-popup" onclick="closePopup()">&times;</span>
@@ -492,6 +510,7 @@
         </div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -510,6 +529,9 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
+        const adminEmail = "tuza_email_id_ithetak@gmail.com"; 
+        let currentUserEmail = "";
+        
         const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
         
@@ -517,7 +539,7 @@
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
-            else { loadDataFromFirebase(); loadPendingTasks(); }
+            else { currentUserEmail = user.email; loadDataFromFirebase(); loadPendingTasks(); }
         });
 
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
@@ -641,6 +663,7 @@
             const details = document.getElementById('details').value;
             const mobile = document.getElementById('mobile').value || "-";
             const village = document.getElementById('villageInput').value || "-";
+            const payStatus = document.getElementById('payStatus').value;
             const purpose = document.getElementById('purpose').value || "-";
             const idProof = document.getElementById('idProof').value || "-";
             const commission = document.getElementById('commission').value || 0;
@@ -650,10 +673,14 @@
 
             db.collection("transactions").add({
                 category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
-                mobile, village, payStatus: "Paid", purpose, idProof,
+                mobile, village, payStatus, purpose, idProof,
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                document.getElementById('amount').value = ""; document.getElementById('details').value = ""; document.getElementById('mobile').value = ""; document.getElementById('villageInput').value = ""; document.getElementById('commission').value = ""; alert("व्यवहार सेव्ह झाला!");
+                // Clear all form inputs
+                document.getElementById('amount').value = ""; document.getElementById('details').value = ""; document.getElementById('mobile').value = ""; document.getElementById('villageInput').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
+                alert("व्यवहार सेव्ह झाला!");
+            }).catch(err => {
+                alert("Error: " + err.message);
             });
         }
 
@@ -755,23 +782,19 @@
 
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
-                    
-                    // WhatsApp message template for free sending
                     let waMsg = encodeURIComponent(`नमस्कार ${data.customerName}, Pusdekar Digital कडून आपले पेंडिंग काम (${data.taskDetails}) बाकी आहे. कृपया संपर्क साधा.`);
                     let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
 
-                    // Add to Full Table
                     table.innerHTML += `<tr>
                         <td>${dateStr}</td><td><b>${data.customerName}</b></td><td>${data.mobile}</td>
                         <td>${data.taskDetails}</td><td class="text-red">Pending</td>
                         <td>
-                            <a href="${waLink}" target="_blank" class="wa-btn">💬 WhatsApp</a>
-                            <button class="done-btn" onclick="markTaskDone('${data.id}')">✔ Done</button> 
+                            <a href="${waLink}" target="_blank" class="wa-btn">💬 WA</a>
+                            <button class="done-btn" onclick="markTaskDone('${data.id}')">✔</button> 
                             <button class="delete-btn" onclick="deletePendingTask('${data.id}')">❌</button>
                         </td>
                     </tr>`;
 
-                    // Add to Popup Modal
                     popupList.innerHTML += `<li class="popup-task-item">
                         <div class="popup-task-info">
                             <h4>👤 ${data.customerName} (${data.mobile})</h4>
@@ -886,7 +909,6 @@
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
-            
             let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
 
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
@@ -915,7 +937,7 @@
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox") impactAmt = amt;
                             else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || (svc === "Shop Expense" && eSrc === "Cash")) impactAmt = -amt;
                         } else {
-                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impact = amt;
+                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impactAmt = amt;
                             else if ((svc === "Money Transfer" && bSrc === selectedWallet) || (svc === "Shop Expense" && eSrc === selectedWallet)) impactAmt = -amt;
                         }
                     }
@@ -980,7 +1002,6 @@
                 let purposeText = data.purpose || "-"; if(data.narration && data.narration !== "-") { purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`; }
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
 
-                // WhatsApp quick share link for statement entries if mobile is present
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
                     let msg = encodeURIComponent(`नमस्कार ${data.details}, Pusdekar Digital कडून आपल्या व्यवहाराची नोंद यशस्वी झाली आहे. रक्कम: ₹${data.amount}`);
