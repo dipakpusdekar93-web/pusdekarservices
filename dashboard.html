@@ -188,6 +188,8 @@
                             <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
                             <option value="Fino Cash Deposit" class="lbl-fino1-dep">Fino 1 Cash Deposit</option>
                             <option value="Fino2 Cash Deposit" class="lbl-fino2-dep">Fino 2 Cash Deposit</option>
+                            <option value="Payworld Cash Deposit" class="lbl-payworld-dep">Payworld Cash Deposit</option>
+                            <option value="Paynearby Cash Deposit" class="lbl-paynearby-dep">Paynearby Cash Deposit</option>
                             <option value="Fino Payment Bank" class="lbl-fino1-pay">Fino 1 Payment Bank</option>
                             <option value="Fino2 Payment Bank" class="lbl-fino2-pay">Fino 2 Payment Bank</option>
                             <option value="Payworld Services" class="lbl-payworld-srv">Payworld Services</option>
@@ -267,7 +269,6 @@
                     </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
                     
-                    <!-- PAN/AADHAAR FIELD RESTORED FOR CA AUDIT RULE -->
                     <div class="form-group">
                         <label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label>
                         <input type="text" id="idProof" placeholder="आयडी नंबर (ऑटो-फील किंवा टाका)" style="background:#f8fafc;">
@@ -645,6 +646,7 @@
             updateLabels('lbl-payworld-opt', pw + " ॲडजस्टमेंट"); updateLabels('lbl-paynearby-opt', pn + " ॲडजस्टमेंट"); updateLabels('lbl-mahapower-opt', mp + " ॲडजस्टमेंट");
 
             updateLabels('lbl-fino1-dep', f1 + " Cash Deposit"); updateLabels('lbl-fino2-dep', f2 + " Cash Deposit");
+            updateLabels('lbl-payworld-dep', pw + " Cash Deposit"); updateLabels('lbl-paynearby-dep', pn + " Cash Deposit");
             updateLabels('lbl-fino1-pay', f1 + " Payment Bank"); updateLabels('lbl-fino2-pay', f2 + " Payment Bank");
             updateLabels('lbl-payworld-srv', pw + " Services"); updateLabels('lbl-paynearby-srv', pn + " Services"); updateLabels('lbl-mahapower-srv', mp + " Bill Collection");
 
@@ -1009,8 +1011,8 @@
                 } else {
                     if(svc === "Fino Opening") f1Bal += amt; else if(svc === "Fino Payment Bank") { f1Bal += amt; cBal -= amt; } else if(svc === "Fino Cash Deposit") { f1Bal -= amt; cBal += amt; }
                     else if(svc === "Fino2 Opening") f2Bal += amt; else if(svc === "Fino2 Payment Bank") { f2Bal += amt; cBal -= amt; } else if(svc === "Fino2 Cash Deposit") { f2Bal -= amt; cBal += amt; }
-                    else if(svc === "Payworld Opening") pwBal += amt; else if(svc === "Payworld Services") { pwBal += amt; cBal -= amt; }
-                    else if(svc === "Paynearby Opening") pnBal += amt; else if(svc === "Paynearby Services") { pnBal += amt; cBal -= amt; }
+                    else if(svc === "Payworld Opening") pwBal += amt; else if(svc === "Payworld Services") { pwBal += amt; cBal -= amt; } else if(svc === "Payworld Cash Deposit") { pwBal -= amt; cBal += amt; }
+                    else if(svc === "Paynearby Opening") pnBal += amt; else if(svc === "Paynearby Services") { pnBal += amt; cBal -= amt; } else if(svc === "Paynearby Cash Deposit") { pnBal -= amt; cBal += amt; }
                     else if(svc === "Mahapower Opening") mBal += amt; else if(svc === "Mahapower Bill Collection") { mBal -= amt; cBal += amt; }
                     else if(svc === "Cash Opening") cBal += amt;
                     else if(svc.includes("Opening") && bankBal[svc.replace(" Opening", "")] !== undefined) { bankBal[svc.replace(" Opening", "")] += amt; }
@@ -1095,12 +1097,12 @@
                     } else {
                         if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impactAmt = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impactAmt = -amt; }
                         else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impactAmt = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impactAmt = -amt; }
-                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impactAmt = -amt; }
-                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impactAmt = -amt; }
+                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impactAmt = -amt; }
+                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impactAmt = -amt; }
                         else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impactAmt = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) impactAmt = -amt; }
                         else if (selectedWallet === "Cash") {
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impactAmt = amt;
-                            else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impactAmt = -amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impactAmt = -amt;
                         } else {
                             if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impactAmt = amt;
                             else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impactAmt = -amt;
@@ -1126,12 +1128,12 @@
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
                     if(svc === "Money Transfer") isPlus = true; else isMinus = true; 
-                } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
+                } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given" || svc === "Payworld Services" || svc === "Paynearby Services") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
                     isMinus = true;
-                } else if(svc === "Advance Received" || svc === "Hand Loan Returned") {
+                } else if(svc === "Advance Received" || svc === "Hand Loan Returned" || svc === "Payworld Cash Deposit" || svc === "Paynearby Cash Deposit") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
                     amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`;
@@ -1149,12 +1151,12 @@
                     } else {
                         if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impact = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impact = -amt; }
                         else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impact = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impact = -amt; }
-                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impact = -amt; }
-                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impact = -amt; }
+                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impact = -amt; }
+                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impact = -amt; }
                         else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impact = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) impact = -amt; }
                         else if (selectedWallet === "Cash") {
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
-                            else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
                         } else {
                             if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impact = amt;
                             else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impact = -amt;
@@ -1228,7 +1230,7 @@
         }
 
         function selectedAssetCheck(sel, svc, bSrc, eSrc) {
-            if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash";
+            if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash";
             return false;
         }
 
