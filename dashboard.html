@@ -209,7 +209,7 @@
                     <div class="form-group">
                         <label>ग्राहक मोबाईल (नंबर टाका)</label>
                         <input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()">
-                        <span id="searchMsg" style="color:var(--success); font-size:11px; display:none; margin-top:2px;">✔️ जुना ग्राहक सापडला!</span>
+                        <span id="searchMsg" style="display:none; margin-top:2px; font-size:11px;"></span>
                     </div>
 
                     <div class="form-group">
@@ -405,7 +405,7 @@
                     <div class="form-group">
                         <label>मोबाईल नंबर (नंबर टाका)</label>
                         <input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomerMaha()">
-                        <span id="searchMsgMo" style="color:var(--success); font-size:11px; display:none; margin-top:2px;">✔️ जुना ग्राहक सापडला!</span>
+                        <span id="searchMsgMo" style="display:none; margin-top:2px; font-size:11px;"></span>
                     </div>
 
                     <div class="form-group">
@@ -698,19 +698,24 @@
             document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0;
         }
 
-        // ================= CUSTOMER MASTER & AUTO-FILL =================
+        // ================= CUSTOMER MASTER & AUTO-FILL WITH CLICKABLE PROMPT =================
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value;
+            const msgSpan = document.getElementById('searchMsg');
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
                         document.getElementById('details').value = data.name || "";
                         document.getElementById('idProof').value = data.idProof || "-";
-                        document.getElementById('searchMsg').style.display = "inline-block";
-                        setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
+                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!";
+                        msgSpan.style.color = "var(--success)";
+                        msgSpan.style.display = "inline-block";
+                        setTimeout(() => { msgSpan.style.display = "none"; }, 3000);
                     } else {
-                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर, नाव आणि पॅन/आधार सेव्ह करा.");
+                        msgSpan.innerHTML = `❌ नंबर सापडला नाही! <a href="#" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; text-decoration:underline;">येथे क्लिक करून ॲड करा</a>`;
+                        msgSpan.style.color = "var(--danger)";
+                        msgSpan.style.display = "block";
                         document.getElementById('details').value = "";
                         document.getElementById('idProof').value = "";
                     }
@@ -720,20 +725,31 @@
 
         function searchCustomerMaha() {
             const mobile = document.getElementById('moMobile').value;
+            const msgSpan = document.getElementById('searchMsgMo');
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
                         document.getElementById('moName').value = data.name || "";
                         document.getElementById('moVillage').value = data.village || "-";
-                        document.getElementById('searchMsgMo').style.display = "inline-block";
-                        setTimeout(() => { document.getElementById('searchMsgMo').style.display = "none"; }, 3000);
+                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!";
+                        msgSpan.style.color = "var(--success)";
+                        msgSpan.style.display = "inline-block";
+                        setTimeout(() => { msgSpan.style.display = "none"; }, 3000);
                     } else {
-                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर आणि नाव सेव्ह करा.");
+                        msgSpan.innerHTML = `❌ नंबर सापडला नाही! <a href="#" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; text-decoration:underline;">येथे क्लिक करून ॲड करा</a>`;
+                        msgSpan.style.color = "var(--danger)";
+                        msgSpan.style.display = "block";
                         document.getElementById('moName').value = "";
                     }
                 });
             }
+        }
+
+        function goToAddCustomer(mobile) {
+            switchTab('customers');
+            document.getElementById('cMobile').value = mobile;
+            document.getElementById('cName').focus();
         }
 
         function addNewCustomerManually() {
@@ -825,7 +841,6 @@
 
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
-            // CA Audit Rule Validation (₹10k+)
             if(amount >= 10000 && (idProof === "" || idProof === "-")) {
                 alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!");
                 document.getElementById('idProof').focus();
