@@ -43,7 +43,6 @@
         .w-card h4 { margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase; opacity: 0.9; font-weight: 600; }
         .w-card h3 { margin: 0; font-size: 18px; font-weight: 700; }
         
-        /* Unique Colors for each wallet */
         .bg-fino1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
         .bg-fino2 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
         .bg-payworld { background: linear-gradient(135deg, #f59e0b, #d97706); }
@@ -103,7 +102,7 @@
         
         .text-green { color: var(--success); font-weight: 600; }
         .text-red { color: var(--danger); font-weight: 600; }
-        /* Delete Button is visible to ALL now */
+        
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .delete-btn:hover { background: #f87171; color: white; }
 
@@ -119,7 +118,6 @@
 </head>
 <body>
 
-    <!-- Professional Sidebar -->
     <div class="sidebar no-print">
         <div class="sidebar-brand">
             <span>⚡ Pusdekar Digital</span>
@@ -132,7 +130,6 @@
         </ul>
     </div>
 
-    <!-- Main Content Area -->
     <div class="main-content">
         <div class="header">
             <div>
@@ -149,7 +146,6 @@
                 <h2 id="grandTotalBal">₹ 0</h2>
             </div>
             
-            <!-- Colorful Compact Wallets -->
             <div class="wallet-cards">
                 <div class="w-card bg-fino1"><h4 class="lbl-fino1">Fino 1</h4><h3 id="f1Bal">₹ 0</h3></div>
                 <div class="w-card bg-fino2"><h4 class="lbl-fino2">Fino 2</h4><h3 id="f2Bal">₹ 0</h3></div>
@@ -159,7 +155,6 @@
                 <div class="w-card bg-cash"><h4>Cash in Hand</h4><h3 id="cBal">₹ 0</h3></div>
             </div>
 
-            <!-- Compact 9 Banks Grid -->
             <div class="banks-container">
                 <div class="banks-header">
                     <h4>UPI Banks Balance</h4>
@@ -178,7 +173,6 @@
                 </div>
             </div>
 
-            <!-- Entry Form (Kept visible and compact) -->
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 <div class="form-row">
@@ -262,7 +256,6 @@
                 <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
-            <!-- Adjustments Form (Moved to bottom so it doesn't interrupt entry flow) -->
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
@@ -383,8 +376,11 @@
                 </div>
                 <div class="form-group" style="margin-bottom:0;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
                 <div class="form-group" style="margin-bottom:0;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
+                
                 <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+                <button class="print-btn" style="background:#10b981;" onclick="downloadExcel()">📥 Download Excel</button>
                 <button class="print-btn" style="background:var(--primary);" onclick="resetFilter()">Reset</button>
+                <button class="print-btn" style="background:var(--danger); margin-left:auto;" onclick="deleteAllEntries()">🗑️ Delete All Entries</button>
             </div>
 
             <div class="table-responsive">
@@ -403,6 +399,9 @@
                         </tr>
                     </thead>
                     <tbody id="statementTableEntries"></tbody>
+                    <tfoot id="statementTotalFoot" style="background: #f8fafc; font-weight: bold; border-top: 2px solid #cbd5e1;">
+                        <!-- Calculated totals will appear here -->
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -461,6 +460,8 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
+        const adminEmail = "tuza_email_id_ithetak@gmail.com"; // Keep your main email here
+        
         const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
 
@@ -627,11 +628,48 @@
             });
         }
 
-        // ❌ DELETE BUTTON LOGIC UNLOCKED - NO EMAIL RESTRICTION ❌
         function deleteEntry(docId) {
-            if(confirm("ही नोंद नक्की डिलीट करायची का?")) { 
-                db.collection("transactions").doc(docId).delete(); 
+            if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
+        }
+
+        // NEW: ALL DELETE FACILITY
+        function deleteAllEntries() {
+            if(confirm("⚠️ सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) {
+                let code = prompt("सुरक्षेसाठी 'DELETE' असे टाइप करा:");
+                if(code === "DELETE") {
+                    allTransactions.forEach(t => {
+                        db.collection("transactions").doc(t.id).delete();
+                    });
+                    alert("सर्व डेटा कायमचा डिलीट झाला आहे!");
+                } else {
+                    alert("शब्द चुकीचा आहे. डिलीट प्रक्रिया रद्द केली.");
+                }
             }
+        }
+
+        // NEW: EXCEL DOWNLOAD FACILITY
+        function downloadExcel() {
+            let csv = [];
+            let rows = document.querySelectorAll("#reportTable tr");
+            for (let i = 0; i < rows.length; i++) {
+                let row = [], cols = rows[i].querySelectorAll("td, th");
+                // Skip Action Column (index 8)
+                let len = cols.length;
+                if(i !== 0) len = len - 1; // Don't take button HTML
+                for (let j = 0; j < cols.length; j++) {
+                    if(j === 8) continue; // Skip Action column
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); // remove commas and newlines
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(","));
+            }
+            let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"});
+            let downloadLink = document.createElement("a");
+            downloadLink.download = "Pusdekar_Statement.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
         }
 
         let allTransactions = [];
@@ -712,8 +750,6 @@
             moData.forEach((data) => {
                 let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
                 let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
-                
-                // UNLOCKED DELETE BUTTON
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
                 
                 moTable.innerHTML += `<tr>
@@ -728,6 +764,10 @@
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
+            
+            // For Totals tracking
+            let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
+
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
 
             dataList.forEach((data) => {
@@ -768,22 +808,62 @@
                 if(serviceDisplay.includes("Mahapower")) serviceDisplay = serviceDisplay.replace("Mahapower", mp);
 
                 let amtDisplay = `₹ ${data.amount}`;
+                
+                // Determining + or - for the sum tracking
+                let isPlus = false; let isMinus = false;
+
                 if(data.category === "Mahaonline") {
                     serviceDisplay = `<b>[Mahaonline]</b> ${svc}`;
-                    let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`;
+                    let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; 
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`;
+                    isPlus = true;
                 }
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
+                    if(svc === "Money Transfer") isPlus = true; else isMinus = true; // Relative to Cash if not filtered, but we track based on impact above
                 } else if(svc === "Shop Expense") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
-                } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`;
-                } else if(!svc.includes("Opening")) { amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; }
+                    isMinus = true;
+                } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { 
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; 
+                    isMinus = true;
+                } else if(!svc.includes("Opening")) { 
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; 
+                    isPlus = true;
+                }
+
+                // If 'All' is selected, use global +/-, if specific wallet, use exact impact
+                if(selectedWallet !== "All") {
+                    // Re-evaluate based on the wallet logic
+                    let impact = 0;
+                    if(data.category === "Mahaonline") {
+                        if(bSrc === selectedWallet) impact = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impact = amt;
+                    } else {
+                        if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank") impact = amt; else if (svc === "Fino Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino")) impact = -amt; }
+                        else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank") impact = amt; else if (svc === "Fino2 Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino2")) impact = -amt; }
+                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services") impact = amt; else if (svc === "Shop Expense" && eSrc === "Payworld") impact = -amt; }
+                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services") impact = amt; else if (svc === "Shop Expense" && eSrc === "Paynearby") impact = -amt; }
+                        else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impact = amt; else if (svc === "Mahapower Bill Collection" || (svc === "Shop Expense" && eSrc === "Mahapower")) impact = -amt; }
+                        else if (selectedWallet === "Cash") {
+                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox") impact = amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || (svc === "Shop Expense" && eSrc === "Cash")) impact = -amt;
+                        } else {
+                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impact = amt;
+                            else if ((svc === "Money Transfer" && bSrc === selectedWallet) || (svc === "Shop Expense" && eSrc === selectedWallet)) impact = -amt;
+                        }
+                    }
+                    if(impact > 0) { isPlus = true; isMinus = false; amtDisplay = `<span class="text-green">+ ₹ ${Math.abs(impact)}</span>`; }
+                    else if(impact < 0) { isPlus = false; isMinus = true; amtDisplay = `<span class="text-red">- ₹ ${Math.abs(impact)}</span>`; }
+                    else { isPlus = false; isMinus = false; }
+                }
+
+                if(isPlus) sumPlus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt);
+                if(isMinus) sumMinus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt);
+                sumComm += comm;
 
                 let purposeText = data.purpose || "-"; if(data.narration && data.narration !== "-") { purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`; }
-                
-                // UNLOCKED DELETE BUTTON
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
 
                 table.innerHTML += `<tr>
@@ -793,6 +873,14 @@
                     <td class="no-print">${deleteBtnHtml}</td>
                 </tr>`;
             });
+
+            // Update Total Footer
+            document.getElementById("statementTotalFoot").innerHTML = `<tr>
+                <td colspan="5" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td>
+                <td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td>
+                <td class="text-green" style="font-size:14px;">+ ₹ ${sumComm}</td>
+                <td colspan="2"></td>
+            </tr>`;
         }
 
         function filterData() {
