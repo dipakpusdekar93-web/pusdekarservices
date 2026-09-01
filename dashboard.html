@@ -278,7 +278,7 @@
                 <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="monthInc">₹ 0</h3></div>
                 <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
-            
+
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
@@ -461,7 +461,8 @@
 
         <!-- ================= VIEW 5: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
-            <div class="container" style="border-left: 4px solid var(--primary);">
+            
+            <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
                 <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
                     <div style="flex:1; min-width:250px; background:#f8fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
@@ -472,6 +473,7 @@
                         <div class="form-group"><label>Paynearby</label><input type="text" id="renamePaynearby" placeholder="Paynearby Wallet"></div><br>
                         <div class="form-group"><label>Mahapower</label><input type="text" id="renameMahapower" placeholder="Mahapower Wallet"></div>
                     </div>
+
                     <div style="flex:2; min-width:350px; background:#f5f3ff; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
                         <h4 style="color:#7c3aed; margin-top:0;">९ UPI बँका</h4>
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
@@ -487,8 +489,18 @@
                         </div>
                     </div>
                 </div>
-                <button class="adj-btn" style="margin-top:15px;" onclick="saveWalletNames()">Save All Settings</button>
             </div>
+
+            <!-- NEW SETTING: WHATSAPP PROMO MESSAGE -->
+            <div class="container" style="border-left: 4px solid var(--warning);">
+                <h3 style="color:var(--warning);">💬 WhatsApp प्रमोशनल मेसेज (मार्केटिंग)</h3>
+                <p style="font-size:12px; color:#475569; margin-bottom: 12px;">हा मेसेज तुम्ही पाठवलेल्या प्रत्येक WhatsApp मेसेजच्या शेवटी आपोआप जोडला जाईल. तुम्ही इथे तुमच्या इतर सेवांची माहिती लिहून ती कधीही बदलू शकता.</p>
+                <div class="form-group">
+                    <textarea id="promoMessage" rows="4" placeholder="उदा. आमच्याकडे पॅन कार्ड, राजपत्र, कास्ट व्हॅलिडिटी..."></textarea>
+                </div>
+                <button class="save-btn" style="background:var(--success); margin-top:15px;" onclick="saveWalletNames()">Save All Settings & Message</button>
+            </div>
+
         </div>
     </div>
 
@@ -560,7 +572,13 @@
                 let inputVal = document.getElementById('renameB'+(i+1)).value;
                 localStorage.setItem("wallet_" + key, inputVal || key);
             });
-            loadWalletNames(); alert("सर्व नावे यशस्वीरित्या बदलली!"); switchTab('dashboard');
+
+            // Save Promo Message
+            localStorage.setItem("wa_promo_msg", document.getElementById('promoMessage').value);
+
+            loadWalletNames();
+            alert("सर्व सेटिंग्स आणि WhatsApp मेसेज यशस्वीरित्या सेव्ह झाला!");
+            switchTab('dashboard');
         }
 
         function updateLabels(className, text) { document.querySelectorAll('.' + className).forEach(el => el.innerText = text); }
@@ -591,6 +609,10 @@
                 updateLabels('lbl-b' + (i+1) + '-upi', name + " UPI");
                 document.getElementById('renameB' + (i+1)).value = name === key ? "" : name;
             });
+
+            // Load Promo Message
+            const defaultPromo = "📌 आमच्या इतर सेवा: सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : defaultPromo;
         }
 
         function toggleFormFields() {
@@ -748,6 +770,12 @@
             downloadLink.click();
         }
 
+        function getPromoText() {
+            let promoMsg = localStorage.getItem("wa_promo_msg");
+            if(promoMsg === null) promoMsg = "📌 आमच्या इतर सेवा: सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            return promoMsg.trim() !== "" ? `\n\n${promoMsg}` : "";
+        }
+
         // ================= PENDING TASKS =================
         function addPendingTask() {
             const name = document.getElementById('ptName').value;
@@ -775,9 +803,11 @@
                 snapshot.forEach((doc) => { tasks.push({ id: doc.id, ...doc.data() }); });
                 tasks.sort((a, b) => b.timestamp - a.timestamp);
 
+                let promo = getPromoText();
+
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
-                    let waMsg = encodeURIComponent(`नमस्कार ${data.customerName},\nPusdekar Online Center कडून आपले पेंडिंग काम (${data.taskDetails}) बाकी आहे. कृपया संपर्क साधा.\nधन्यवाद!`);
+                    let waMsg = encodeURIComponent(`नमस्कार ${data.customerName},\nPusdekar Online Center कडून आपले पेंडिंग काम (${data.taskDetails}) बाकी आहे. कृपया संपर्क साधा.\nधन्यवाद!${promo}`);
                     let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
 
                     table.innerHTML += `<tr>
@@ -888,15 +918,16 @@
         function renderMahaonlineTable(dataList) {
             const moTable = document.getElementById("moTableBody"); moTable.innerHTML = "";
             let moData = dataList.filter(d => d.category === "Mahaonline").sort((a, b) => b.timestamp - a.timestamp);
+            let promo = getPromoText();
+            
             moData.forEach((data) => {
                 let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
                 let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
                 
-                // Add WhatsApp button to Mahaonline Table
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
-                    let msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी: ₹${data.pendingAmount || 0}\nधन्यवाद!`);
+                    let msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी (उधार): ₹${data.pendingAmount || 0}\nधन्यवाद!${promo}`);
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA</a>`;
                 }
                 
@@ -913,6 +944,7 @@
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
             let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
+            let promo = getPromoText();
 
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
 
@@ -1015,9 +1047,9 @@
                 if(data.mobile && data.mobile !== "-") {
                     let msg = "";
                     if (data.category === "Mahaonline") {
-                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी: ₹${data.pendingAmount || 0}\nधन्यवाद!`);
+                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center मध्ये आपले काम (${data.service}) नोंदवले गेले आहे.\nएकूण फी: ₹${data.totalFee || 0}\nजमा: ₹${data.amount}\nबाकी (उधार): ₹${data.pendingAmount || 0}\nधन्यवाद!${promo}`);
                     } else {
-                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center कडून आपल्या व्यवहाराची नोंद यशस्वी झाली आहे.\nरक्कम: ₹${data.amount}\nधन्यवाद!`);
+                        msg = encodeURIComponent(`नमस्कार ${data.details},\nPusdekar Online Center कडून आपल्या व्यवहाराची नोंद यशस्वी झाली आहे.\nरक्कम: ₹${data.amount}\nधन्यवाद!${promo}`);
                     }
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA</a>`;
                 }
