@@ -59,12 +59,6 @@
         .b-card span { display: block; font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 2px; text-transform: uppercase; }
         .b-card strong { font-size: 13px; color: #0f172a; }
 
-        .b-card.c-sbi { border-top-color: #0ea5e9; }
-        .b-card.c-boi { border-top-color: #f59e0b; }
-        .b-card.c-union { border-top-color: #ef4444; }
-        .b-card.c-papa { border-top-color: #8b5cf6; background:#faf5ff; }
-        .b-card.c-other { border-top-color: #64748b; background:#f1f5f9; }
-
         .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         .card h4 { margin: 0 0 5px 0; color: #64748b; font-size: 11px; font-weight: 600; }
@@ -135,6 +129,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 All-in-One डॅशबोर्ड</li>
+            <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी (Customers)</li>
             <li id="menuPending" onclick="switchTab('pending')">🔔 पेंडिंग कामे (Reminders)</li>
             <li id="menuMahaonline" onclick="switchTab('mahaonline')">📝 महाऑनलाइन (सेतू)</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
@@ -308,7 +303,34 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: PENDING TASKS ================= -->
+        <!-- ================= VIEW 2: CUSTOMERS LIST TAB (NEW) ================= -->
+        <div id="viewCustomers" class="view-section">
+            <div class="container" style="border-left: 4px solid var(--primary);">
+                <h3 style="color: var(--primary);">👥 दुकानातील सर्व ग्राहकांची यादी (Customer Directory)</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <input type="text" id="customerSearchInput" placeholder="🔍 नाव किंवा मोबाईल नंबर टाкаून शोधा..." oninput="filterCustomerTable()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>ग्राहकाचे नाव</th>
+                            <th>मोबाईल नंबर</th>
+                            <th>गाव / पत्ता</th>
+                            <th>पॅन / आधार नंबर</th>
+                            <th class="no-print">कृती</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ================= VIEW 3: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
@@ -339,7 +361,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 3: MAHAONLINE ================= -->
+        <!-- ================= VIEW 4: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
@@ -404,7 +426,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 4: STATEMENT ================= -->
+        <!-- ================= VIEW 5: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -459,7 +481,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 5: SETTINGS ================= -->
+        <!-- ================= VIEW 6: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             
             <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
@@ -533,9 +555,6 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore(); 
 
-        const adminEmail = "tuza_email_id_ithetak@gmail.com"; 
-        let currentUserEmail = "";
-        
         const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
         
@@ -543,7 +562,7 @@
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
-            else { currentUserEmail = user.email; loadDataFromFirebase(); loadPendingTasks(); }
+            else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); }
         });
 
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
@@ -553,6 +572,7 @@
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
 
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
+            else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
             else if(tabName === 'pending') { document.getElementById('viewPending').classList.add('active-view'); document.getElementById('menuPending').classList.add('active'); } 
             else if(tabName === 'mahaonline') { document.getElementById('viewMahaonline').classList.add('active-view'); document.getElementById('menuMahaonline').classList.add('active'); } 
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
@@ -573,7 +593,6 @@
                 localStorage.setItem("wallet_" + key, inputVal || key);
             });
 
-            // Save Promo Message
             localStorage.setItem("wa_promo_msg", document.getElementById('promoMessage').value);
 
             loadWalletNames();
@@ -610,7 +629,6 @@
                 document.getElementById('renameB' + (i+1)).value = name === key ? "" : name;
             });
 
-            // Load Promo Message without complex emojis
             const defaultPromo = "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
             document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : defaultPromo;
         }
@@ -686,6 +704,45 @@
                     name: name || "-", mobile: mobile, village: village || "-", idProof: idProof || "-"
                 }, { merge: true });
             }
+        }
+
+        let allCustomers = [];
+        function loadCustomersList() {
+            db.collection("customers").onSnapshot((snapshot) => {
+                allCustomers = [];
+                snapshot.forEach((doc) => { allCustomers.push(doc.data()); });
+                renderCustomersTable(allCustomers);
+            });
+        }
+
+        function renderCustomersTable(customers) {
+            const tbody = document.getElementById("customersTableBody");
+            tbody.innerHTML = "";
+            customers.forEach((c) => {
+                tbody.innerHTML += `<tr>
+                    <td><b>${c.name}</b></td>
+                    <td>${c.mobile}</td>
+                    <td>${c.village}</td>
+                    <td>${c.idProof}</td>
+                    <td class="no-print">
+                        <button class="adj-btn" style="padding:4px 8px; font-size:11px;" onclick="useCustomer('${c.mobile}', '${c.name}', '${c.village}', '${c.idProof}')">➕ एन्ट्री करा</button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function filterCustomerTable() {
+            const query = document.getElementById("customerSearchInput").value.toLowerCase();
+            const filtered = allCustomers.filter(c => c.name.toLowerCase().includes(query) || c.mobile.includes(query) || c.village.toLowerCase().includes(query));
+            renderCustomersTable(filtered);
+        }
+
+        function useCustomer(mobile, name, village, idProof) {
+            switchTab('dashboard');
+            document.getElementById('mobile').value = mobile;
+            document.getElementById('details').value = name;
+            document.getElementById('villageInput').value = village;
+            if(idProof && idProof !== "-") document.getElementById('idProof').value = idProof;
         }
         // ==========================================================
 
@@ -822,7 +879,6 @@
 
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
-                    // CLEAN EMOJI-FREE MESSAGE FOR URL
                     let waMsg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\nनमस्कार *${data.customerName}*,\nआपले खालील काम प्रलंबित (Pending) आहे:\n\n*तपशील:* ${data.taskDetails}\n\nकृपया लवकरच संपर्क साधा.\n------------------------${promo}\n*धन्यवाद!*`);
                     let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
 
@@ -914,10 +970,12 @@
             document.getElementById('mBal').innerText = "₹ " + mBal; document.getElementById('cBal').innerText = "₹ " + cBal;
             document.getElementById('totalUpiBal').innerText = "₹ " + totalUpi;
             document.getElementById('todayInc').innerText = "₹ " + incT; document.getElementById('todayExp').innerText = "₹ " + expT;
-            document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = "₹ " + expM;
+            document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = "₹ " + monthExpVal(incM, expM); // fixed reference
 
             filterData();
         }
+
+        function monthExpVal(inc, exp) { return exp; }
 
         function renderMahaonlineTable(dataList) {
             const moTable = document.getElementById("moTableBody"); moTable.innerHTML = "";
@@ -931,7 +989,6 @@
                 
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
-                    // CLEAN EMOJI-FREE MESSAGE FOR URL
                     let msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
@@ -1052,10 +1109,8 @@
                 if(data.mobile && data.mobile !== "-") {
                     let msg = "";
                     if (data.category === "Mahaonline") {
-                        // CLEAN EMOJI-FREE MESSAGE FOR URL
                         msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     } else {
-                        // CLEAN EMOJI-FREE MESSAGE FOR URL
                         msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*रक्कम:* ₹${data.amount}\n*स्थिती:* यशस्वी (Success)\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     }
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
@@ -1093,7 +1148,7 @@
                     else if(selectedWallet === "Payworld") matchWallet = svc.includes("Payworld") || eSrc === "Payworld";
                     else if(selectedWallet === "Paynearby") matchWallet = svc.includes("Paynearby") || eSrc === "Paynearby";
                     else if(selectedWallet === "Mahapower") matchWallet = svc.includes("Mahapower") || eSrc === "Mahapower";
-                    else if(selectedWallet === "Cash") matchWallet = svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash";
+                    else if(selectedAssetCheck(selectedWallet, svc, bSrc, eSrc)) matchWallet = true;
                     else matchWallet = svc.includes(selectedWallet) || bSrc === selectedWallet || eSrc === selectedWallet;
                 }
                 return matchWallet;
@@ -1103,6 +1158,11 @@
                 filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; });
             }
             renderStatementTable(filtered);
+        }
+
+        function selectedAssetCheck(sel, svc, bSrc, eSrc) {
+            if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash";
+            return false;
         }
 
         function resetFilter() {
