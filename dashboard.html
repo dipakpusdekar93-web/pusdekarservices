@@ -206,7 +206,6 @@
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
                     
-                    <!-- DEDICATED MOBILE NUMBER TO AUTO-FILL DETAILS -->
                     <div class="form-group">
                         <label>ग्राहक मोबाईल (नंबर टाका)</label>
                         <input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()">
@@ -219,7 +218,7 @@
                     </div>
                 </div>
 
-                <!-- Hidden or background fields needed for saving -->
+                <!-- HIDDEN FIELDS FOR BACKEND STORAGE -->
                 <input type="hidden" id="villageInput" value="-">
                 <input type="hidden" id="idProof" value="-">
 
@@ -319,7 +318,7 @@
                     <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div>
                     <div class="form-group"><label>मोबाईल नंबर (१००% अचूक) *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी मोबाईल नंबर"></div>
                     <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div>
-                    <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="आयडी नंबर"></div>
+                    <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन किंवा आधार नंबर"></div>
                 </div>
                 <button class="save-btn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह / अपडेट करा</button>
             </div>
@@ -393,19 +392,23 @@
                             <option value="Other Mahaonline">इतर सेवा (Other Mahaonline Services)</option>
                         </select>
                     </div>
-                    <!-- DEDICATED MOBILE FOR MAHAONLINE TO AUTO-FILL -->
+                    
                     <div class="form-group">
                         <label>मोबाईल नंबर (नंबर टाका)</label>
                         <input type="tel" id="moMobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomerMaha()">
                         <span id="searchMsgMo" style="color:var(--success); font-size:11px; display:none; margin-top:2px;">✔️ जुना ग्राहक सापडला!</span>
                     </div>
+
                     <div class="form-group">
                         <label>ग्राहकाचे नाव (ऑटो-फील)</label>
                         <input type="text" id="moName" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;">
                     </div>
                 </div>
+
+                <!-- HIDDEN VILLAGE FOR MAHAONLINE -->
+                <input type="hidden" id="moVillage" value="-">
+
                 <div class="form-row">
-                    <div class="form-group"><label>गाव / पत्ता (ऑटो-फील)</label><input type="text" id="moVillage" placeholder="गाव" readonly style="background:#f8fafc;"></div>
                     <div class="form-group"><label>एकूण फी (Total ₹) *</label><input type="number" id="moTotal" placeholder="उदा. 150" oninput="calcUdhar()"></div>
                     <div class="form-group"><label>आज जमा रक्कम (Paid ₹) *</label><input type="number" id="moPaid" placeholder="उदा. 50" oninput="calcUdhar()"></div>
                     <div class="form-group"><label>बाकी (Pending ₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div>
@@ -699,7 +702,7 @@
                         document.getElementById('searchMsg').style.display = "inline-block";
                         setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
                     } else {
-                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर आणि नाव सेव्ह करा.");
+                        alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर, नाव आणि पॅन/आधार सेव्ह करा.");
                         document.getElementById('details').value = "";
                     }
                 });
@@ -770,7 +773,7 @@
 
         function filterCustomerTable() {
             const query = document.getElementById("customerSearchInput").value.toLowerCase();
-            const filtered = allCustomers.filter(c => c.name.toLowerCase().includes(query) || c.mobile.includes(query) || c.village.toLowerCase().includes(query));
+            const filtered = allCustomers.filter(c => c.name.toLowerCase().includes(query) || c.mobile.includes(query) || c.village.toLowerCase().includes(query) || (c.idProof && c.idProof.toLowerCase().includes(query)));
             renderCustomersTable(filtered);
         }
 
@@ -1149,7 +1152,6 @@
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
-                table.html += `...`; // standard formatting remains
                 table.innerHTML += `<tr>
                     <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b><br><small>${data.mobile}</small>${waEntryLink}</td>
                     <td>${data.payStatus}</td><td>${purposeText}</td><td>${amtDisplay}</td>
