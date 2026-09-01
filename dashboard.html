@@ -218,9 +218,8 @@
                     </div>
                 </div>
 
-                <!-- HIDDEN FIELDS FOR BACKEND STORAGE -->
+                <!-- HIDDEN VILLAGE FOR BACKEND -->
                 <input type="hidden" id="villageInput" value="-">
-                <input type="hidden" id="idProof" value="-">
 
                 <div class="form-row" id="bankSelectRow" style="display: none; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
                     <div class="form-group">
@@ -267,7 +266,17 @@
                         <select id="payStatus"><option value="Paid">Paid (जमा)</option><option value="Udhar">Udhar (उधार)</option></select>
                     </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
+                    
+                    <!-- PAN/AADHAAR FIELD RESTORED FOR CA AUDIT RULE -->
+                    <div class="form-group">
+                        <label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label>
+                        <input type="text" id="idProof" placeholder="आयडी नंबर (ऑटो-फील किंवा टाका)" style="background:#f8fafc;">
+                    </div>
+
                     <div class="form-group"><label>कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div>
                 </div>
 
@@ -697,13 +706,13 @@
                     if (doc.exists) {
                         const data = doc.data();
                         document.getElementById('details').value = data.name || "";
-                        document.getElementById('villageInput').value = data.village || "-";
                         document.getElementById('idProof').value = data.idProof || "-";
                         document.getElementById('searchMsg').style.display = "inline-block";
                         setTimeout(() => { document.getElementById('searchMsg').style.display = "none"; }, 3000);
                     } else {
                         alert("हा मोबाईल नंबर नवीन आहे! प्रथम 'ग्राहकांची यादी' मध्ये जाऊन हा नंबर, नाव आणि पॅन/आधार सेव्ह करा.");
                         document.getElementById('details').value = "";
+                        document.getElementById('idProof').value = "";
                     }
                 });
             }
@@ -802,7 +811,7 @@
 
         function saveEntry() {
             const service = document.getElementById('serviceType').value;
-            const amount = document.getElementById('amount').value;
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
             const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-";
             const expenseSource = (service === "Shop Expense" || service.includes("Advance") || service.includes("Hand Loan")) ? document.getElementById('expenseSource').value : "-";
             const mobile = document.getElementById('mobile').value;
@@ -816,12 +825,19 @@
 
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
+            // CA Audit Rule Validation (₹10k+)
+            if(amount >= 10000 && (idProof === "" || idProof === "-")) {
+                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!");
+                document.getElementById('idProof').focus();
+                return;
+            }
+
             db.collection("transactions").add({
                 category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
                 mobile, village, payStatus, purpose, idProof,
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
+                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
                 alert("व्यवहार सेव्ह झाला!");
             });
         }
