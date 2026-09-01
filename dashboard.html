@@ -203,10 +203,10 @@
                             <option value="Bill Payment">Bill Payment / Recharge</option>
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                             <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- अॅडव्हान्स / उसनवार ---</option>
-                            <option value="Advance Received">📥 अॅडव्हान्स जमा (Advance Received)</option>
-                            <option value="Advance Used">📤 अॅडव्हान्स वापरला (Advance Used)</option>
-                            <option value="Hand Loan Given">📤 उसनवार दिले (Hand Loan Given)</option>
-                            <option value="Hand Loan Returned">📥 उसनवार परत आली (Hand Loan Returned)</option>
+                            <option value="Advance Received">अॅडव्हान्स जमा (Advance Received)</option>
+                            <option value="Advance Used">अॅडव्हान्स वापरला (Advance Used)</option>
+                            <option value="Hand Loan Given">उसनवार दिले (Hand Loan Given)</option>
+                            <option value="Hand Loan Returned">उसनवार परत आली (Hand Loan Returned)</option>
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
@@ -280,7 +280,7 @@
             </div>
 
             <div class="container" style="border-left: 4px solid #0891b2;">
-                <h3>☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
+                <h3>सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
                         <select id="adjWallet">
@@ -311,7 +311,7 @@
         <!-- ================= VIEW 2: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
-                <h3 style="color: var(--warning);">🔔 नवीन पेंडिंग काम जोडा</h3>
+                <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
                 <div class="form-row">
                     <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div>
                     <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div>
@@ -493,7 +493,7 @@
 
             <!-- WHATSAPP PROMO MESSAGE -->
             <div class="container" style="border-left: 4px solid var(--warning);">
-                <h3 style="color:var(--warning);">💬 WhatsApp प्रमोशनल मेसेज (मार्केटिंग)</h3>
+                <h3 style="color:var(--warning);">WhatsApp प्रमोशनल मेसेज (मार्केटिंग)</h3>
                 <p style="font-size:12px; color:#475569; margin-bottom: 12px;">हा मेसेज तुम्ही पाठवलेल्या प्रत्येक WhatsApp मेसेजच्या शेवटी आपोआप जोडला जाईल. तुम्ही इथे तुमच्या इतर सेवांची माहिती लिहून ती कधीही बदलू शकता.</p>
                 <div class="form-group">
                     <textarea id="promoMessage" rows="4" placeholder="उदा. आमच्याकडे पॅन कार्ड, राजपत्र, कास्ट व्हॅलिडिटी..."></textarea>
@@ -508,8 +508,8 @@
     <div id="pendingModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-popup" onclick="closePopup()">&times;</span>
-            <h3 style="margin-top:0; color:var(--warning); border-bottom:1px solid #e2e8f0; padding-bottom:10px;">🔔 आजची पेंडिंग कामे (Reminders)</h3>
-            <p style="font-size:12px; color:#64748b;">भाऊ, खालील ग्राहकांचे काम अजून बाकी आहे. पूर्ण झाल्यावर '✔ काम झाले' वर क्लिक कर.</p>
+            <h3 style="margin-top:0; color:var(--warning); border-bottom:1px solid #e2e8f0; padding-bottom:10px;">आजची पेंडिंग कामे (Reminders)</h3>
+            <p style="font-size:12px; color:#64748b;">भाऊ, खालील ग्राहकांचे काम अजून बाकी आहे. पूर्ण झाल्यावर 'काम झाले' वर क्लिक कर.</p>
             <ul class="popup-task-list" id="popupTaskList"></ul>
         </div>
     </div>
@@ -610,8 +610,8 @@
                 document.getElementById('renameB' + (i+1)).value = name === key ? "" : name;
             });
 
-            // Load Promo Message
-            const defaultPromo = "📌 *आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            // Load Promo Message without complex emojis
+            const defaultPromo = "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
             document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : defaultPromo;
         }
 
@@ -653,13 +653,11 @@
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value || document.getElementById('moMobile').value;
             if (mobile.length === 10) {
-                // First check in permanent customers collection
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
                         fillCustomerFields(data);
                     } else {
-                        // Fallback to old transactions if not in customers yet
                         db.collection("transactions").where("mobile", "==", mobile).limit(1).get().then((querySnapshot) => {
                             if (!querySnapshot.empty) {
                                 const data = querySnapshot.docs[0].data();
@@ -685,10 +683,7 @@
         function saveCustomerData(mobile, name, village, idProof) {
             if(mobile && mobile !== "-" && mobile.length === 10) {
                 db.collection("customers").doc(mobile).set({
-                    name: name || "-",
-                    mobile: mobile,
-                    village: village || "-",
-                    idProof: idProof || "-"
+                    name: name || "-", mobile: mobile, village: village || "-", idProof: idProof || "-"
                 }, { merge: true });
             }
         }
@@ -731,7 +726,7 @@
                 mobile, village, payStatus, purpose, idProof,
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                saveCustomerData(mobile, details, village, idProof); // Save Customer Permanently
+                saveCustomerData(mobile, details, village, idProof);
                 document.getElementById('amount').value = ""; document.getElementById('details').value = ""; document.getElementById('mobile').value = ""; document.getElementById('villageInput').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
                 alert("व्यवहार सेव्ह झाला!");
             });
@@ -755,7 +750,7 @@
                 payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
                 commission: 0, narration: "Mahaonline Service", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                saveCustomerData(mobile, details, village, "-"); // Save Customer Permanently
+                saveCustomerData(mobile, details, village, "-");
                 document.getElementById('moName').value = ""; document.getElementById('moMobile').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
             });
         }
@@ -765,7 +760,7 @@
         }
 
         function deleteAllEntries() {
-            if(confirm("⚠️ सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) {
+            if(confirm("सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) {
                 let code = prompt("सुरक्षेसाठी 'DELETE' असे टाइप करा:");
                 if(code === "DELETE") {
                     allTransactions.forEach(t => { db.collection("transactions").doc(t.id).delete(); });
@@ -792,8 +787,8 @@
 
         function getPromoText() {
             let promoMsg = localStorage.getItem("wa_promo_msg");
-            if(promoMsg === null) promoMsg = "📌 *आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
-            return promoMsg.trim() !== "" ? `\n\n${promoMsg}` : "";
+            if(promoMsg === null) promoMsg = "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            return promoMsg.trim() !== "" ? `\n${promoMsg}` : "";
         }
 
         // ================= PENDING TASKS =================
@@ -827,7 +822,8 @@
 
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
-                    let waMsg = encodeURIComponent(`🔔 *Pusdekar Online Center* 🔔\n➖➖➖➖➖➖➖➖➖➖\nनमस्कार *${data.customerName}*,\nआपले खालील काम प्रलंबित (Pending) आहे:\n\n📝 *तपशील:* ${data.taskDetails}\n\nकृपया लवकरच संपर्क साधा.\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद!* 🙏`);
+                    // CLEAN EMOJI-FREE MESSAGE FOR URL
+                    let waMsg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\nनमस्कार *${data.customerName}*,\nआपले खालील काम प्रलंबित (Pending) आहे:\n\n*तपशील:* ${data.taskDetails}\n\nकृपया लवकरच संपर्क साधा.\n------------------------${promo}\n*धन्यवाद!*`);
                     let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
 
                     table.innerHTML += `<tr>
@@ -935,7 +931,8 @@
                 
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
-                    let msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *एकूण फी:* ₹${data.totalFee || 0}\n✅ *जमा:* ₹${data.amount}\n❗ *बाकी (उधार):* ₹${data.pendingAmount || 0}\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
+                    // CLEAN EMOJI-FREE MESSAGE FOR URL
+                    let msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
                 
@@ -999,7 +996,8 @@
                 if(data.category === "Mahaonline") {
                     serviceDisplay = `<b>[Mahaonline]</b> ${svc}`;
                     let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; 
-                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`;
+                    isPlus = true;
                 }
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
@@ -1007,11 +1005,13 @@
                 } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
-                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`; isMinus = true;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
+                    isMinus = true;
                 } else if(svc === "Advance Received" || svc === "Hand Loan Returned") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
-                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`; isPlus = true;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`;
+                    isPlus = true;
                 } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { 
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true;
                 } else if(!svc.includes("Opening")) { 
@@ -1052,9 +1052,11 @@
                 if(data.mobile && data.mobile !== "-") {
                     let msg = "";
                     if (data.category === "Mahaonline") {
-                        msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *एकूण फी:* ₹${data.totalFee || 0}\n✅ *जमा:* ₹${data.amount}\n❗ *बाकी (उधार):* ₹${data.pendingAmount || 0}\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
+                        // CLEAN EMOJI-FREE MESSAGE FOR URL
+                        msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     } else {
-                        msg = encodeURIComponent(`🧾 *Pusdekar Online Center* 🧾\n➖➖➖➖➖➖➖➖➖➖\n👤 *नाव:* ${data.details}\n📝 *सेवा:* ${data.service}\n💰 *रक्कम:* ₹${data.amount}\n✅ *स्थिती:* यशस्वी (Success)\n➖➖➖➖➖➖➖➖➖➖${promo}\n🙏 *धन्यवाद! पुन्हा भेट द्या.* 🙏`);
+                        // CLEAN EMOJI-FREE MESSAGE FOR URL
+                        msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*रक्कम:* ₹${data.amount}\n*स्थिती:* यशस्वी (Success)\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
                     }
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
