@@ -107,6 +107,8 @@
         .delete-btn:hover { background: #f87171; color: white; }
         .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .done-btn:hover { background: #34d399; color: white; }
+        .wa-btn { background: #25d366; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; }
+        .wa-btn:hover { background: #1ebd59; }
 
         /* POPUP MODAL CSS */
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
@@ -132,7 +134,6 @@
 </head>
 <body>
 
-    <!-- Professional Sidebar -->
     <div class="sidebar no-print">
         <div class="sidebar-brand">
             <span>⚡ Pusdekar Digital</span>
@@ -146,7 +147,6 @@
         </ul>
     </div>
 
-    <!-- Main Content Area -->
     <div class="main-content">
         <div class="header">
             <div>
@@ -155,7 +155,6 @@
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
             <div class="grand-total-card">
@@ -273,7 +272,6 @@
                 <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
-            <!-- Adjustments Form -->
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>☀️ सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
@@ -303,7 +301,6 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: PENDING TASKS (NEW) ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">🔔 नवीन पेंडिंग काम जोडा</h3>
@@ -334,7 +331,6 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 3: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
@@ -399,7 +395,6 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 4: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -454,7 +449,6 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 5: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
@@ -489,19 +483,15 @@
         </div>
     </div>
 
-    <!-- ================= MODAL FOR PENDING TASKS AUTO POPUP ================= -->
     <div id="pendingModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-popup" onclick="closePopup()">&times;</span>
             <h3 style="margin-top:0; color:var(--warning); border-bottom:1px solid #e2e8f0; padding-bottom:10px;">🔔 आजची पेंडिंग कामे (Reminders)</h3>
             <p style="font-size:12px; color:#64748b;">भाऊ, खालील ग्राहकांचे काम अजून बाकी आहे. पूर्ण झाल्यावर '✔ काम झाले' वर क्लिक कर.</p>
-            <ul class="popup-task-list" id="popupTaskList">
-                <!-- Tasks will load here -->
-            </ul>
+            <ul class="popup-task-list" id="popupTaskList"></ul>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -523,7 +513,7 @@
         const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
         
-        let hasShownPopup = false; // To show popup only once per refresh
+        let hasShownPopup = false;
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
@@ -708,9 +698,8 @@
             let rows = document.querySelectorAll("#reportTable tr");
             for (let i = 0; i < rows.length; i++) {
                 let row = [], cols = rows[i].querySelectorAll("td, th");
-                let len = i === 0 ? cols.length : cols.length - 1; // Skip action col for rows
                 for (let j = 0; j < cols.length; j++) {
-                    if(j === 8) continue; // Skip Action column
+                    if(j === 8) continue;
                     let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " ");
                     row.push('"' + data + '"');
                 }
@@ -762,16 +751,24 @@
                 let tasks = [];
 
                 snapshot.forEach((doc) => { tasks.push({ id: doc.id, ...doc.data() }); });
-                tasks.sort((a, b) => b.timestamp - a.timestamp); // Newest first
+                tasks.sort((a, b) => b.timestamp - a.timestamp);
 
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
                     
+                    // WhatsApp message template for free sending
+                    let waMsg = encodeURIComponent(`नमस्कार ${data.customerName}, Pusdekar Digital कडून आपले पेंडिंग काम (${data.taskDetails}) बाकी आहे. कृपया संपर्क साधा.`);
+                    let waLink = data.mobile !== "-" ? `https://wa.me/91${data.mobile}?text=${waMsg}` : `https://wa.me/?text=${waMsg}`;
+
                     // Add to Full Table
                     table.innerHTML += `<tr>
                         <td>${dateStr}</td><td><b>${data.customerName}</b></td><td>${data.mobile}</td>
                         <td>${data.taskDetails}</td><td class="text-red">Pending</td>
-                        <td><button class="done-btn" onclick="markTaskDone('${data.id}')">✔ Done</button> <button class="delete-btn" onclick="deletePendingTask('${data.id}')">❌</button></td>
+                        <td>
+                            <a href="${waLink}" target="_blank" class="wa-btn">💬 WhatsApp</a>
+                            <button class="done-btn" onclick="markTaskDone('${data.id}')">✔ Done</button> 
+                            <button class="delete-btn" onclick="deletePendingTask('${data.id}')">❌</button>
+                        </td>
                     </tr>`;
 
                     // Add to Popup Modal
@@ -780,11 +777,13 @@
                             <h4>👤 ${data.customerName} (${data.mobile})</h4>
                             <p>📝 ${data.taskDetails}</p>
                         </div>
-                        <button class="done-btn" onclick="markTaskDone('${data.id}')">✔ काम झाले</button>
+                        <div style="display:flex; gap:5px;">
+                            <a href="${waLink}" target="_blank" class="wa-btn">💬 WA</a>
+                            <button class="done-btn" onclick="markTaskDone('${data.id}')">✔ झाले</button>
+                        </div>
                     </li>`;
                 });
 
-                // Show Auto Popup if there are tasks and we haven't shown it yet in this session
                 if(tasks.length > 0 && !hasShownPopup) {
                     document.getElementById('pendingModal').style.display = 'block';
                     hasShownPopup = true;
@@ -916,7 +915,7 @@
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox") impactAmt = amt;
                             else if (svc.includes("Payment Bank") || svc.includes("Payworld") || svc.includes("Paynearby") || svc === "UPI Cash Given" || (svc === "Shop Expense" && eSrc === "Cash")) impactAmt = -amt;
                         } else {
-                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impactAmt = amt;
+                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet)) impact = amt;
                             else if ((svc === "Money Transfer" && bSrc === selectedWallet) || (svc === "Shop Expense" && eSrc === selectedWallet)) impactAmt = -amt;
                         }
                     }
@@ -981,8 +980,15 @@
                 let purposeText = data.purpose || "-"; if(data.narration && data.narration !== "-") { purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`; }
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
 
+                // WhatsApp quick share link for statement entries if mobile is present
+                let waEntryLink = "";
+                if(data.mobile && data.mobile !== "-") {
+                    let msg = encodeURIComponent(`नमस्कार ${data.details}, Pusdekar Digital कडून आपल्या व्यवहाराची नोंद यशस्वी झाली आहे. रक्कम: ₹${data.amount}`);
+                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA</a>`;
+                }
+
                 table.innerHTML += `<tr>
-                    <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b><br><small>${data.mobile}</small></td>
+                    <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b><br><small>${data.mobile}</small>${waEntryLink}</td>
                     <td>${data.payStatus}</td><td>${purposeText}</td><td>${amtDisplay}</td>
                     <td class="text-green">+ ₹ ${data.commission || 0}</td><td><strong>₹ ${runningBal}</strong></td>
                     <td class="no-print">${deleteBtnHtml}</td>
