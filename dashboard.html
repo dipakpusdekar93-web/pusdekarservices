@@ -137,6 +137,7 @@
         </div>
         <ul class="sidebar-menu">
             <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 All-in-One डॅशबोर्ड</li>
+            <li id="menuLinks" onclick="switchTab('links')">🔗 क्विक लिंक्स (Websites)</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी (Customers)</li>
             <li id="menuPending" onclick="switchTab('pending')">🔔 पेंडिंग कामे (Reminders)</li>
             <li id="menuMahaonline" onclick="switchTab('mahaonline')">📝 महाऑनलाइन (सेतू)</li>
@@ -155,28 +156,11 @@
         <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
-            <!-- NEW QUICK LINKS CONTAINER -->
+            <!-- DYNAMIC QUICK LINKS CONTAINER -->
             <div class="quick-links-container no-print">
                 <h3>🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
-                <div class="quick-links-grid">
-                    <a href="https://mahaonline.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">📝</span>महाऑनलाइन</a>
-                    <a href="https://aaplesarkar.mahaonline.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏛️</span>आपलं सरकार</a>
-                    <a href="https://www.pan.utiitsl.com/" target="_blank" class="ql-btn"><span class="ql-icon">🪪</span>पॅन पोर्टल</a>
-                    <a href="https://rfd.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">📜</span>महसूल विभाग</a>
-                    <a href="https://pmkisan.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🌾</span>Farmer ID</a>
-                    <a href="https://mahadbt.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🚜</span>MahaDBT Farmer</a>
-                    <a href="https://partner.finopaymentbank.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏦</span>Fino Bank</a>
-                    <a href="#" target="_blank" class="ql-btn"><span class="ql-icon">⚡</span>Fino Light Wt</a>
-                    <a href="https://retailer.payworldindia.com/" target="_blank" class="ql-btn"><span class="ql-icon">💸</span>Payworld</a>
-                    <a href="https://retailer.paynearby.in/" target="_blank" class="ql-btn"><span class="ql-icon">📱</span>Paynearby</a>
-                    <a href="#" target="_blank" class="ql-btn"><span class="ql-icon">🖨️</span>Print Portal</a>
-                    <a href="https://digitalseva.csc.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">💻</span>CSC</a>
-                    <a href="https://beneficiary.nha.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏥</span>Ayushman Card</a>
-                    <a href="https://myaadhaar.uidai.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🆔</span>Aadhaar Card</a>
-                    <a href="https://mahaid.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🔐</span>MahaID</a>
-                    <a href="https://mahaforest.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🌲</span>Forest Dept</a>
-                    <a href="https://udyamregistration.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏭</span>Udyam Reg</a>
-                    <a href="https://barti.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">✅</span>Caste Validity</a>
+                <div class="quick-links-grid" id="dashboardQuickLinks">
+                    <!-- Links will load here automatically from Firebase -->
                 </div>
             </div>
             
@@ -350,6 +334,42 @@
                     <div class="form-group"><input type="text" id="adjNarration" placeholder="नरेशन / टीप"></div>
                 </div>
                 <button class="adj-btn" onclick="saveAdjustment()">Update Balance</button>
+            </div>
+        </div>
+
+        <!-- ================= VIEW: QUICK LINKS MANAGEMENT ================= -->
+        <div id="viewLinks" class="view-section">
+            <div class="container" style="border-left: 4px solid var(--primary);">
+                <h3 style="color: var(--primary);">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>लिंकचे नाव (उदा. महाऑनलाइन) *</label>
+                        <input type="text" id="qlName" placeholder="वेबसाईटचे नाव">
+                    </div>
+                    <div class="form-group">
+                        <label>वेबसाईटची लिंक (URL) *</label>
+                        <input type="text" id="qlUrl" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>आयकॉन / इमोजी (उदा. 📝)</label>
+                        <input type="text" id="qlIcon" placeholder="इमोजी टाका">
+                    </div>
+                </div>
+                <button class="save-btn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
+            </div>
+
+            <div class="table-responsive">
+                <table id="linksTable">
+                    <thead>
+                        <tr>
+                            <th>आयकॉन</th>
+                            <th>लिंकचे नाव</th>
+                            <th>URL</th>
+                            <th class="no-print">कृती</th>
+                        </tr>
+                    </thead>
+                    <tbody id="linksTableBody"></tbody>
+                </table>
             </div>
         </div>
 
@@ -629,7 +649,12 @@
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
-            else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); }
+            else { 
+                loadDataFromFirebase(); 
+                loadPendingTasks(); 
+                loadCustomersList(); 
+                loadQuickLinks(); 
+            }
         });
 
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
@@ -639,6 +664,7 @@
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
 
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
+            else if(tabName === 'links') { document.getElementById('viewLinks').classList.add('active-view'); document.getElementById('menuLinks').classList.add('active'); }
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
             else if(tabName === 'pending') { document.getElementById('viewPending').classList.add('active-view'); document.getElementById('menuPending').classList.add('active'); } 
             else if(tabName === 'mahaonline') { document.getElementById('viewMahaonline').classList.add('active-view'); document.getElementById('menuMahaonline').classList.add('active'); } 
@@ -648,6 +674,54 @@
 
         window.onload = function() { loadWalletNames(); }
 
+        // ================= QUICK LINKS LOGIC =================
+        function saveQuickLink() {
+            const name = document.getElementById('qlName').value;
+            const url = document.getElementById('qlUrl').value;
+            const icon = document.getElementById('qlIcon').value || "🌐";
+            
+            if(!name || !url) { alert("लिंकचे नाव आणि URL भरणे आवश्यक आहे!"); return; }
+
+            db.collection("quicklinks").add({
+                name: name, url: url, icon: icon, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('qlName').value = "";
+                document.getElementById('qlUrl').value = "";
+                document.getElementById('qlIcon').value = "";
+                alert("लिंक यशस्वीरित्या सेव्ह झाली!");
+            });
+        }
+
+        function deleteQuickLink(docId) {
+            if(confirm("ही लिंक डिलीट करायची का?")) { db.collection("quicklinks").doc(docId).delete(); }
+        }
+
+        function loadQuickLinks() {
+            db.collection("quicklinks").onSnapshot((snapshot) => {
+                const dashboardGrid = document.getElementById('dashboardQuickLinks');
+                const tableBody = document.getElementById('linksTableBody');
+                dashboardGrid.innerHTML = ""; tableBody.innerHTML = "";
+                
+                let links = [];
+                snapshot.forEach(doc => { links.push({id: doc.id, ...doc.data()}); });
+                links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+
+                links.forEach(data => {
+                    // 1. Dashboard Box
+                    dashboardGrid.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
+                    
+                    // 2. Settings Table
+                    tableBody.innerHTML += `<tr>
+                        <td style="font-size:18px; text-align:center;">${data.icon}</td>
+                        <td><b>${data.name}</b></td>
+                        <td><a href="${data.url}" target="_blank" style="color:var(--primary); text-decoration:none;">${data.url}</a></td>
+                        <td class="no-print"><button class="delete-btn" onclick="deleteQuickLink('${data.id}')">❌ Delete</button></td>
+                    </tr>`;
+                });
+            });
+        }
+
+        // ================= OTHER SETTINGS =================
         function saveWalletNames() {
             localStorage.setItem("wallet_fino1", document.getElementById('renameFino1').value || "Fino 1");
             localStorage.setItem("wallet_fino2", document.getElementById('renameFino2').value || "Fino 2");
@@ -845,7 +919,7 @@
             }
         }
 
-        // ================= SAVE DATA =================
+        // ================= SAVE TRANSACTIONS =================
         function saveAdjustment() {
             const adjWallet = document.getElementById('adjWallet').value;
             const amount = document.getElementById('adjAmount').value;
@@ -879,7 +953,7 @@
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
             if(amount >= 10000 && (idProof === "" || idProof === "-")) {
-                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!");
+                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे অগ্রসর आहे!");
                 document.getElementById('idProof').focus();
                 return;
             }
@@ -940,9 +1014,7 @@
                 let cols = rows[i].querySelectorAll("td, th");
                 
                 for (let j = 0; j < cols.length; j++) {
-                    // Ignore the elements that have "no-print" class (like Action column)
                     if(cols[j].classList.contains("no-print")) continue;
-                    
                     let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); 
                     row.push('"' + data + '"');
                 }
@@ -1117,7 +1189,7 @@
             });
         }
 
-        // ================= STATEMENT TABLE (11 COLUMNS) =================
+        // ================= STATEMENT TABLE =================
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
@@ -1232,7 +1304,6 @@
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
-                // NEW COLUMNS FORMATTING (11 columns logic)
                 let villageText = (data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : "";
                 let idProofText = (data.idProof && data.idProof !== "-") ? data.idProof : "-";
                 let mobileText = (data.mobile && data.mobile !== "-") ? data.mobile : "-";
