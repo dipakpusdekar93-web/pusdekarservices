@@ -31,6 +31,14 @@
 
         .view-section { display: none; }
         .view-section.active-view { display: block; }
+
+        /* Quick Links Dashboard */
+        .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
+        .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: all 0.2s; height: 60px; }
+        .ql-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 6px 10px rgba(37, 99, 235, 0.2); }
+        .ql-icon { font-size: 20px; margin-bottom: 4px; }
         
         /* Dashboard Compact Cards */
         .grand-total-card { background: linear-gradient(135deg, #059669, #047857); color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; box-shadow: var(--card-shadow); }
@@ -146,6 +154,31 @@
 
         <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
+            
+            <!-- NEW QUICK LINKS CONTAINER -->
+            <div class="quick-links-container no-print">
+                <h3>🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
+                <div class="quick-links-grid">
+                    <a href="https://mahaonline.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">📝</span>महाऑनलाइन</a>
+                    <a href="https://aaplesarkar.mahaonline.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏛️</span>आपलं सरकार</a>
+                    <a href="https://www.pan.utiitsl.com/" target="_blank" class="ql-btn"><span class="ql-icon">🪪</span>पॅन पोर्टल</a>
+                    <a href="https://rfd.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">📜</span>महसूल विभाग</a>
+                    <a href="https://pmkisan.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🌾</span>Farmer ID</a>
+                    <a href="https://mahadbt.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🚜</span>MahaDBT Farmer</a>
+                    <a href="https://partner.finopaymentbank.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏦</span>Fino Bank</a>
+                    <a href="#" target="_blank" class="ql-btn"><span class="ql-icon">⚡</span>Fino Light Wt</a>
+                    <a href="https://retailer.payworldindia.com/" target="_blank" class="ql-btn"><span class="ql-icon">💸</span>Payworld</a>
+                    <a href="https://retailer.paynearby.in/" target="_blank" class="ql-btn"><span class="ql-icon">📱</span>Paynearby</a>
+                    <a href="#" target="_blank" class="ql-btn"><span class="ql-icon">🖨️</span>Print Portal</a>
+                    <a href="https://digitalseva.csc.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">💻</span>CSC</a>
+                    <a href="https://beneficiary.nha.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏥</span>Ayushman Card</a>
+                    <a href="https://myaadhaar.uidai.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🆔</span>Aadhaar Card</a>
+                    <a href="https://mahaid.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🔐</span>MahaID</a>
+                    <a href="https://mahaforest.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🌲</span>Forest Dept</a>
+                    <a href="https://udyamregistration.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">🏭</span>Udyam Reg</a>
+                    <a href="https://barti.maharashtra.gov.in/" target="_blank" class="ql-btn"><span class="ql-icon">✅</span>Caste Validity</a>
+                </div>
+            </div>
             
             <div class="grand-total-card">
                 <h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4>
@@ -1084,7 +1117,7 @@
             });
         }
 
-        // ================= UPDATED RENDER STATEMENT (11 COLUMNS) =================
+        // ================= STATEMENT TABLE (11 COLUMNS) =================
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
@@ -1199,7 +1232,7 @@
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
-                // NEW COLUMNS FORMATTING
+                // NEW COLUMNS FORMATTING (11 columns logic)
                 let villageText = (data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : "";
                 let idProofText = (data.idProof && data.idProof !== "-") ? data.idProof : "-";
                 let mobileText = (data.mobile && data.mobile !== "-") ? data.mobile : "-";
