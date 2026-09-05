@@ -84,7 +84,7 @@
         .print-btn { background: #475569; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; height: 36px; }
 
         .table-responsive { overflow-x: auto; background: white; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th, td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 12px; }
         th { background-color: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
         tr:hover { background-color: #f1f5f9; }
@@ -500,9 +500,11 @@
                 <table id="reportTable">
                     <thead>
                         <tr>
-                            <th>वेळ/तारीख</th>
+                            <th>तारीख/वेळ</th>
                             <th>सर्व्हिस</th>
-                            <th>नाव व मोबाईल</th>
+                            <th>ग्राहकाचे नाव</th>
+                            <th>मोबाईल नंबर</th>
+                            <th>पॅन/आधार नंबर</th>
                             <th>स्थिती</th>
                             <th>कारण / नरेशन</th>
                             <th>रक्कम (₹)</th>
@@ -700,7 +702,7 @@
             document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0;
         }
 
-        // ================= CUSTOMER MASTER & AUTO-FILL WITH CLICKABLE PROMPT =================
+        // ================= CUSTOMER MASTER & AUTO-FILL =================
         function searchCustomer() {
             const mobile = document.getElementById('mobile').value;
             const msgSpan = document.getElementById('searchMsg');
@@ -809,8 +811,8 @@
                 db.collection("customers").doc(mobile).delete().then(() => { alert("ग्राहक डिलीट झाला!"); });
             }
         }
-        // ==========================================================
 
+        // ================= SAVE DATA =================
         function saveAdjustment() {
             const adjWallet = document.getElementById('adjWallet').value;
             const amount = document.getElementById('adjAmount').value;
@@ -820,7 +822,7 @@
             db.collection("transactions").add({
                 category: "Adjustment", service: adjWallet, amount: Number(amount), bankSource: "-", expenseSource: "-",
                 details: narration ? `Opening/Adjustment (${narration})` : "Opening/Adjustment",
-                mobile: "-", district: "-", village: "-", state: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-",
+                mobile: "-", village: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-",
                 commission: 0, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = ""; alert("बॅलन्स अपडेट झाला!");
@@ -895,20 +897,31 @@
             }
         }
 
+        // ================= EXPORT EXCEL =================
         function downloadExcel() {
-            let csv = []; let rows = document.querySelectorAll("#reportTable tr");
+            let csv = []; 
+            let rows = document.querySelectorAll("#reportTable tr");
+            
             for (let i = 0; i < rows.length; i++) {
-                let row = [], cols = rows[i].querySelectorAll("td, th");
+                let row = []; 
+                let cols = rows[i].querySelectorAll("td, th");
+                
                 for (let j = 0; j < cols.length; j++) {
-                    if(j === 8) continue;
-                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); row.push('"' + data + '"');
+                    // Ignore the elements that have "no-print" class (like Action column)
+                    if(cols[j].classList.contains("no-print")) continue;
+                    
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); 
+                    row.push('"' + data + '"');
                 }
                 csv.push(row.join(","));
             }
             let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"});
-            let downloadLink = document.createElement("a"); downloadLink.download = "Pusdekar_Statement.csv";
-            downloadLink.href = window.URL.createObjectURL(csvFile); downloadLink.style.display = "none";
-            document.body.appendChild(downloadLink); downloadLink.click();
+            let downloadLink = document.createElement("a"); 
+            downloadLink.download = "Pusdekar_Full_Statement.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile); 
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink); 
+            downloadLink.click();
         }
 
         function getPromoText() {
@@ -1071,6 +1084,7 @@
             });
         }
 
+        // ================= UPDATED RENDER STATEMENT (11 COLUMNS) =================
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
             const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
@@ -1128,7 +1142,7 @@
                 else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
                     let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
                     if(svc === "Money Transfer") isPlus = true; else isMinus = true; 
-                } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given" || svc === "Payworld Services" || svc === "Paynearby Services") {
+                } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
                     let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
                     if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
                     amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
@@ -1185,16 +1199,28 @@
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
+                // NEW COLUMNS FORMATTING
+                let villageText = (data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : "";
+                let idProofText = (data.idProof && data.idProof !== "-") ? data.idProof : "-";
+                let mobileText = (data.mobile && data.mobile !== "-") ? data.mobile : "-";
+
                 table.innerHTML += `<tr>
-                    <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b><br><small>${data.mobile}</small>${waEntryLink}</td>
-                    <td>${data.payStatus}</td><td>${purposeText}</td><td>${amtDisplay}</td>
-                    <td class="text-green">+ ₹ ${data.commission || 0}</td><td><strong>₹ ${runningBal}</strong></td>
+                    <td>${dateStr}</td>
+                    <td>${serviceDisplay}</td>
+                    <td><b>${data.details}</b>${villageText}${waEntryLink}</td>
+                    <td>${mobileText}</td>
+                    <td><b>${idProofText}</b></td>
+                    <td>${data.payStatus}</td>
+                    <td>${purposeText}</td>
+                    <td>${amtDisplay}</td>
+                    <td class="text-green">+ ₹ ${data.commission || 0}</td>
+                    <td><strong>₹ ${runningBal}</strong></td>
                     <td class="no-print">${deleteBtnHtml}</td>
                 </tr>`;
             });
 
             document.getElementById("statementTotalFoot").innerHTML = `<tr>
-                <td colspan="5" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td>
+                <td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td>
                 <td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td>
                 <td class="text-green" style="font-size:14px;">+ ₹ ${sumComm}</td>
                 <td colspan="2"></td>
