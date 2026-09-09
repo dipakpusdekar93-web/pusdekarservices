@@ -84,9 +84,12 @@
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1); }
         
         .save-btn, .adj-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; transition: background 0.2s; }
-        .save-btn:hover { background: #047857; }
+        .save-btn:hover:not(:disabled) { background: #047857; }
+        .save-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        
         .adj-btn { background: var(--primary); }
-        .adj-btn:hover { background: var(--primary-dark); }
+        .adj-btn:hover:not(:disabled) { background: var(--primary-dark); }
+        .adj-btn:disabled { background: #94a3b8; cursor: not-allowed; }
 
         .filter-section { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 15px; }
         .print-btn { background: #475569; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; height: 36px; }
@@ -298,7 +301,7 @@
                     <div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div>
                 </div>
 
-                <button class="save-btn" onclick="saveEntry()">Save Transaction Entry</button>
+                <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">Save Transaction Entry</button>
             </div>
 
             <div class="summary-cards">
@@ -333,7 +336,7 @@
                     <div class="form-group"><input type="number" id="adjAmount" placeholder="रक्कम टाका (₹) *"></div>
                     <div class="form-group"><input type="text" id="adjNarration" placeholder="नरेशन / टीप"></div>
                 </div>
-                <button class="adj-btn" onclick="saveAdjustment()">Update Balance</button>
+                <button class="adj-btn" id="saveAdjBtn" onclick="saveAdjustment()">Update Balance</button>
             </div>
         </div>
 
@@ -355,7 +358,7 @@
                         <input type="text" id="qlIcon" placeholder="इमोजी टाका">
                     </div>
                 </div>
-                <button class="save-btn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
+                <button class="save-btn" id="saveQuickLinkBtn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
             </div>
 
             <div class="table-responsive">
@@ -383,7 +386,7 @@
                     <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div>
                     <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन किंवा आधार नंबर"></div>
                 </div>
-                <button class="save-btn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह / अपडेट करा</button>
+                <button class="save-btn" id="saveCustomerBtn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह / अपडेट करा</button>
             </div>
 
             <div class="container filter-section">
@@ -419,7 +422,7 @@
                 <div class="form-row">
                     <div class="form-group"><label>काय काम आहे? (तपशील) *</label><textarea id="ptDetails" rows="2" placeholder="उदा. पॅन कार्डची प्रिंट काढायची आहे..."></textarea></div>
                 </div>
-                <button class="save-btn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
+                <button class="save-btn" id="savePendingBtn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
             </div>
 
             <div class="table-responsive">
@@ -493,7 +496,7 @@
                         </select>
                     </div>
                 </div>
-                <button class="save-btn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
+                <button class="save-btn" id="saveMahaBtn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
             </div>
 
             <div class="table-responsive">
@@ -676,11 +679,15 @@
 
         // ================= QUICK LINKS LOGIC =================
         function saveQuickLink() {
+            const btn = document.getElementById('saveQuickLinkBtn');
             const name = document.getElementById('qlName').value;
             const url = document.getElementById('qlUrl').value;
             const icon = document.getElementById('qlIcon').value || "🌐";
             
             if(!name || !url) { alert("लिंकचे नाव आणि URL भरणे आवश्यक आहे!"); return; }
+
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("quicklinks").add({
                 name: name, url: url, icon: icon, timestamp: firebase.firestore.FieldValue.serverTimestamp()
@@ -688,7 +695,11 @@
                 document.getElementById('qlName').value = "";
                 document.getElementById('qlUrl').value = "";
                 document.getElementById('qlIcon').value = "";
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा";
                 alert("लिंक यशस्वीरित्या सेव्ह झाली!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा";
             });
         }
 
@@ -864,12 +875,16 @@
         }
 
         function addNewCustomerManually() {
+            const btn = document.getElementById('saveCustomerBtn');
             const name = document.getElementById('cName').value;
             const mobile = document.getElementById('cMobile').value;
             const village = document.getElementById('cVillage').value || "-";
             const idProof = document.getElementById('cIdProof').value || "-";
 
             if(name === "" || mobile.length !== 10) { alert("कृपया ग्राहकाचे नाव आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
+
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("customers").doc(mobile).set({
                 name: name, mobile: mobile, village: village, idProof: idProof
@@ -878,7 +893,11 @@
                 document.getElementById('cMobile').value = "";
                 document.getElementById('cVillage').value = "";
                 document.getElementById('cIdProof').value = "";
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा";
                 alert("ग्राहक यशस्वीरित्या सेव्ह झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा";
             });
         }
 
@@ -921,10 +940,14 @@
 
         // ================= SAVE TRANSACTIONS =================
         function saveAdjustment() {
+            const btn = document.getElementById('saveAdjBtn');
             const adjWallet = document.getElementById('adjWallet').value;
             const amount = document.getElementById('adjAmount').value;
             const narration = document.getElementById('adjNarration').value;
             if(amount === "") { alert("कृपया रक्कम भरा!"); return; }
+
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Updating...";
 
             db.collection("transactions").add({
                 category: "Adjustment", service: adjWallet, amount: Number(amount), bankSource: "-", expenseSource: "-",
@@ -932,11 +955,17 @@
                 mobile: "-", village: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-",
                 commission: 0, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = ""; alert("बॅलन्स अपडेट झाला!");
+                document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = "";
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "Update Balance";
+                alert("बॅलन्स अपडेट झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Update Balance";
             });
         }
 
         function saveEntry() {
+            const btn = document.getElementById('saveEntryBtn');
             const service = document.getElementById('serviceType').value;
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-";
@@ -953,10 +982,13 @@
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
             if(amount >= 10000 && (idProof === "" || idProof === "-")) {
-                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे অগ্রসর आहे!");
+                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!");
                 document.getElementById('idProof').focus();
                 return;
             }
+
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("transactions").add({
                 category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
@@ -964,11 +996,16 @@
                 commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "Save Transaction Entry";
                 alert("व्यवहार सेव्ह झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Transaction Entry";
             });
         }
 
         function saveMahaonline() {
+            const btn = document.getElementById('saveMahaBtn');
             const service = document.getElementById('moService').value;
             const mobile = document.getElementById('moMobile').value;
             const details = document.getElementById('moName').value;
@@ -980,13 +1017,21 @@
 
             if(mobile.length !== 10 || details === "" || totalAmount === "" || paidAmount === "") { alert("कृपया बरोबर मोबाईल नंबर, नाव आणि फी भरा!"); return; }
 
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Saving...";
+
             db.collection("transactions").add({
                 category: "Mahaonline", service: service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount),
                 bankSource: payMode, expenseSource: "-", details: details, mobile: mobile, village: village,
                 payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
                 commission: 0, narration: "Mahaonline Service", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
+                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; 
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
+                alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
             });
         }
 
@@ -1037,17 +1082,25 @@
 
         // ================= PENDING TASKS =================
         function addPendingTask() {
+            const btn = document.getElementById('savePendingBtn');
             const name = document.getElementById('ptName').value;
             const mobile = document.getElementById('ptMobile').value || "-";
             const details = document.getElementById('ptDetails').value;
             if(name === "" || details === "") { alert("कृपया ग्राहकाचे नाव आणि कामाचा तपशील भरा!"); return; }
+
+            // Double Click Protection - Button Disable
+            btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("pendingTasks").add({
                 customerName: name, mobile: mobile, taskDetails: details,
                 status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
+                // Re-enable Button
+                btn.disabled = false; btn.innerText = "Save Pending Task";
                 alert("पेंडिंग काम सेव्ह झाले!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Pending Task";
             });
         }
 
