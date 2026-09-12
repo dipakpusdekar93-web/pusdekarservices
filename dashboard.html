@@ -103,14 +103,11 @@
         .text-green { color: var(--success); font-weight: 600; }
         .text-red { color: var(--danger); font-weight: 600; }
         
-        /* Edit & Delete Buttons */
-        .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
-        .edit-btn:hover { background: #38bdf8; color: white; }
-        .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
+        .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .delete-btn:hover { background: #f87171; color: white; }
-        .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px;}
+        .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
         .done-btn:hover { background: #34d399; color: white; }
-        .wa-btn { background: #25d366; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; margin-right: 4px; margin-bottom: 2px;}
+        .wa-btn { background: #25d366; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; }
         .wa-btn:hover { background: #1ebd59; }
 
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
@@ -162,9 +159,12 @@
         <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
+            <!-- DYNAMIC QUICK LINKS CONTAINER -->
             <div class="quick-links-container no-print">
                 <h3>🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
-                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
+                <div class="quick-links-grid" id="dashboardQuickLinks">
+                    <!-- Links will load here automatically from Firebase -->
+                </div>
             </div>
             
             <div class="grand-total-card">
@@ -201,6 +201,7 @@
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 
+                <!-- CUSTOM DATE & TIME ROW -->
                 <div class="form-row" style="background:#f8fafc; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
                     <div class="form-group" style="margin-bottom:0;">
                         <label style="color:var(--primary);">व्यवहाराची तारीख व वेळ (जुनी नोंद करायची असल्यास बदला)</label>
@@ -248,6 +249,7 @@
                     </div>
                 </div>
 
+                <!-- HIDDEN VILLAGE FOR BACKEND -->
                 <input type="hidden" id="villageInput" value="-">
 
                 <div class="form-row" id="bankSelectRow" style="display: none; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
@@ -383,10 +385,10 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: CUSTOMERS MANAGEMENT ================= -->
+        <!-- ================= VIEW 2: CUSTOMERS MANAGEMENT TAB ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
-                <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा किंवा एडिट करा</h3>
+                <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा किंवा एडिट करा (Customer Master)</h3>
                 <div class="form-row">
                     <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div>
                     <div class="form-group"><label>मोबाईल नंबर (१००% अचूक) *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी मोबाईल नंबर"></div>
@@ -418,7 +420,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: PENDING TASKS ================= -->
+        <!-- ================= VIEW 3: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
@@ -449,11 +451,12 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: MAHAONLINE ================= -->
+        <!-- ================= VIEW 4: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
                 
+                <!-- CUSTOM DATE & TIME FOR MAHAONLINE -->
                 <div class="form-row" style="background:#f5f3ff; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
                     <div class="form-group" style="margin-bottom:0;">
                         <label style="color:#7c3aed;">महाऑनलाइन तारिख व वेळ (जुनी नोंद असल्यास बदला)</label>
@@ -485,6 +488,7 @@
                     </div>
                 </div>
 
+                <!-- HIDDEN VILLAGE FOR MAHAONLINE -->
                 <input type="hidden" id="moVillage" value="-">
 
                 <div class="form-row">
@@ -532,7 +536,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: STATEMENT ================= -->
+        <!-- ================= VIEW 5: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -589,7 +593,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: SETTINGS ================= -->
+        <!-- ================= VIEW 6: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
@@ -662,17 +666,15 @@
         const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
         
         let hasShownPopup = false;
-        
-        // EDIT IDs Global Variables
-        let editLinkId = null;
-        let editTaskId = null;
-        let editEntryId = null;
-        let editAdjId = null;
-        let editMahaId = null;
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) { window.location.href = "login.html"; } 
-            else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); loadQuickLinks(); }
+            else { 
+                loadDataFromFirebase(); 
+                loadPendingTasks(); 
+                loadCustomersList(); 
+                loadQuickLinks(); 
+            }
         });
 
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
@@ -703,129 +705,232 @@
 
             btn.disabled = true; btn.innerText = "Saving...";
 
-            if(editLinkId) {
-                db.collection("quicklinks").doc(editLinkId).update({ name, url, icon }).then(() => {
-                    document.getElementById('qlName').value = ""; document.getElementById('qlUrl').value = ""; document.getElementById('qlIcon').value = "";
-                    editLinkId = null; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक अपडेट झाली!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; });
-            } else {
-                db.collection("quicklinks").add({ name, url, icon, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => {
-                    document.getElementById('qlName').value = ""; document.getElementById('qlUrl').value = ""; document.getElementById('qlIcon').value = "";
-                    btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक सेव्ह झाली!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; });
-            }
-        }
-
-        function editLink(id) {
-            db.collection("quicklinks").doc(id).get().then(doc => {
-                if(doc.exists) {
-                    let data = doc.data();
-                    document.getElementById('qlName').value = data.name;
-                    document.getElementById('qlUrl').value = data.url;
-                    document.getElementById('qlIcon').value = data.icon;
-                    editLinkId = id;
-                    document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा";
-                    switchTab('links'); window.scrollTo(0,0);
-                }
+            db.collection("quicklinks").add({
+                name: name, url: url, icon: icon, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('qlName').value = "";
+                document.getElementById('qlUrl').value = "";
+                document.getElementById('qlIcon').value = "";
+                btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा";
+                alert("लिंक यशस्वीरित्या सेव्ह झाली!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा";
             });
         }
 
-        function deleteQuickLink(docId) { if(confirm("ही लिंक डिलीट करायची का?")) { db.collection("quicklinks").doc(docId).delete(); } }
+        function deleteQuickLink(docId) {
+            if(confirm("ही लिंक डिलीट करायची का?")) { db.collection("quicklinks").doc(docId).delete(); }
+        }
 
         function loadQuickLinks() {
             db.collection("quicklinks").onSnapshot((snapshot) => {
-                const dashboardGrid = document.getElementById('dashboardQuickLinks'); const tableBody = document.getElementById('linksTableBody');
-                dashboardGrid.innerHTML = ""; tableBody.innerHTML = ""; let links = [];
+                const dashboardGrid = document.getElementById('dashboardQuickLinks');
+                const tableBody = document.getElementById('linksTableBody');
+                dashboardGrid.innerHTML = ""; tableBody.innerHTML = "";
+                
+                let links = [];
                 snapshot.forEach(doc => { links.push({id: doc.id, ...doc.data()}); });
                 links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
 
                 links.forEach(data => {
                     dashboardGrid.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
                     tableBody.innerHTML += `<tr>
-                        <td style="font-size:18px; text-align:center;">${data.icon}</td><td><b>${data.name}</b></td>
+                        <td style="font-size:18px; text-align:center;">${data.icon}</td>
+                        <td><b>${data.name}</b></td>
                         <td><a href="${data.url}" target="_blank" style="color:var(--primary); text-decoration:none;">${data.url}</a></td>
-                        <td class="no-print">
-                            <button class="edit-btn" onclick="editLink('${data.id}')">✏️ Edit</button>
-                            <button class="delete-btn" onclick="deleteQuickLink('${data.id}')">❌</button>
-                        </td>
+                        <td class="no-print"><button class="delete-btn" onclick="deleteQuickLink('${data.id}')">❌ Delete</button></td>
                     </tr>`;
                 });
             });
         }
 
+        // ================= OTHER SETTINGS =================
+        function saveWalletNames() {
+            localStorage.setItem("wallet_fino1", document.getElementById('renameFino1').value || "Fino 1");
+            localStorage.setItem("wallet_fino2", document.getElementById('renameFino2').value || "Fino 2");
+            localStorage.setItem("wallet_payworld", document.getElementById('renamePayworld').value || "Payworld");
+            localStorage.setItem("wallet_paynearby", document.getElementById('renamePaynearby').value || "Paynearby");
+            localStorage.setItem("wallet_mahapower", document.getElementById('renameMahapower').value || "Mahapower");
+            
+            BANK_KEYS.forEach((key, i) => {
+                let inputVal = document.getElementById('renameB'+(i+1)).value;
+                localStorage.setItem("wallet_" + key, inputVal || key);
+            });
+
+            localStorage.setItem("wa_promo_msg", document.getElementById('promoMessage').value);
+
+            loadWalletNames();
+            alert("सर्व सेटिंग्स आणि WhatsApp मेसेज यशस्वीरित्या सेव्ह झाला!");
+            switchTab('dashboard');
+        }
+
+        function updateLabels(className, text) { document.querySelectorAll('.' + className).forEach(el => el.innerText = text); }
+
+        function loadWalletNames() {
+            const f1 = localStorage.getItem("wallet_fino1") || "Fino 1"; const f2 = localStorage.getItem("wallet_fino2") || "Fino 2";
+            const pw = localStorage.getItem("wallet_payworld") || "Payworld"; const pn = localStorage.getItem("wallet_paynearby") || "Paynearby";
+            const mp = localStorage.getItem("wallet_mahapower") || "Mahapower";
+            
+            updateLabels('lbl-fino1', f1); updateLabels('lbl-fino2', f2);
+            updateLabels('lbl-payworld', pw); updateLabels('lbl-paynearby', pn); updateLabels('lbl-mahapower', mp);
+
+            updateLabels('lbl-fino1-opt', f1 + " ॲडजस्टमेंट"); updateLabels('lbl-fino2-opt', f2 + " ॲडजस्टमेंट");
+            updateLabels('lbl-payworld-opt', pw + " ॲडजस्टमेंट"); updateLabels('lbl-paynearby-opt', pn + " ॲडजस्टमेंट"); updateLabels('lbl-mahapower-opt', mp + " ॲडजस्टमेंट");
+
+            updateLabels('lbl-fino1-dep', f1 + " Cash Deposit"); updateLabels('lbl-fino2-dep', f2 + " Cash Deposit");
+            updateLabels('lbl-payworld-dep', pw + " Cash Deposit"); updateLabels('lbl-paynearby-dep', pn + " Cash Deposit");
+            updateLabels('lbl-fino1-pay', f1 + " Payment Bank"); updateLabels('lbl-fino2-pay', f2 + " Payment Bank");
+            updateLabels('lbl-payworld-srv', pw + " Services"); updateLabels('lbl-paynearby-srv', pn + " Services"); updateLabels('lbl-mahapower-srv', mp + " Bill Collection");
+
+            document.getElementById('renameFino1').value = f1 === "Fino 1" ? "" : f1; document.getElementById('renameFino2').value = f2 === "Fino 2" ? "" : f2;
+            document.getElementById('renamePayworld').value = pw === "Payworld" ? "" : pw; document.getElementById('renamePaynearby').value = pn === "Paynearby" ? "" : pn;
+            document.getElementById('renameMahapower').value = mp === "Mahapower" ? "" : mp;
+
+            BANK_KEYS.forEach((key, i) => {
+                let name = localStorage.getItem("wallet_" + key) || key;
+                updateLabels('lbl-b' + (i+1), name);
+                updateLabels('lbl-b' + (i+1) + '-opt', name + " ॲडजस्टमेंट");
+                updateLabels('lbl-b' + (i+1) + '-upi', name + " UPI");
+                document.getElementById('renameB' + (i+1)).value = name === key ? "" : name;
+            });
+
+            const defaultPromo = "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : defaultPromo;
+        }
+
+        function toggleFormFields() {
+            const st = document.getElementById('serviceType').value;
+            const bRow = document.getElementById('bankSelectRow');
+            const eRow = document.getElementById('expenseSourceRow');
+            const eLabel = document.getElementById('dynamicSourceLabel');
+
+            if(st === "Money Transfer" || st === "UPI Cash Given") {
+                bRow.style.display = "flex"; eRow.style.display = "none";
+            } else if(st === "Shop Expense" || st === "Advance Received" || st === "Advance Used" || st === "Hand Loan Given" || st === "Hand Loan Returned") {
+                bRow.style.display = "none"; 
+                if(st === "Advance Received" || st === "Hand Loan Returned") {
+                    eLabel.innerHTML = "पैसे <b>कुठे जमा</b> झाले?"; eLabel.style.color = "var(--success)";
+                    eRow.style.border = "1px dashed var(--success)"; eRow.style.background = "#f0fdf4";
+                } else {
+                    eLabel.innerHTML = "पैसे <b>कुठून दिले/काढले</b>?"; eLabel.style.color = "var(--danger)";
+                    eRow.style.border = "1px dashed var(--danger)"; eRow.style.background = "#fff5f5";
+                }
+                eRow.style.display = "flex";
+            } else { bRow.style.display = "none"; eRow.style.display = "none"; }
+        }
+
+        function checkCAuditRule() {
+            const amt = parseFloat(document.getElementById('amount').value) || 0;
+            const label = document.getElementById('idProofLabel');
+            if(amt >= 10000) { label.innerHTML = "पॅन/आधार (₹10k+ मुळे <b>सक्तीचे</b>)"; label.style.color = "var(--danger)"; } 
+            else { label.innerHTML = "पॅन/आधार (₹10k+ साठी)"; label.style.color = "#334155"; }
+        }
+
+        function calcUdhar() {
+            let t = parseFloat(document.getElementById('moTotal').value) || 0;
+            let p = parseFloat(document.getElementById('moPaid').value) || 0;
+            document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0;
+        }
+
         // ================= CUSTOMER MASTER & AUTO-FILL =================
         function searchCustomer() {
-            const mobile = document.getElementById('mobile').value; const msgSpan = document.getElementById('searchMsg');
+            const mobile = document.getElementById('mobile').value;
+            const msgSpan = document.getElementById('searchMsg');
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
-                        document.getElementById('details').value = data.name || ""; document.getElementById('idProof').value = data.idProof || "-";
-                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!"; msgSpan.style.color = "var(--success)"; msgSpan.style.display = "inline-block";
+                        document.getElementById('details').value = data.name || "";
+                        document.getElementById('idProof').value = data.idProof || "-";
+                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!";
+                        msgSpan.style.color = "var(--success)";
+                        msgSpan.style.display = "inline-block";
                         setTimeout(() => { msgSpan.style.display = "none"; }, 3000);
                     } else {
                         msgSpan.innerHTML = `❌ नंबर सापडला नाही! <a href="#" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; text-decoration:underline;">येथे क्लिक करून ॲड करा</a>`;
-                        msgSpan.style.color = "var(--danger)"; msgSpan.style.display = "block";
-                        document.getElementById('details').value = ""; document.getElementById('idProof').value = "";
+                        msgSpan.style.color = "var(--danger)";
+                        msgSpan.style.display = "block";
+                        document.getElementById('details').value = "";
+                        document.getElementById('idProof').value = "";
                     }
                 });
             }
         }
 
         function searchCustomerMaha() {
-            const mobile = document.getElementById('moMobile').value; const msgSpan = document.getElementById('searchMsgMo');
+            const mobile = document.getElementById('moMobile').value;
+            const msgSpan = document.getElementById('searchMsgMo');
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
-                        document.getElementById('moName').value = data.name || ""; document.getElementById('moVillage').value = data.village || "-";
-                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!"; msgSpan.style.color = "var(--success)"; msgSpan.style.display = "inline-block";
+                        document.getElementById('moName').value = data.name || "";
+                        document.getElementById('moVillage').value = data.village || "-";
+                        msgSpan.innerHTML = "✔️ जुना ग्राहक सापडला!";
+                        msgSpan.style.color = "var(--success)";
+                        msgSpan.style.display = "inline-block";
                         setTimeout(() => { msgSpan.style.display = "none"; }, 3000);
                     } else {
                         msgSpan.innerHTML = `❌ नंबर सापडला नाही! <a href="#" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; text-decoration:underline;">येथे क्लिक करून ॲड करा</a>`;
-                        msgSpan.style.color = "var(--danger)"; msgSpan.style.display = "block"; document.getElementById('moName').value = "";
+                        msgSpan.style.color = "var(--danger)";
+                        msgSpan.style.display = "block";
+                        document.getElementById('moName').value = "";
                     }
                 });
             }
         }
 
-        function goToAddCustomer(mobile) { switchTab('customers'); document.getElementById('cMobile').value = mobile; document.getElementById('cName').focus(); }
+        function goToAddCustomer(mobile) {
+            switchTab('customers');
+            document.getElementById('cMobile').value = mobile;
+            document.getElementById('cName').focus();
+        }
 
         function addNewCustomerManually() {
             const btn = document.getElementById('saveCustomerBtn');
-            const name = document.getElementById('cName').value; const mobile = document.getElementById('cMobile').value;
-            const village = document.getElementById('cVillage').value || "-"; const idProof = document.getElementById('cIdProof').value || "-";
+            const name = document.getElementById('cName').value;
+            const mobile = document.getElementById('cMobile').value;
+            const village = document.getElementById('cVillage').value || "-";
+            const idProof = document.getElementById('cIdProof').value || "-";
 
             if(name === "" || mobile.length !== 10) { alert("कृपया ग्राहकाचे नाव आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
             btn.disabled = true; btn.innerText = "Saving...";
-            db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => {
-                document.getElementById('cName').value = ""; document.getElementById('cMobile').value = ""; document.getElementById('cVillage').value = ""; document.getElementById('cIdProof').value = "";
-                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा"; alert("ग्राहक यशस्वीरित्या सेव्ह झाला!");
-            }).catch(e => { btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा"; });
-        }
 
-        function editCust(mobile) {
-            let c = allCustomers.find(x => x.mobile === mobile);
-            if(c) {
-                document.getElementById('cName').value = c.name || ""; document.getElementById('cMobile').value = c.mobile || "";
-                document.getElementById('cVillage').value = c.village || ""; document.getElementById('cIdProof').value = c.idProof || "";
-                document.getElementById('saveCustomerBtn').innerText = "🔄 ग्राहक अपडेट करा";
-                switchTab('customers'); window.scrollTo(0,0);
-            }
+            db.collection("customers").doc(mobile).set({
+                name: name, mobile: mobile, village: village, idProof: idProof
+            }, { merge: true }).then(() => {
+                document.getElementById('cName').value = "";
+                document.getElementById('cMobile').value = "";
+                document.getElementById('cVillage').value = "";
+                document.getElementById('cIdProof').value = "";
+                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा";
+                alert("ग्राहक यशस्वीरित्या सेव्ह झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा";
+            });
         }
 
         let allCustomers = [];
-        function loadCustomersList() { db.collection("customers").onSnapshot((snapshot) => { allCustomers = []; snapshot.forEach((doc) => { allCustomers.push(doc.data()); }); renderCustomersTable(allCustomers); }); }
+        function loadCustomersList() {
+            db.collection("customers").onSnapshot((snapshot) => {
+                allCustomers = [];
+                snapshot.forEach((doc) => { allCustomers.push(doc.data()); });
+                renderCustomersTable(allCustomers);
+            });
+        }
 
         function renderCustomersTable(customers) {
-            const tbody = document.getElementById("customersTableBody"); tbody.innerHTML = "";
+            const tbody = document.getElementById("customersTableBody");
+            tbody.innerHTML = "";
             customers.forEach((c) => {
                 tbody.innerHTML += `<tr>
-                    <td><b>${c.name}</b></td><td>${c.mobile}</td><td>${c.village}</td><td>${c.idProof}</td>
+                    <td><b>${c.name}</b></td>
+                    <td>${c.mobile}</td>
+                    <td>${c.village}</td>
+                    <td>${c.idProof}</td>
                     <td class="no-print">
-                        <button class="edit-btn" onclick="editCust('${c.mobile}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteCustomer('${c.mobile}')">❌</button>
+                        <button class="delete-btn" style="background:#fee2e2; color:var(--danger);" onclick="deleteCustomer('${c.mobile}')">❌ डिलीट</button>
                     </td>
                 </tr>`;
             });
@@ -836,178 +941,181 @@
             const filtered = allCustomers.filter(c => c.name.toLowerCase().includes(query) || c.mobile.includes(query) || c.village.toLowerCase().includes(query) || (c.idProof && c.idProof.toLowerCase().includes(query)));
             renderCustomersTable(filtered);
         }
-        function deleteCustomer(mobile) { if(confirm("हा ग्राहक डिलीट करायचा का?")) { db.collection("customers").doc(mobile).delete().then(() => { alert("ग्राहक डिलीट झाला!"); }); } }
 
-        // ================= SAVE TRANSACTIONS & EDITS =================
-        function editTxn(id) {
-            let data = allTransactions.find(x => x.id === id);
-            if(!data) return;
-
-            if(data.category === "Adjustment") {
-                document.getElementById('adjWallet').value = data.service;
-                document.getElementById('adjAmount').value = data.amount;
-                document.getElementById('adjNarration').value = data.details.replace("Opening/Adjustment (", "").replace(")", "").replace("Opening/Adjustment", "").trim() || "";
-                editAdjId = id; document.getElementById('saveAdjBtn').innerText = "🔄 Update Balance";
-                switchTab('dashboard'); window.scrollTo(0, document.body.scrollHeight);
-            } else if(data.category === "Mahaonline") {
-                editMaha(id);
-            } else {
-                document.getElementById('serviceType').value = data.service; toggleFormFields();
-                document.getElementById('amount').value = data.amount; document.getElementById('mobile').value = data.mobile === "-" ? "" : data.mobile;
-                document.getElementById('details').value = data.details; document.getElementById('villageInput').value = data.village === "-" ? "" : data.village;
-                document.getElementById('payStatus').value = data.payStatus; document.getElementById('purpose').value = data.purpose === "-" ? "" : data.purpose;
-                document.getElementById('idProof').value = data.idProof === "-" ? "" : data.idProof; document.getElementById('commission').value = data.commission || 0;
-                document.getElementById('entryNarration').value = data.narration === "-" ? "" : data.narration;
-
-                if(data.bankSource !== "-") document.getElementById('upiBank').value = data.bankSource;
-                if(data.expenseSource !== "-") document.getElementById('expenseSource').value = data.expenseSource;
-
-                if(data.timestamp) {
-                    let d = data.timestamp.toDate(); let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-                    document.getElementById('entryCustomDate').value = (new Date(d - tzoffset)).toISOString().slice(0,16);
-                }
-                editEntryId = id; document.getElementById('saveEntryBtn').innerText = "🔄 Update Entry";
-                switchTab('dashboard'); window.scrollTo(0,0);
+        function deleteCustomer(mobile) {
+            if(confirm("हा ग्राहक डिलीट करायचा का?")) {
+                db.collection("customers").doc(mobile).delete().then(() => { alert("ग्राहक डिलीट झाला!"); });
             }
         }
 
-        function editMaha(id) {
-            let data = allTransactions.find(x => x.id === id);
-            if(!data) return;
-            document.getElementById('moService').value = data.service; document.getElementById('moMobile').value = data.mobile === "-" ? "" : data.mobile;
-            document.getElementById('moName').value = data.details; document.getElementById('moVillage').value = data.village === "-" ? "" : data.village;
-            document.getElementById('moTotal').value = data.totalFee; document.getElementById('moPaid').value = data.amount;
-            document.getElementById('moPending').value = data.pendingAmount; document.getElementById('moPayMode').value = data.bankSource;
-
-            if(data.timestamp) {
-                let d = data.timestamp.toDate(); let tzoffset = (new Date()).getTimezoneOffset() * 60000;
-                document.getElementById('moCustomDate').value = (new Date(d - tzoffset)).toISOString().slice(0,16);
-            }
-            editMahaId = id; document.getElementById('saveMahaBtn').innerText = "🔄 Update Mahaonline";
-            switchTab('mahaonline'); window.scrollTo(0,0);
-        }
-
+        // ================= SAVE TRANSACTIONS =================
         function saveAdjustment() {
-            const btn = document.getElementById('saveAdjBtn'); const adjWallet = document.getElementById('adjWallet').value;
-            const amount = document.getElementById('adjAmount').value; const narration = document.getElementById('adjNarration').value;
+            const btn = document.getElementById('saveAdjBtn');
+            const adjWallet = document.getElementById('adjWallet').value;
+            const amount = document.getElementById('adjAmount').value;
+            const narration = document.getElementById('adjNarration').value;
             if(amount === "") { alert("कृपया रक्कम भरा!"); return; }
-
-            let updateData = {
-                category: "Adjustment", service: adjWallet, amount: Number(amount), bankSource: "-", expenseSource: "-",
-                details: narration ? `Opening/Adjustment (${narration})` : "Opening/Adjustment",
-                mobile: "-", village: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-", commission: 0
-            };
 
             btn.disabled = true; btn.innerText = "Updating...";
 
-            if(editAdjId) {
-                db.collection("transactions").doc(editAdjId).update(updateData).then(() => {
-                    document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = "";
-                    editAdjId = null; btn.disabled = false; btn.innerText = "Update Balance"; alert("बॅलन्स अपडेट झाला!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Update Balance"; });
-            } else {
-                updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-                db.collection("transactions").add(updateData).then(() => {
-                    document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = "";
-                    btn.disabled = false; btn.innerText = "Update Balance"; alert("बॅलन्स सेव्ह झाला!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Update Balance"; });
-            }
+            db.collection("transactions").add({
+                category: "Adjustment", service: adjWallet, amount: Number(amount), bankSource: "-", expenseSource: "-",
+                details: narration ? `Opening/Adjustment (${narration})` : "Opening/Adjustment",
+                mobile: "-", village: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-",
+                commission: 0, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = "";
+                btn.disabled = false; btn.innerText = "Update Balance";
+                alert("बॅलन्स अपडेट झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Update Balance";
+            });
         }
 
         function saveEntry() {
-            const btn = document.getElementById('saveEntryBtn'); const service = document.getElementById('serviceType').value;
+            const btn = document.getElementById('saveEntryBtn');
+            const service = document.getElementById('serviceType').value;
             const amount = parseFloat(document.getElementById('amount').value) || 0;
             const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-";
             const expenseSource = (service === "Shop Expense" || service.includes("Advance") || service.includes("Hand Loan")) ? document.getElementById('expenseSource').value : "-";
-            const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value;
-            const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value;
-            const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-";
-            const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-";
+            const mobile = document.getElementById('mobile').value;
+            const details = document.getElementById('details').value;
+            const village = document.getElementById('villageInput').value || "-";
+            const payStatus = document.getElementById('payStatus').value;
+            const purpose = document.getElementById('purpose').value || "-";
+            const idProof = document.getElementById('idProof').value || "-";
+            const commission = document.getElementById('commission').value || 0;
+            const narration = document.getElementById('entryNarration').value || "-";
             const customDateVal = document.getElementById('entryCustomDate').value;
 
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
-            if(amount >= 10000 && (idProof === "" || idProof === "-")) { alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!"); document.getElementById('idProof').focus(); return; }
 
-            let updateData = { category: "General", service, amount: Number(amount), bankSource, expenseSource, details, mobile, village, payStatus, purpose, idProof, commission: Number(commission), narration };
+            if(amount >= 10000 && (idProof === "" || idProof === "-")) {
+                alert("⚠️ नियमानुसार ₹१०,००० किंवा त्यापेक्षा जास्त रकमेसाठी पॅन/आधार नंबर टाकणे सक्तीचे आहे!");
+                document.getElementById('idProof').focus();
+                return;
+            }
 
-            if(customDateVal) { updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); } 
-            else if (!editEntryId) { updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp(); }
+            // Handle Custom Date if selected
+            let finalTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+            if(customDateVal) {
+                finalTimestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal));
+            }
 
             btn.disabled = true; btn.innerText = "Saving...";
 
-            if(editEntryId) {
-                db.collection("transactions").doc(editEntryId).update(updateData).then(() => {
-                    resetEntryForm(); editEntryId = null; btn.disabled = false; btn.innerText = "Save Transaction Entry"; alert("व्यवहार अपडेट झाला!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Transaction Entry"; });
-            } else {
-                db.collection("transactions").add(updateData).then(() => {
-                    resetEntryForm(); btn.disabled = false; btn.innerText = "Save Transaction Entry"; alert("व्यवहार सेव्ह झाला!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Transaction Entry"; });
-            }
+            db.collection("transactions").add({
+                category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
+                mobile, village, payStatus, purpose, idProof,
+                commission: Number(commission), narration, timestamp: finalTimestamp
+            }).then(() => {
+                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = ""; document.getElementById('entryCustomDate').value = "";
+                btn.disabled = false; btn.innerText = "Save Transaction Entry";
+                alert("व्यवहार सेव्ह झाला!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Transaction Entry";
+            });
         }
-        function resetEntryForm() { document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = ""; document.getElementById('entryCustomDate').value = ""; }
 
         function saveMahaonline() {
-            const btn = document.getElementById('saveMahaBtn'); const service = document.getElementById('moService').value;
-            const mobile = document.getElementById('moMobile').value; const details = document.getElementById('moName').value;
-            const village = document.getElementById('moVillage').value || "-"; const totalAmount = document.getElementById('moTotal').value;
-            const paidAmount = document.getElementById('moPaid').value; const pendingAmount = document.getElementById('moPending').value;
-            const payMode = document.getElementById('moPayMode').value; const customDateVal = document.getElementById('moCustomDate').value;
+            const btn = document.getElementById('saveMahaBtn');
+            const service = document.getElementById('moService').value;
+            const mobile = document.getElementById('moMobile').value;
+            const details = document.getElementById('moName').value;
+            const village = document.getElementById('moVillage').value || "-";
+            const totalAmount = document.getElementById('moTotal').value;
+            const paidAmount = document.getElementById('moPaid').value;
+            const pendingAmount = document.getElementById('moPending').value;
+            const payMode = document.getElementById('moPayMode').value;
+            const customDateVal = document.getElementById('moCustomDate').value;
 
             if(mobile.length !== 10 || details === "" || totalAmount === "" || paidAmount === "") { alert("कृपया बरोबर मोबाईल नंबर, नाव आणि फी भरा!"); return; }
 
-            let updateData = { category: "Mahaonline", service: service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount), bankSource: payMode, expenseSource: "-", details: details, mobile: mobile, village: village, payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-", commission: 0, narration: "Mahaonline Service" };
-
-            if(customDateVal) { updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); } 
-            else if (!editMahaId) { updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp(); }
+            let finalTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+            if(customDateVal) {
+                finalTimestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal));
+            }
 
             btn.disabled = true; btn.innerText = "Saving...";
 
-            if(editMahaId) {
-                db.collection("transactions").doc(editMahaId).update(updateData).then(() => {
-                    resetMahaForm(); editMahaId = null; btn.disabled = false; btn.innerText = "Save Mahaonline Entry"; alert("महाऑनलाइन अपडेट झाले!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Mahaonline Entry"; });
-            } else {
-                db.collection("transactions").add(updateData).then(() => {
-                    resetMahaForm(); btn.disabled = false; btn.innerText = "Save Mahaonline Entry"; alert("महाऑनलाइन सेव्ह झाले!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Mahaonline Entry"; });
+            db.collection("transactions").add({
+                category: "Mahaonline", service: service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount),
+                bankSource: payMode, expenseSource: "-", details: details, mobile: mobile, village: village,
+                payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
+                commission: 0, narration: "Mahaonline Service", timestamp: finalTimestamp
+            }).then(() => {
+                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; document.getElementById('moCustomDate').value = "";
+                btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
+                alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
+            });
+        }
+
+        function deleteEntry(docId) {
+            if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); }
+        }
+
+        function deleteAllEntries() {
+            if(confirm("सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) {
+                let code = prompt("सुरक्षेसाठी 'DELETE' असे टाइप करा:");
+                if(code === "DELETE") {
+                    allTransactions.forEach(t => { db.collection("transactions").doc(t.id).delete(); });
+                    alert("सर्व डेटा कायमचा डिलीट झाला आहे!");
+                } else { alert("शब्द चुकीचा आहे. डिलीट प्रक्रिया रद्द केली."); }
             }
         }
-        function resetMahaForm() { document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; document.getElementById('moCustomDate').value = ""; }
 
-        function deleteEntry(docId) { if(confirm("ही नोंद कायमची डिलीट करायची का?")) { db.collection("transactions").doc(docId).delete(); } }
-        function deleteAllEntries() { if(confirm("सावधान! तुम्ही 'सर्व' एन्ट्रीज कायमच्या डिलीट करत आहात. खात्री आहे का?")) { let code = prompt("सुरक्षेसाठी 'DELETE' असे टाइप करा:"); if(code === "DELETE") { allTransactions.forEach(t => { db.collection("transactions").doc(t.id).delete(); }); alert("सर्व डेटा कायमचा डिलीट झाला आहे!"); } else { alert("शब्द चुकीचा आहे. डिलीट प्रक्रिया रद्द केली."); } } }
+        // ================= EXPORT EXCEL =================
+        function downloadExcel() {
+            let csv = []; 
+            let rows = document.querySelectorAll("#reportTable tr");
+            
+            for (let i = 0; i < rows.length; i++) {
+                let row = []; 
+                let cols = rows[i].querySelectorAll("td, th");
+                
+                for (let j = 0; j < cols.length; j++) {
+                    if(cols[j].classList.contains("no-print")) continue;
+                    let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); 
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(","));
+            }
+            let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"});
+            let downloadLink = document.createElement("a"); 
+            downloadLink.download = "Pusdekar_Full_Statement.csv";
+            downloadLink.href = window.URL.createObjectURL(csvFile); 
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink); 
+            downloadLink.click();
+        }
+
+        function getPromoText() {
+            let promoMsg = localStorage.getItem("wa_promo_msg");
+            if(promoMsg === null) promoMsg = "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, सेंट्रल कास्ट, पॅन कार्ड, PVC कार्ड, RC बुक, आयुष्यमान कार्ड इत्यादी.";
+            return promoMsg.trim() !== "" ? `\n${promoMsg}` : "";
+        }
 
         // ================= PENDING TASKS =================
         function addPendingTask() {
-            const btn = document.getElementById('savePendingBtn'); const name = document.getElementById('ptName').value;
-            const mobile = document.getElementById('ptMobile').value || "-"; const details = document.getElementById('ptDetails').value;
+            const btn = document.getElementById('savePendingBtn');
+            const name = document.getElementById('ptName').value;
+            const mobile = document.getElementById('ptMobile').value || "-";
+            const details = document.getElementById('ptDetails').value;
             if(name === "" || details === "") { alert("कृपया ग्राहकाचे नाव आणि कामाचा तपशील भरा!"); return; }
 
             btn.disabled = true; btn.innerText = "Saving...";
 
-            if(editTaskId) {
-                db.collection("pendingTasks").doc(editTaskId).update({ customerName: name, mobile: mobile, taskDetails: details }).then(() => {
-                    document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
-                    editTaskId = null; btn.disabled = false; btn.innerText = "Save Pending Task"; alert("पेंडिंग काम अपडेट झाले!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Pending Task"; });
-            } else {
-                db.collection("pendingTasks").add({ customerName: name, mobile: mobile, taskDetails: details, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => {
-                    document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
-                    btn.disabled = false; btn.innerText = "Save Pending Task"; alert("पेंडिंग काम सेव्ह झाले!");
-                }).catch(e => { btn.disabled = false; btn.innerText = "Save Pending Task"; });
-            }
-        }
-
-        function editTask(id) {
-            db.collection("pendingTasks").doc(id).get().then(doc => {
-                if(doc.exists) {
-                    let data = doc.data();
-                    document.getElementById('ptName').value = data.customerName; document.getElementById('ptMobile').value = data.mobile === "-" ? "" : data.mobile;
-                    document.getElementById('ptDetails').value = data.taskDetails; editTaskId = id;
-                    document.getElementById('savePendingBtn').innerText = "🔄 पेंडिंग काम अपडेट करा";
-                    switchTab('pending'); window.scrollTo(0,0);
-                }
+            db.collection("pendingTasks").add({
+                customerName: name, mobile: mobile, taskDetails: details,
+                status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
+                btn.disabled = false; btn.innerText = "Save Pending Task";
+                alert("पेंडिंग काम सेव्ह झाले!");
+            }).catch(e => {
+                btn.disabled = false; btn.innerText = "Save Pending Task";
             });
         }
 
@@ -1023,6 +1131,7 @@
                 tasks.sort((a, b) => b.timestamp - a.timestamp);
 
                 let promo = getPromoText();
+
                 tasks.forEach(data => {
                     let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
                     let waMsg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\nनमस्कार *${data.customerName}*,\nआपले खालील काम प्रलंबित (Pending) आहे:\n\n*तपशील:* ${data.taskDetails}\n\nकृपया लवकरच संपर्क साधा.\n------------------------${promo}\n*धन्यवाद!*`);
@@ -1032,7 +1141,7 @@
                         <td>${dateStr}</td><td><b>${data.customerName}</b></td><td>${data.mobile}</td>
                         <td>${data.taskDetails}</td><td class="text-red">Pending</td>
                         <td>
-                            <button class="edit-btn" onclick="editTask('${data.id}')">✏️ Edit</button>
+                            <a href="${waLink}" target="_blank" class="wa-btn">💬 WA</a>
                             <button class="done-btn" onclick="markTaskDone('${data.id}')">✔</button> 
                             <button class="delete-btn" onclick="deletePendingTask('${data.id}')">❌</button>
                         </td>
@@ -1062,13 +1171,20 @@
         function getSafeString(val) { return val ? val.toString() : "-"; }
 
         function processCalculations(dataList) {
-            let incT=0, expT=0, incM=0, expM=0; let f1Bal=0, f2Bal=0, pwBal=0, pnBal=0, mBal=0, cBal=0;
+            let incT=0, expT=0, incM=0, expM=0; 
+            let f1Bal=0, f2Bal=0, pwBal=0, pnBal=0, mBal=0, cBal=0;
             let bankBal = {}; BANK_KEYS.forEach(k => bankBal[k] = 0);
+
             const now = new Date(); const todayDateStr = now.toLocaleDateString('en-IN'); const currentMonth = now.getMonth(); const currentYear = now.getFullYear();
 
             dataList.forEach((data) => {
                 let isToday = false, isThisMonth = false;
-                if (data.timestamp) { const docDate = data.timestamp.toDate(); if(docDate.toLocaleDateString('en-IN') === todayDateStr) isToday = true; if(docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) isThisMonth = true; }
+                if (data.timestamp) {
+                    const docDate = data.timestamp.toDate();
+                    if(docDate.toLocaleDateString('en-IN') === todayDateStr) isToday = true;
+                    if(docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) isThisMonth = true;
+                }
+
                 const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
                 let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
 
@@ -1084,44 +1200,70 @@
                     else if(svc === "Payworld Opening") pwBal += amt; else if(svc === "Payworld Services") { pwBal += amt; cBal -= amt; } else if(svc === "Payworld Cash Deposit") { pwBal -= amt; cBal += amt; }
                     else if(svc === "Paynearby Opening") pnBal += amt; else if(svc === "Paynearby Services") { pnBal += amt; cBal -= amt; } else if(svc === "Paynearby Cash Deposit") { pnBal -= amt; cBal += amt; }
                     else if(svc === "Mahapower Opening") mBal += amt; else if(svc === "Mahapower Bill Collection") { mBal -= amt; cBal += amt; }
-                    else if(svc === "Cash Opening") cBal += amt; else if(svc.includes("Opening") && bankBal[svc.replace(" Opening", "")] !== undefined) { bankBal[svc.replace(" Opening", "")] += amt; }
-                    else if(svc === "Money Transfer") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] -= amt; cBal += amt; } else if(svc === "UPI Cash Given") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] += amt; cBal -= amt; }
-                    else if(svc === "Advance Received" || svc === "Hand Loan Returned") { if(bankBal[eSrc] !== undefined) bankBal[eSrc] += amt; else if(eSrc === "Fino") f1Bal += amt; else if(eSrc === "Fino2") f2Bal += amt; else if(eSrc === "Payworld") pwBal += amt; else if(eSrc === "Paynearby") pnBal += amt; else if(eSrc === "Mahapower") mBal += amt; else cBal += amt; }
-                    else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") { if(bankBal[eSrc] !== undefined) bankBal[eSrc] -= amt; else if(eSrc === "Fino") f1Bal -= amt; else if(eSrc === "Fino2") f2Bal -= amt; else if(eSrc === "Payworld") pwBal -= amt; else if(eSrc === "Paynearby") pnBal -= amt; else if(eSrc === "Mahapower") mBal -= amt; else cBal -= amt; }
+                    else if(svc === "Cash Opening") cBal += amt;
+                    else if(svc.includes("Opening") && bankBal[svc.replace(" Opening", "")] !== undefined) { bankBal[svc.replace(" Opening", "")] += amt; }
+                    else if(svc === "Money Transfer") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] -= amt; cBal += amt; }
+                    else if(svc === "UPI Cash Given") { if(bankBal[bSrc] !== undefined) bankBal[bSrc] += amt; cBal -= amt; }
+                    else if(svc === "Advance Received" || svc === "Hand Loan Returned") {
+                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] += amt; else if(eSrc === "Fino") f1Bal += amt; else if(eSrc === "Fino2") f2Bal += amt; else if(eSrc === "Payworld") pwBal += amt; else if(eSrc === "Paynearby") pnBal += amt; else if(eSrc === "Mahapower") mBal += amt; else cBal += amt;
+                    }
+                    else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
+                        if(bankBal[eSrc] !== undefined) bankBal[eSrc] -= amt; else if(eSrc === "Fino") f1Bal -= amt; else if(eSrc === "Fino2") f2Bal -= amt; else if(eSrc === "Payworld") pwBal -= amt; else if(eSrc === "Paynearby") pnBal -= amt; else if(eSrc === "Mahapower") mBal -= amt; else cBal -= amt; 
+                    }
+
                     if(isToday) { if(svc === "Shop Expense") expT += amt; else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incT += comm; }
                     if(isThisMonth) { if(svc === "Shop Expense") expM += amt; else if(!svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan")) incM += comm; }
                 }
             });
 
-            let totalUpi = 0; BANK_KEYS.forEach((key, i) => { totalUpi += bankBal[key]; document.getElementById('bal-b'+(i+1)).innerText = "₹ " + bankBal[key]; });
-            document.getElementById('grandTotalBal').innerText = "₹ " + (f1Bal + f2Bal + pwBal + pnBal + mBal + totalUpi + cBal); document.getElementById('f1Bal').innerText = "₹ " + f1Bal; document.getElementById('f2Bal').innerText = "₹ " + f2Bal; document.getElementById('pwBal').innerText = "₹ " + pwBal; document.getElementById('pnBal').innerText = "₹ " + pnBal; document.getElementById('mBal').innerText = "₹ " + mBal; document.getElementById('cBal').innerText = "₹ " + cBal; document.getElementById('totalUpiBal').innerText = "₹ " + totalUpi; document.getElementById('todayInc').innerText = "₹ " + incT; document.getElementById('todayExp').innerText = "₹ " + expT; document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = "₹ " + expM;
+            let totalUpi = 0;
+            BANK_KEYS.forEach((key, i) => { totalUpi += bankBal[key]; document.getElementById('bal-b'+(i+1)).innerText = "₹ " + bankBal[key]; });
+
+            document.getElementById('grandTotalBal').innerText = "₹ " + (f1Bal + f2Bal + pwBal + pnBal + mBal + totalUpi + cBal);
+            document.getElementById('f1Bal').innerText = "₹ " + f1Bal; document.getElementById('f2Bal').innerText = "₹ " + f2Bal;
+            document.getElementById('pwBal').innerText = "₹ " + pwBal; document.getElementById('pnBal').innerText = "₹ " + pnBal;
+            document.getElementById('mBal').innerText = "₹ " + mBal; document.getElementById('cBal').innerText = "₹ " + cBal;
+            document.getElementById('totalUpiBal').innerText = "₹ " + totalUpi;
+            document.getElementById('todayInc').innerText = "₹ " + incT; document.getElementById('todayExp').innerText = "₹ " + expT;
+            document.getElementById('monthInc').innerText = "₹ " + incM; document.getElementById('monthExp').innerText = monthExpVal(incM, expM);
+
             filterData();
         }
+
+        function monthExpVal(inc, exp) { return "₹ " + exp; }
 
         function renderMahaonlineTable(dataList) {
             const moTable = document.getElementById("moTableBody"); moTable.innerHTML = "";
             let moData = dataList.filter(d => d.category === "Mahaonline").sort((a, b) => b.timestamp - a.timestamp);
             let promo = getPromoText();
+            
             moData.forEach((data) => {
-                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading..."; let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
+                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN') : "Loading...";
+                let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
+                let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
+                
                 let waEntryLink = "";
-                if(data.mobile && data.mobile !== "-") { let msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`); waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`; }
+                if(data.mobile && data.mobile !== "-") {
+                    let msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
+                    waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
+                }
                 
                 moTable.innerHTML += `<tr>
                     <td>${dateStr}</td><td><b>${data.service}</b></td><td>${data.details}<br><small>${data.mobile}</small>${waEntryLink}</td>
                     <td>${data.village}</td><td>${payMode}</td><td><b>₹ ${data.totalFee || 0}</b></td>
                     <td class="text-green">+ ₹ ${data.amount}</td><td class="text-red">₹ ${data.pendingAmount || 0}</td>
-                    <td class="no-print">
-                        <button class="edit-btn" onclick="editMaha('${data.id}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button>
-                    </td>
+                    <td class="no-print">${deleteBtnHtml}</td>
                 </tr>`;
             });
         }
 
+        // ================= STATEMENT TABLE =================
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
-            const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0; let sumPlus = 0; let sumMinus = 0; let sumComm = 0; let promo = getPromoText();
+            const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0;
+            let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
+            let promo = getPromoText();
+
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
 
             dataList.forEach((data) => {
@@ -1137,8 +1279,9 @@
                     if(data.category === "Mahaonline") runningBal += amt; else if(comm > 0) runningBal += comm;
                 } else {
                     let impactAmt = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === selectedWallet) impactAmt = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impactAmt = amt; } 
-                    else {
+                    if(data.category === "Mahaonline") {
+                        if(bSrc === selectedWallet) impactAmt = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impactAmt = amt;
+                    } else {
                         if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impactAmt = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impactAmt = -amt; }
                         else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impactAmt = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impactAmt = -amt; }
                         else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impactAmt = -amt; }
@@ -1160,99 +1303,138 @@
                 if(serviceDisplay.includes("Payworld")) serviceDisplay = serviceDisplay.replace("Payworld", pw); if(serviceDisplay.includes("Paynearby")) serviceDisplay = serviceDisplay.replace("Paynearby", pn);
                 if(serviceDisplay.includes("Mahapower")) serviceDisplay = serviceDisplay.replace("Mahapower", mp);
 
-                let amtDisplay = `₹ ${data.amount}`; let isPlus = false; let isMinus = false;
+                let amtDisplay = `₹ ${data.amount}`;
+                let isPlus = false; let isMinus = false;
 
-                if(data.category === "Mahaonline") { serviceDisplay = `<b>[Mahaonline]</b> ${svc}`; let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true; }
-                else if(svc === "Money Transfer" || svc === "UPI Cash Given") { let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`; if(svc === "Money Transfer") isPlus = true; else isMinus = true; } 
-                else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") { let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn; amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`; isMinus = true; } 
-                else if(svc === "Advance Received" || svc === "Hand Loan Returned" || svc === "Payworld Cash Deposit" || svc === "Paynearby Cash Deposit") { let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn; amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`; isPlus = true; } 
-                else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true; } else if(!svc.includes("Opening")) { amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true; }
+                if(data.category === "Mahaonline") {
+                    serviceDisplay = `<b>[Mahaonline]</b> ${svc}`;
+                    let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; 
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`;
+                    isPlus = true;
+                }
+                else if(svc === "Money Transfer" || svc === "UPI Cash Given") {
+                    let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`;
+                    if(svc === "Money Transfer") isPlus = true; else isMinus = true; 
+                } else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") {
+                    let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
+                    if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`;
+                    isMinus = true;
+                } else if(svc === "Advance Received" || svc === "Hand Loan Returned" || svc === "Payworld Cash Deposit" || svc === "Paynearby Cash Deposit") {
+                    let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc;
+                    if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn;
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`;
+                    isPlus = true;
+                } else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { 
+                    amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true;
+                } else if(!svc.includes("Opening")) { 
+                    amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true;
+                }
 
                 if(selectedWallet !== "All") {
                     let impact = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === selectedWallet) impact = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impact = amt; } else {
+                    if(data.category === "Mahaonline") {
+                        if(bSrc === selectedWallet) impact = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impact = amt;
+                    } else {
                         if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impact = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impact = -amt; }
                         else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impact = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impact = -amt; }
                         else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impact = -amt; }
                         else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impact = -amt; }
                         else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impact = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) impact = -amt; }
-                        else if (selectedWallet === "Cash") { if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt; else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt; } 
-                        else { if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impact = amt; else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impact = -amt; }
+                        else if (selectedWallet === "Cash") {
+                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
+                        } else {
+                            if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impact = amt;
+                            else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impact = -amt;
+                        }
                     }
-                    if(impact > 0) { isPlus = true; isMinus = false; amtDisplay = `<span class="text-green">+ ₹ ${Math.abs(impact)}</span>`; } else if(impact < 0) { isPlus = false; isMinus = true; amtDisplay = `<span class="text-red">- ₹ ${Math.abs(impact)}</span>`; } else { isPlus = false; isMinus = false; }
+                    if(impact > 0) { isPlus = true; isMinus = false; amtDisplay = `<span class="text-green">+ ₹ ${Math.abs(impact)}</span>`; }
+                    else if(impact < 0) { isPlus = false; isMinus = true; amtDisplay = `<span class="text-red">- ₹ ${Math.abs(impact)}</span>`; }
+                    else { isPlus = false; isMinus = false; }
                 }
 
-                if(isPlus) sumPlus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); if(isMinus) sumMinus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); sumComm += comm;
+                if(isPlus) sumPlus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt);
+                if(isMinus) sumMinus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt);
+                sumComm += comm;
+
                 let purposeText = data.purpose || "-"; if(data.narration && data.narration !== "-") { purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`; }
-                
+                let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
+
                 let waEntryLink = "";
                 if(data.mobile && data.mobile !== "-") {
                     let msg = "";
-                    if (data.category === "Mahaonline") { msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`); } 
-                    else { msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*रक्कम:* ₹${data.amount}\n*स्थिती:* यशस्वी (Success)\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`); }
+                    if (data.category === "Mahaonline") {
+                        msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*एकूण फी:* ₹${data.totalFee || 0}\n*जमा:* ₹${data.amount}\n*बाकी (उधार):* ₹${data.pendingAmount || 0}\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
+                    } else {
+                        msg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\n*नाव:* ${data.details}\n*सेवा:* ${data.service}\n*रक्कम:* ₹${data.amount}\n*स्थिती:* यशस्वी (Success)\n------------------------${promo}\n*धन्यवाद! पुन्हा भेट द्या.*`);
+                    }
                     waEntryLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="padding:2px 5px; font-size:10px; margin-top:3px;">💬 WA पावती</a>`;
                 }
 
+                let villageText = (data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : "";
+                let idProofText = (data.idProof && data.idProof !== "-") ? data.idProof : "-";
+                let mobileText = (data.mobile && data.mobile !== "-") ? data.mobile : "-";
+
                 table.innerHTML += `<tr>
-                    <td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b>${(data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : ""}${waEntryLink}</td>
-                    <td>${(data.mobile && data.mobile !== "-") ? data.mobile : "-"}</td><td><b>${(data.idProof && data.idProof !== "-") ? data.idProof : "-"}</b></td><td>${data.payStatus}</td>
-                    <td>${purposeText}</td><td>${amtDisplay}</td><td class="text-green">+ ₹ ${data.commission || 0}</td><td><strong>₹ ${runningBal}</strong></td>
-                    <td class="no-print">
-                        <button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button>
-                        <button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button>
-                    </td>
+                    <td>${dateStr}</td>
+                    <td>${serviceDisplay}</td>
+                    <td><b>${data.details}</b>${villageText}${waEntryLink}</td>
+                    <td>${mobileText}</td>
+                    <td><b>${idProofText}</b></td>
+                    <td>${data.payStatus}</td>
+                    <td>${purposeText}</td>
+                    <td>${amtDisplay}</td>
+                    <td class="text-green">+ ₹ ${data.commission || 0}</td>
+                    <td><strong>₹ ${runningBal}</strong></td>
+                    <td class="no-print">${deleteBtnHtml}</td>
                 </tr>`;
             });
 
-            document.getElementById("statementTotalFoot").innerHTML = `<tr><td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td><td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td><td class="text-green" style="font-size:14px;">+ ₹ ${sumComm}</td><td colspan="2"></td></tr>`;
+            document.getElementById("statementTotalFoot").innerHTML = `<tr>
+                <td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td>
+                <td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td>
+                <td class="text-green" style="font-size:14px;">+ ₹ ${sumComm}</td>
+                <td colspan="2"></td>
+            </tr>`;
         }
 
         function filterData() {
-            const selectedWallet = document.getElementById('walletFilter').value; const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value;
+            const selectedWallet = document.getElementById('walletFilter').value;
+            const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value;
             let filtered = allTransactions.filter(item => {
                 let matchWallet = true;
                 if(selectedWallet !== "All") {
                     let bSrc = getSafeString(item.bankSource); let eSrc = getSafeString(item.expenseSource); let svc = getSafeString(item.service);
                     if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc];
                     if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) { svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening"; }
+                    
                     if(item.category === "Mahaonline") matchWallet = (bSrc === selectedWallet) || (selectedWallet === "Cash" && bSrc === "Cash");
-                    else if(selectedWallet === "Fino") matchWallet = (svc.includes("Fino") && !svc.includes("Fino2")) || eSrc === "Fino"; else if(selectedWallet === "Fino2") matchWallet = svc.includes("Fino2") || eSrc === "Fino2"; else if(selectedWallet === "Payworld") matchWallet = svc.includes("Payworld") || eSrc === "Payworld"; else if(selectedWallet === "Paynearby") matchWallet = svc.includes("Paynearby") || eSrc === "Paynearby"; else if(selectedWallet === "Mahapower") matchWallet = svc.includes("Mahapower") || eSrc === "Mahapower"; else if(selectedAssetCheck(selectedWallet, svc, bSrc, eSrc)) matchWallet = true; else matchWallet = svc.includes(selectedWallet) || bSrc === selectedWallet || eSrc === selectedWallet;
-                } return matchWallet;
+                    else if(selectedWallet === "Fino") matchWallet = (svc.includes("Fino") && !svc.includes("Fino2")) || eSrc === "Fino";
+                    else if(selectedWallet === "Fino2") matchWallet = svc.includes("Fino2") || eSrc === "Fino2";
+                    else if(selectedWallet === "Payworld") matchWallet = svc.includes("Payworld") || eSrc === "Payworld";
+                    else if(selectedWallet === "Paynearby") matchWallet = svc.includes("Paynearby") || eSrc === "Paynearby";
+                    else if(selectedWallet === "Mahapower") matchWallet = svc.includes("Mahapower") || eSrc === "Mahapower";
+                    else if(selectedAssetCheck(selectedWallet, svc, bSrc, eSrc)) matchWallet = true;
+                    else matchWallet = svc.includes(selectedWallet) || bSrc === selectedWallet || eSrc === selectedWallet;
+                }
+                return matchWallet;
             });
-            if(f && t) { const fromDate = new Date(f); fromDate.setHours(0,0,0,0); const toDate = new Date(t); toDate.setHours(23,59,59,999); filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; }); }
+            if(f && t) {
+                const fromDate = new Date(f); fromDate.setHours(0,0,0,0); const toDate = new Date(t); toDate.setHours(23,59,59,999);
+                filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; });
+            }
             renderStatementTable(filtered);
         }
 
-        function selectedAssetCheck(sel, svc, bSrc, eSrc) { if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash"; return false; }
-        function resetFilter() { document.getElementById('walletFilter').value = "All"; document.getElementById('fromDate').value = ""; document.getElementById('toDate').value = ""; renderStatementTable(allTransactions); }
-
-        function clearUdhar(docId, category, pendingAmount, name, mobile) {
-            if(confirm("ही उधारी जमा झाली असे मार्क करायचे का?\n(रक्कम गल्ल्यात / Cash मध्ये ऍड होईल)")) {
-                db.collection("transactions").doc(docId).update({ payStatus: "Paid" }).then(() => {
-                    db.collection("transactions").add({ category: "General", service: "Udhar Received", amount: Number(pendingAmount), bankSource: "Cash", expenseSource: "-", details: name + " (उधारी जमा)", mobile: mobile, village: "-", payStatus: "Paid", purpose: "उधारी क्लिअर झाली", idProof: "-", commission: 0, narration: "Udhar Cleared", timestamp: firebase.firestore.FieldValue.serverTimestamp() }); alert("उधारी गल्ल्यात (Cash) जमा झाली!");
-                });
-            }
-        }
-        
-        // ================= UDHAR TICKER AND TABLE =================
-        function renderUdharKhata(dataList) {
-            const tbody = document.getElementById("udharTableBody"); const tickerBox = document.getElementById("udharTickerBox"); const tickerText = document.getElementById("udharTickerText"); tbody.innerHTML = ""; let totalUdhar = 0; let tickerStr = ""; let udharData = dataList.filter(d => d.payStatus === "Udhar"); let promo = getPromoText();
-            udharData.forEach(data => {
-                let pending = data.category === "Mahaonline" ? (data.pendingAmount || 0) : data.amount; totalUdhar += pending; let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "-";
-                let waMsg = encodeURIComponent(`*Pusdekar Online Center*\n------------------------\nनमस्कार *${data.details}*,\nआपली दुकानातील उधारी बाकी आहे.\n\n*सर्व्हिस:* ${data.service}\n*बाकी रक्कम:* ₹${pending}\n\nकृपया लवकरात लवकर रक्कम जमा करावी.\n------------------------${promo}\n*धन्यवाद!*`);
-                let waLink = data.mobile !== "-" ? `<a href="https://wa.me/91${data.mobile}?text=${waMsg}" target="_blank" class="wa-btn">💬 WA पाठवा</a>` : '';
-                tbody.innerHTML += `<tr>
-                    <td>${dateStr}</td><td><b>${data.details}</b></td><td>${data.mobile}</td><td>${data.service}</td><td class="text-red"><b>₹ ${pending}</b></td>
-                    <td class="no-print">${waLink}
-                        <button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button>
-                        <button class="done-btn" onclick="clearUdhar('${data.id}', '${data.category}', ${pending}, '${data.details}', '${data.mobile}')">✔️ जमा झाली</button>
-                    </td>
-                </tr>`;
-                tickerStr += ` &nbsp;&nbsp;🔴 <b>${data.details || "अज्ञात"}</b> &nbsp;👉&nbsp; <b>₹ ${pending}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `;
-            });
-            document.getElementById("totalUdharAmount").innerText = `₹ ${totalUdhar}`; if(udharData.length > 0) { tickerText.innerHTML = tickerStr; tickerBox.style.display = "flex"; } else { tickerBox.style.display = "none"; }
+        function selectedAssetCheck(sel, svc, bSrc, eSrc) {
+            if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash";
+            return false;
         }
 
+        function resetFilter() {
+            document.getElementById('walletFilter').value = "All"; document.getElementById('fromDate').value = ""; document.getElementById('toDate').value = ""; renderStatementTable(allTransactions);
+        }
     </script>
 </body>
 </html>
