@@ -200,6 +200,15 @@
 
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
+                
+                <!-- CUSTOM DATE & TIME ROW -->
+                <div class="form-row" style="background:#f8fafc; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="color:var(--primary);">व्यवहाराची तारीख व वेळ (जुनी नोंद करायची असल्यास बदला)</label>
+                        <input type="datetime-local" id="entryCustomDate" style="background:#fff;">
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>सर्व्हिसचा प्रकार</label>
@@ -447,6 +456,14 @@
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
                 
+                <!-- CUSTOM DATE & TIME FOR MAHAONLINE -->
+                <div class="form-row" style="background:#f5f3ff; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="color:#7c3aed;">महाऑनलाइन तारिख व वेळ (जुनी नोंद असल्यास बदला)</label>
+                        <input type="datetime-local" id="moCustomDate" style="background:#fff;">
+                    </div>
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>सर्व्हिस निवडा</label>
@@ -686,7 +703,6 @@
             
             if(!name || !url) { alert("लिंकचे नाव आणि URL भरणे आवश्यक आहे!"); return; }
 
-            // Double Click Protection - Button Disable
             btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("quicklinks").add({
@@ -695,7 +711,6 @@
                 document.getElementById('qlName').value = "";
                 document.getElementById('qlUrl').value = "";
                 document.getElementById('qlIcon').value = "";
-                // Re-enable Button
                 btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा";
                 alert("लिंक यशस्वीरित्या सेव्ह झाली!");
             }).catch(e => {
@@ -718,10 +733,7 @@
                 links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
 
                 links.forEach(data => {
-                    // 1. Dashboard Box
                     dashboardGrid.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
-                    
-                    // 2. Settings Table
                     tableBody.innerHTML += `<tr>
                         <td style="font-size:18px; text-align:center;">${data.icon}</td>
                         <td><b>${data.name}</b></td>
@@ -883,7 +895,6 @@
 
             if(name === "" || mobile.length !== 10) { alert("कृपया ग्राहकाचे नाव आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
-            // Double Click Protection - Button Disable
             btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("customers").doc(mobile).set({
@@ -893,7 +904,6 @@
                 document.getElementById('cMobile').value = "";
                 document.getElementById('cVillage').value = "";
                 document.getElementById('cIdProof').value = "";
-                // Re-enable Button
                 btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा";
                 alert("ग्राहक यशस्वीरित्या सेव्ह झाला!");
             }).catch(e => {
@@ -946,7 +956,6 @@
             const narration = document.getElementById('adjNarration').value;
             if(amount === "") { alert("कृपया रक्कम भरा!"); return; }
 
-            // Double Click Protection - Button Disable
             btn.disabled = true; btn.innerText = "Updating...";
 
             db.collection("transactions").add({
@@ -956,7 +965,6 @@
                 commission: 0, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('adjAmount').value = ""; document.getElementById('adjNarration').value = "";
-                // Re-enable Button
                 btn.disabled = false; btn.innerText = "Update Balance";
                 alert("बॅलन्स अपडेट झाला!");
             }).catch(e => {
@@ -978,6 +986,7 @@
             const idProof = document.getElementById('idProof').value || "-";
             const commission = document.getElementById('commission').value || 0;
             const narration = document.getElementById('entryNarration').value || "-";
+            const customDateVal = document.getElementById('entryCustomDate').value;
 
             if(amount === "" || mobile.length !== 10 || details === "" || service === "") { alert("कृपया सर्व्हिस, रक्कम आणि बरोबर १० अंकी मोबाईल नंबर भरा!"); return; }
 
@@ -987,16 +996,20 @@
                 return;
             }
 
-            // Double Click Protection - Button Disable
+            // Handle Custom Date if selected
+            let finalTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+            if(customDateVal) {
+                finalTimestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal));
+            }
+
             btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("transactions").add({
                 category: "General", service, amount: Number(amount), bankSource, expenseSource, details, 
                 mobile, village, payStatus, purpose, idProof,
-                commission: Number(commission), narration, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                commission: Number(commission), narration, timestamp: finalTimestamp
             }).then(() => {
-                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = "";
-                // Re-enable Button
+                document.getElementById('amount').value = ""; document.getElementById('mobile').value = ""; document.getElementById('details').value = ""; document.getElementById('purpose').value = ""; document.getElementById('idProof').value = ""; document.getElementById('commission').value = ""; document.getElementById('entryNarration').value = ""; document.getElementById('entryCustomDate').value = "";
                 btn.disabled = false; btn.innerText = "Save Transaction Entry";
                 alert("व्यवहार सेव्ह झाला!");
             }).catch(e => {
@@ -1014,20 +1027,24 @@
             const paidAmount = document.getElementById('moPaid').value;
             const pendingAmount = document.getElementById('moPending').value;
             const payMode = document.getElementById('moPayMode').value;
+            const customDateVal = document.getElementById('moCustomDate').value;
 
             if(mobile.length !== 10 || details === "" || totalAmount === "" || paidAmount === "") { alert("कृपया बरोबर मोबाईल नंबर, नाव आणि फी भरा!"); return; }
 
-            // Double Click Protection - Button Disable
+            let finalTimestamp = firebase.firestore.FieldValue.serverTimestamp();
+            if(customDateVal) {
+                finalTimestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal));
+            }
+
             btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("transactions").add({
                 category: "Mahaonline", service: service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount),
                 bankSource: payMode, expenseSource: "-", details: details, mobile: mobile, village: village,
                 payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-",
-                commission: 0, narration: "Mahaonline Service", timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                commission: 0, narration: "Mahaonline Service", timestamp: finalTimestamp
             }).then(() => {
-                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; 
-                // Re-enable Button
+                document.getElementById('moMobile').value = ""; document.getElementById('moName').value = ""; document.getElementById('moVillage').value = ""; document.getElementById('moTotal').value = ""; document.getElementById('moPaid').value = ""; document.getElementById('moPending').value = "0"; document.getElementById('moCustomDate').value = "";
                 btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
                 alert("महाऑनलाइन एन्ट्री सेव्ह झाली!");
             }).catch(e => {
@@ -1088,7 +1105,6 @@
             const details = document.getElementById('ptDetails').value;
             if(name === "" || details === "") { alert("कृपया ग्राहकाचे नाव आणि कामाचा तपशील भरा!"); return; }
 
-            // Double Click Protection - Button Disable
             btn.disabled = true; btn.innerText = "Saving...";
 
             db.collection("pendingTasks").add({
@@ -1096,7 +1112,6 @@
                 status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById('ptName').value = ""; document.getElementById('ptMobile').value = ""; document.getElementById('ptDetails').value = "";
-                // Re-enable Button
                 btn.disabled = false; btn.innerText = "Save Pending Task";
                 alert("पेंडिंग काम सेव्ह झाले!");
             }).catch(e => {
@@ -1223,7 +1238,7 @@
             let promo = getPromoText();
             
             moData.forEach((data) => {
-                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading...";
+                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN') : "Loading...";
                 let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
                 let deleteBtnHtml = `<button class="delete-btn" onclick="deleteEntry('${data.id}')">❌ Delete</button>`;
                 
