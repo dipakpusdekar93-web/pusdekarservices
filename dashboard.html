@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusdekar Online Center - Management</title>
-    <!-- Chart.js Library for Graphical Charts -->
+    <!-- Chart.js Library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -34,30 +34,27 @@
         .view-section { display: none; }
         .view-section.active-view { display: block; }
 
-        /* Chart Container */
-        .chart-container { background: white; padding: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; margin-bottom: 15px; height: 300px; position: relative; }
-
         /* Udhar Ticker / Marquee */
         .udhar-ticker { background: #fef2f2; color: #dc2626; padding: 10px 15px; font-weight: bold; border-left: 4px solid #dc2626; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: var(--card-shadow); font-size: 14px; }
         .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
         .udhar-ticker marquee { flex-grow: 1; cursor: pointer; }
 
-        /* Quick Links */
+        /* Quick Links Dashboard */
         .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
         .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
         .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-        .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; }
+        .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; transition: all 0.2s; }
         .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
         .ql-icon { font-size: 20px; margin-bottom: 4px; }
         
-        /* Dashboard Cards */
+        /* Dashboard Compact Cards */
         .grand-total-card { background: linear-gradient(135deg, #059669, #047857); color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; box-shadow: var(--card-shadow); }
         .grand-total-card h4 { margin: 0 0 5px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .grand-total-card h2 { margin: 0; font-size: 28px; font-weight: 700; }
 
         .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .w-card { color: white; padding: 12px 10px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); }
-        .w-card h4 { margin: 0 0 5px 0; font-size: 11px; opacity: 0.9; }
+        .w-card h4 { margin: 0 0 5px 0; font-size: 11px; opacity: 0.9; font-weight: 600; }
         .w-card h3 { margin: 0; font-size: 18px; font-weight: 700; }
         
         .bg-fino1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
@@ -71,41 +68,59 @@
         .banks-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
         .banks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; }
         .b-card { background: #f8fafc; border: 1px solid #cbd5e1; border-top: 3px solid var(--primary); padding: 8px 5px; border-radius: 6px; text-align: center; }
-        
+        .b-card span { display: block; font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 2px; }
+        .b-card strong { font-size: 13px; color: #0f172a; }
+
         .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
+        .card h4 { margin: 0 0 5px 0; color: #64748b; font-size: 11px; font-weight: 600; }
+        .card h3 { margin: 0; font-size: 18px; font-weight: 700; }
         .card.income h3 { color: var(--success); }
         .card.expense h3 { color: var(--danger); }
 
         .container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
+        .container h3 { margin: 0 0 12px 0; font-size: 15px; color: #0f172a; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
         
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
         .form-group { flex: 1; min-width: 180px; }
         label { display: block; font-weight: 600; margin-bottom: 4px; color: #334155; font-size: 11.5px; }
         select, input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px; background: #fff; font-family: inherit; }
-        select:focus, input:focus { outline: none; border-color: var(--primary); }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); }
         
         .save-btn, .adj-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; }
         .save-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .adj-btn { background: var(--primary); }
         
+        .filter-section { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; margin-bottom: 15px; }
+        .print-btn { background: #475569; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; height: 36px; }
+
         .table-responsive { overflow-x: auto; background: white; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th, td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 12px; }
-        th { background-color: #f8fafc; font-weight: 600; white-space: nowrap; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
+        tr:hover { background-color: #f1f5f9; }
         
         .text-green { color: var(--success); font-weight: 600; }
         .text-red { color: var(--danger); font-weight: 600; }
+        .text-blue { color: var(--primary); font-weight: 600; }
         
-        .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
-        .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
-        .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px;}
-        .wa-btn { background: #25d366; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; margin-right: 4px; margin-bottom: 2px;}
+        /* Buttons */
+        .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
+        .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
+        .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px;}
+        .wa-btn { background: #25d366; color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; margin-right: 4px; margin-bottom: 2px;}
+        
+        .chart-container { background: white; padding: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; margin-top: 15px; height: 350px; position: relative; }
 
-        /* Modals */
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
         .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
         
+        .popup-task-list { max-height: 350px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .popup-task-item { background: #fffbeb; border-left: 5px solid var(--warning); padding: 12px 15px; margin-bottom: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .popup-task-info h4 { margin: 0 0 5px 0; color: #0f172a; font-size: 14px; }
+        .popup-task-info p { margin: 0; font-size: 12px; color: #475569; line-height: 1.4; }
+
         @media print { .sidebar, .no-print { display: none !important; } .main-content { margin-left: 0; padding: 0; } }
     </style>
 </head>
@@ -113,7 +128,9 @@
 
     <!-- Sidebar -->
     <div class="sidebar no-print">
-        <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
+        <div class="sidebar-brand">
+            <span>⚡ Pusdekar Online Center</span>
+        </div>
         <ul class="sidebar-menu">
             <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व चार्ट</li>
             <li id="menuUdhar" onclick="switchTab('udhar')">📒 उधारी / बाकी (Udhar)</li>
@@ -127,6 +144,7 @@
         </ul>
     </div>
 
+    <!-- Main Content Area -->
     <div class="main-content">
         <div class="header">
             <div><h2>Pusdekar Online Center</h2></div>
@@ -138,20 +156,14 @@
             
             <div class="udhar-ticker no-print" id="udharTickerBox" style="display:none;">
                 <span>⚠️ उधारी बाकी</span>
-                <marquee id="udharTickerText" behavior="scroll" direction="left"></marquee>
+                <marquee id="udharTickerText" behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();"></marquee>
             </div>
 
             <div class="quick-links-container no-print">
-                <h3>🌐 महत्त्वाच्या लिंक्स (Quick Links)</h3>
+                <h3>🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
                 <div class="quick-links-grid" id="dashboardQuickLinks"></div>
             </div>
             
-            <!-- MONTHLY CHART CONTAINER -->
-            <div class="chart-container no-print">
-                <h3 style="margin-top:0; font-size:14px; color:#475569; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">📊 चालू महिन्याचा रिपोर्ट (Income vs Cash Flow)</h3>
-                <canvas id="monthlyChart"></canvas>
-            </div>
-
             <div class="grand-total-card">
                 <h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4>
                 <h2 id="grandTotalBal">₹ 0</h2>
@@ -167,7 +179,9 @@
             </div>
 
             <div class="banks-container">
-                <div class="banks-header"><h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3></div>
+                <div class="banks-header">
+                    <h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3>
+                </div>
                 <div class="banks-grid">
                     <div class="b-card"><span class="lbl-b1">AXIS-2669</span><strong id="bal-b1">₹ 0</strong></div>
                     <div class="b-card"><span class="lbl-b2">BOI-0005</span><strong id="bal-b2">₹ 0</strong></div>
@@ -197,6 +211,10 @@
                         <select id="serviceType" onchange="toggleFormFields()">
                             <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                             <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
+                            <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- बँक कॅश ट्रान्सफर (Bank Deposit) ---</option>
+                            <option value="Self Bank Deposit" style="font-weight:bold; color:#2563eb;">🏦 स्वतःची कॅश बँकेत भरली (Cash to Bank)</option>
+                            <option value="Self Bank Withdrawal" style="font-weight:bold; color:#dc2626;">🏦 बँकेतून कॅश काढली (Bank to Cash)</option>
+                            <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- AEPS व इतर वॉलेट सर्व्हिसेस ---</option>
                             <option value="Fino Cash Deposit" class="lbl-fino1-dep">Fino 1 Cash Deposit</option>
                             <option value="Fino2 Cash Deposit" class="lbl-fino2-dep">Fino 2 Cash Deposit</option>
                             <option value="Payworld Cash Deposit" class="lbl-payworld-dep">Payworld Cash Deposit</option>
@@ -233,9 +251,9 @@
 
                 <input type="hidden" id="villageInput" value="-">
 
-                <div class="form-row" id="bankSelectRow" style="display: none; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
+                <div class="form-row" id="bankSelectRow" style="display: none; background: #f0f9ff; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
                     <div class="form-group">
-                        <label style="color: var(--primary);">कोणत्या बँकेतून UPI व्यवहार झाला?</label>
+                        <label id="bankSelectLabel" style="color: var(--primary); font-size: 14px;">कोणत्या बँकेतून/बँकेत व्यवहार झाला?</label>
                         <select id="upiBank">
                             <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
                             <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
@@ -278,10 +296,12 @@
                         <select id="payStatus"><option value="Paid">Paid (जमा)</option><option value="Udhar">Udhar (उधार)</option></select>
                     </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
+                    
                     <div class="form-group">
                         <label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label>
                         <input type="text" id="idProof" placeholder="आयडी नंबर (ऑटो-फील किंवा टाका)" style="background:#f8fafc;">
                     </div>
+
                     <div class="form-group"><label>कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                 </div>
 
@@ -326,6 +346,13 @@
                 </div>
                 <button class="adj-btn" id="saveAdjBtn" onclick="saveAdjustment()">Update Balance</button>
             </div>
+
+            <!-- MONTHLY CHART CONTAINER (MOVED TO BOTTOM) -->
+            <div class="chart-container no-print">
+                <h3 style="margin-top:0; font-size:14px; color:#475569; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">📊 चालू महिन्याचा रिपोर्ट (Income vs Cash Flow)</h3>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+
         </div>
 
         <!-- ================= VIEW 2: UDHAR KHATA ================= -->
@@ -347,7 +374,7 @@
         <!-- ================= VIEW 3: FY REPORT (NEW) ================= -->
         <div id="viewFYReport" class="view-section">
             <div class="container" style="border-left: 4px solid #10b981;">
-                <h3 style="color: #047857;">📈 वार्षिक बँक डिपॉझिट्स रिपोर्ट (Financial Year)</h3>
+                <h3 style="color: #047857;">📈 वार्षिक बँक डिपॉझिट्स व कॅश रिपोर्ट (Financial Year)</h3>
                 
                 <div class="form-row" style="margin-bottom:15px; background:#f0fdf4; padding:10px; border-radius:6px; border:1px solid #a7f3d0;">
                     <div class="form-group" style="margin-bottom:0;">
@@ -379,7 +406,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: QUICK LINKS ================= -->
+        <!-- ================= VIEW 4: QUICK LINKS ================= -->
         <div id="viewLinks" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
@@ -398,7 +425,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: CUSTOMERS ================= -->
+        <!-- ================= VIEW 5: CUSTOMERS ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा किंवा एडिट करा</h3>
@@ -419,7 +446,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: PENDING TASKS ================= -->
+        <!-- ================= VIEW 6: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
@@ -438,7 +465,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: MAHAONLINE ================= -->
+        <!-- ================= VIEW 7: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन सर्व्हिसेस</h3>
@@ -457,7 +484,10 @@
                     <div class="form-group"><label>बाकी (Pending ₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group"><label>पेमेंट कुठे जमा झाले?</label><select id="moPayMode"><option value="Cash">Cash in Hand (रोख)</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select></div>
+                    <div class="form-group">
+                        <label>पेमेंट कुठे जमा झाले?</label>
+                        <select id="moPayMode"><option value="Cash">Cash in Hand (रोख)</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                    </div>
                 </div>
                 <button class="save-btn" id="saveMahaBtn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
             </div>
@@ -469,7 +499,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: STATEMENT ================= -->
+        <!-- ================= VIEW 8: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0;">
@@ -509,7 +539,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: SETTINGS ================= -->
+        <!-- ================= VIEW 9: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
                 <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
@@ -575,7 +605,7 @@
         
         let hasShownPopup = false; let allTransactions = []; let allCustomers = [];
         let editLinkId = null, editTaskId = null, editEntryId = null, editAdjId = null, editMahaId = null;
-        let myChartInstance = null; // for Chart.js
+        let myChartInstance = null;
 
         firebase.auth().onAuthStateChanged((user) => {
             if (!user) window.location.href = "login.html"; 
@@ -617,18 +647,13 @@
                 }).catch(e => { btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; });
             }
         }
-        function editLink(id) {
-            db.collection("quicklinks").doc(id).get().then(doc => {
-                if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; switchTab('links'); window.scrollTo(0,0); }
-            });
-        }
+        function editLink(id) { db.collection("quicklinks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; switchTab('links'); window.scrollTo(0,0); } }); }
         function deleteQuickLink(docId) { if(confirm("ही लिंक डिलीट करायची का?")) db.collection("quicklinks").doc(docId).delete(); }
         function loadQuickLinks() {
             db.collection("quicklinks").onSnapshot((snapshot) => {
                 const dg = document.getElementById('dashboardQuickLinks'); const tb = document.getElementById('linksTableBody');
                 dg.innerHTML = ""; tb.innerHTML = ""; let links = [];
-                snapshot.forEach(doc => links.push({id: doc.id, ...doc.data()}));
-                links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+                snapshot.forEach(doc => links.push({id: doc.id, ...doc.data()})); links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
                 links.forEach(data => {
                     dg.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
                     tb.innerHTML += `<tr><td style="font-size:18px; text-align:center;">${data.icon}</td><td><b>${data.name}</b></td><td><a href="${data.url}" target="_blank" style="color:var(--primary); text-decoration:none;">${data.url}</a></td><td class="no-print"><button class="edit-btn" onclick="editLink('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteQuickLink('${data.id}')">❌</button></td></tr>`;
@@ -653,9 +678,17 @@
             document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), कास्ट व्हॅलिडिटी, पॅन कार्ड इत्यादी.";
         }
 
+        // ================= FORM LOGIC =================
         function toggleFormFields() {
             const st = document.getElementById('serviceType').value; const bRow = document.getElementById('bankSelectRow'); const eRow = document.getElementById('expenseSourceRow'); const eLabel = document.getElementById('dynamicSourceLabel');
-            if(st === "Money Transfer" || st === "UPI Cash Given") { bRow.style.display = "flex"; eRow.style.display = "none"; }
+            if(st === "Money Transfer" || st === "UPI Cash Given" || st === "Self Bank Deposit" || st === "Self Bank Withdrawal") { 
+                bRow.style.display = "flex"; eRow.style.display = "none"; 
+                if(st === "Self Bank Deposit" || st === "Self Bank Withdrawal") {
+                    document.getElementById('bankSelectLabel').innerText = st === "Self Bank Deposit" ? "कोणत्या बँकेत कॅश भरली?" : "कोणत्या बँकेतून कॅश काढली?";
+                } else {
+                    document.getElementById('bankSelectLabel').innerText = "कोणत्या बँकेतून/बँकेत व्यवहार झाला?";
+                }
+            }
             else if(st === "Shop Expense" || st === "Advance Received" || st === "Advance Used" || st === "Hand Loan Given" || st === "Hand Loan Returned") {
                 bRow.style.display = "none"; 
                 if(st === "Advance Received" || st === "Hand Loan Returned") { eLabel.innerHTML = "पैसे <b>कुठे जमा</b> झाले?"; eLabel.style.color = "var(--success)"; eRow.style.border = "1px dashed var(--success)"; eRow.style.background = "#f0fdf4"; } 
@@ -710,9 +743,12 @@
             }
         }
         function saveEntry() {
-            const btn = document.getElementById('saveEntryBtn'); const service = document.getElementById('serviceType').value; const amount = parseFloat(document.getElementById('amount').value) || 0; const bankSource = (service === "Money Transfer" || service === "UPI Cash Given") ? document.getElementById('upiBank').value : "-"; const expenseSource = (service === "Shop Expense" || service.includes("Advance") || service.includes("Hand Loan")) ? document.getElementById('expenseSource').value : "-"; const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
-            if(amount===""||mobile.length!==10||details===""||service==="") return alert("माहिती पूर्ण भरा!"); if(amount>=10000&&(idProof===""||idProof==="-")) { alert("₹10k+ साठी आयडी आवश्यक!"); document.getElementById('idProof').focus(); return; }
-            let updateData = { category: "General", service, amount: Number(amount), bankSource, expenseSource, details, mobile, village, payStatus, purpose, idProof, commission: Number(commission), narration };
+            const btn = document.getElementById('saveEntryBtn'); const service = document.getElementById('serviceType').value; const amount = parseFloat(document.getElementById('amount').value) || 0; 
+            const bankSource = (service === "Money Transfer" || service === "UPI Cash Given" || service === "Self Bank Deposit" || service === "Self Bank Withdrawal") ? document.getElementById('upiBank').value : "-"; 
+            const expenseSource = (service === "Shop Expense" || service.includes("Advance") || service.includes("Hand Loan")) ? document.getElementById('expenseSource').value : "-"; 
+            const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
+            if(amount===""||details===""||service==="") return alert("माहिती पूर्ण भरा!"); if(amount>=10000&&(idProof===""||idProof==="-")) { alert("₹10k+ साठी आयडी आवश्यक!"); document.getElementById('idProof').focus(); return; }
+            let updateData = { category: "General", service, amount: Number(amount), bankSource, expenseSource, details, mobile: mobile || "-", village, payStatus, purpose, idProof, commission: Number(commission), narration };
             if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else if(!editEntryId) updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
             btn.disabled=true; btn.innerText="Saving...";
             if(editEntryId) {
@@ -760,7 +796,7 @@
         function loadPendingTasks() {
             db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot(snap => {
                 const tb = document.getElementById('pendingTableBody'); const pp = document.getElementById('popupTaskList'); tb.innerHTML=""; pp.innerHTML=""; let tasks=[]; snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()})); tasks.sort((a,b)=>b.timestamp-a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||"";
-                tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td><button class="edit-btn" onclick="editTask('${d.id}')">✏️ Edit</button><button class="done-btn" onclick="markTaskDone('${d.id}')">✔</button><button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div><button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; });
+                tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="edit-btn" onclick="editTask('${d.id}')">✏️ Edit</button><button class="done-btn" onclick="markTaskDone('${d.id}')">✔</button><button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; });
                 if(tasks.length>0 && !hasShownPopup) { document.getElementById('pendingModal').style.display='block'; hasShownPopup=true; } else if(tasks.length===0) document.getElementById('pendingModal').style.display='none';
             });
         }
@@ -798,6 +834,7 @@
                     else if(svc==="Mahapower Opening") mBal+=amt; else if(svc==="Mahapower Bill Collection") { mBal-=amt; cBal+=amt; }
                     else if(svc==="Cash Opening") cBal+=amt; else if(svc.includes("Opening") && bankBal[svc.replace(" Opening", "")]!==undefined) bankBal[svc.replace(" Opening", "")] += amt;
                     else if(svc==="Money Transfer") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]-=amt; cBal+=amt; } else if(svc==="UPI Cash Given") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]+=amt; cBal-=amt; }
+                    else if(svc==="Self Bank Deposit") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]+=amt; cBal-=amt; } else if(svc==="Self Bank Withdrawal") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]-=amt; cBal+=amt; }
                     else if(svc==="Advance Received"||svc==="Hand Loan Returned") { if(bankBal[eSrc]!==undefined) bankBal[eSrc]+=amt; else if(eSrc==="Fino") f1Bal+=amt; else if(eSrc==="Fino2") f2Bal+=amt; else if(eSrc==="Payworld") pwBal+=amt; else if(eSrc==="Paynearby") pnBal+=amt; else if(eSrc==="Mahapower") mBal+=amt; else cBal+=amt; }
                     else if(svc==="Shop Expense"||svc==="Advance Used"||svc==="Hand Loan Given") { if(bankBal[eSrc]!==undefined) bankBal[eSrc]-=amt; else if(eSrc==="Fino") f1Bal-=amt; else if(eSrc==="Fino2") f2Bal-=amt; else if(eSrc==="Payworld") pwBal-=amt; else if(eSrc==="Paynearby") pnBal-=amt; else if(eSrc==="Mahapower") mBal-=amt; else cBal-=amt; }
 
@@ -812,35 +849,37 @@
             document.getElementById('todayInc').innerText="₹ "+incT; document.getElementById('todayExp').innerText="₹ "+expT; document.getElementById('monthInc').innerText="₹ "+incM; document.getElementById('monthExp').innerText="₹ "+expM;
             
             filterData();
-            generateMonthlyChart(dataList); // Render Chart
+            generateMonthlyChart(dataList);
         }
 
-        // ================= MONTHLY CHART (NEW) =================
+        // ================= MONTHLY CHART =================
         function generateMonthlyChart(dataList) {
             const ctx = document.getElementById('monthlyChart'); if(!ctx) return;
             const now = new Date(); const currM = now.getMonth(); const currY = now.getFullYear();
-            const daysInMonth = new Date(currY, currM + 1, 0).getDate();
+            const todayDate = now.getDate(); // Only show till today to avoid dropping line
             
-            let labels = []; let incData = new Array(daysInMonth).fill(0); let cashIn = new Array(daysInMonth).fill(0); let cashOut = new Array(daysInMonth).fill(0);
-            for(let i=1; i<=daysInMonth; i++) labels.push(i);
+            let labels = []; let incData = new Array(todayDate).fill(0); let cashIn = new Array(todayDate).fill(0); let cashOut = new Array(todayDate).fill(0);
+            for(let i=1; i<=todayDate; i++) labels.push(i);
             
             dataList.forEach(data => {
                 if(!data.timestamp) return; let d = data.timestamp.toDate();
                 if(d.getMonth() === currM && d.getFullYear() === currY) {
                     let day = d.getDate() - 1; 
-                    const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
-                    let svc = getSafeString(data.service); let eSrc = getSafeString(data.expenseSource); let bSrc = getSafeString(data.bankSource);
-                    
-                    if(data.category === "Mahaonline") {
-                        incData[day] += amt; cashIn[day] += amt; // Assuming full fee goes to cash
-                    } else {
-                        if(svc !== "Shop Expense" && !svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan") && svc !== "Udhar Received") incData[day] += comm;
+                    if(day < todayDate) {
+                        const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
+                        let svc = getSafeString(data.service); let eSrc = getSafeString(data.expenseSource); 
                         
-                        let impact = 0;
-                        if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
-                        else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
-                        
-                        if(impact > 0) cashIn[day] += impact; else if(impact < 0) cashOut[day] += Math.abs(impact);
+                        if(data.category === "Mahaonline") {
+                            incData[day] += amt; cashIn[day] += amt;
+                        } else {
+                            if(svc !== "Shop Expense" && !svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan") && svc !== "Udhar Received") incData[day] += comm;
+                            
+                            let impact = 0;
+                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
+                            
+                            if(impact > 0) cashIn[day] += impact; else if(impact < 0) cashOut[day] += Math.abs(impact);
+                        }
                     }
                 }
             });
@@ -856,31 +895,22 @@
                         { label: 'गल्ल्यातून कॅश गेली (Cash Out)', data: cashOut, borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', tension: 0.3 }
                     ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }, scales: { x: { title: { display: true, text: 'महिन्याची तारीख' } }, y: { title: { display: true, text: 'रक्कम (₹)' }, beginAtZero: true } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }, scales: { x: { title: { display: true, text: 'चालू महिन्याची तारीख' } }, y: { title: { display: true, text: 'रक्कम (₹)' }, suggestedMin: 100 } } }
             });
         }
 
-        // ================= FINANCIAL YEAR REPORT (NEW) =================
+        // ================= FINANCIAL YEAR REPORT =================
         function renderFYReport() {
-            const yearVal = parseInt(document.getElementById('fySelect').value); // e.g. 2026
-            const startDate = new Date(yearVal, 3, 1); // April 1st of selected year
-            const endDate = new Date(yearVal + 1, 2, 31, 23, 59, 59); // March 31st of next year
+            const yearVal = parseInt(document.getElementById('fySelect').value); const startDate = new Date(yearVal, 3, 1); const endDate = new Date(yearVal + 1, 2, 31, 23, 59, 59);
+            let bankAgg = {}; const tb = document.getElementById("fyTableBody"); tb.innerHTML = ""; let totalInSum = 0; let totalOutSum = 0; let totalNetSum = 0;
             
-            let bankAgg = {};
-            const tb = document.getElementById("fyTableBody"); tb.innerHTML = "";
-            let totalInSum = 0; let totalOutSum = 0; let totalNetSum = 0;
-
             allTransactions.forEach(data => {
                 if(!data.timestamp) return; let d = data.timestamp.toDate();
                 if(d >= startDate && d <= endDate) {
-                    const amt = parseFloat(data.amount) || 0;
-                    let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
+                    const amt = parseFloat(data.amount) || 0; let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
                     if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc];
                     
-                    const processBank = (name, isDeposit) => {
-                        if(!bankAgg[name]) bankAgg[name] = { in: 0, out: 0 };
-                        if(isDeposit) bankAgg[name].in += amt; else bankAgg[name].out += amt;
-                    };
+                    const processBank = (name, isDeposit) => { if(!bankAgg[name]) bankAgg[name] = { in: 0, out: 0 }; if(isDeposit) bankAgg[name].in += amt; else bankAgg[name].out += amt; };
 
                     if(data.category === "Mahaonline" && bSrc !== "Cash" && bSrc !== "-") { processBank(bSrc, true); }
                     else {
@@ -889,10 +919,13 @@
                         else if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) processBank("Payworld", true); else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") processBank("Payworld", false);
                         else if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) processBank("Paynearby", true); else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") processBank("Paynearby", false);
                         else if (svc === "Mahapower Opening") processBank("Mahapower", true); else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) processBank("Mahapower", false);
-                        else if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) { /* ignore cash */ }
-                        else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) { /* ignore cash */ }
+                        else if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || svc === "Self Bank Withdrawal" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) { /* ignore cash */ }
+                        else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) { /* ignore cash */ }
                         else {
-                            if(bSrc !== "Cash" && bSrc !== "-") { if(svc === "Money Transfer" || svc === "UPI Cash Given") processBank(bSrc, svc === "UPI Cash Given"); }
+                            if(bSrc !== "Cash" && bSrc !== "-") { 
+                                if(svc === "Money Transfer" || svc === "UPI Cash Given") processBank(bSrc, svc === "UPI Cash Given"); 
+                                if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") processBank(bSrc, svc === "Self Bank Deposit");
+                            }
                             if(eSrc !== "Cash" && eSrc !== "-") { if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") processBank(eSrc, false); else if (svc === "Advance Received" || svc === "Hand Loan Returned") processBank(eSrc, true); }
                             if(svc.includes("Opening") && !svc.includes("Cash")) { let nm = svc.replace(" Opening",""); processBank(nm, true); }
                         }
@@ -901,99 +934,111 @@
             });
 
             for (let bank in bankAgg) {
-                let dispName = localStorage.getItem("wallet_" + bank) || bank;
-                let net = bankAgg[bank].in - bankAgg[bank].out;
+                let dispName = localStorage.getItem("wallet_" + bank) || bank; let net = bankAgg[bank].in - bankAgg[bank].out;
                 totalInSum += bankAgg[bank].in; totalOutSum += bankAgg[bank].out; totalNetSum += net;
                 tb.innerHTML += `<tr><td><b>${dispName}</b></td><td class="text-green">₹ ${bankAgg[bank].in}</td><td class="text-red">₹ ${bankAgg[bank].out}</td><td><b>₹ ${net}</b></td></tr>`;
             }
             tb.innerHTML += `<tr style="background:#f1f5f9;"><td style="text-align:right;"><b>Total:</b></td><td class="text-green"><b>₹ ${totalInSum}</b></td><td class="text-red"><b>₹ ${totalOutSum}</b></td><td><b>₹ ${totalNetSum}</b></td></tr>`;
         }
 
-        // ================= MAHAONLINE =================
+        // ================= TABLES =================
         function renderMahaonlineTable(dataList) {
-            const moTable = document.getElementById("moTableBody"); moTable.innerHTML = "";
-            let moData = dataList.filter(d => d.category === "Mahaonline").sort((a, b) => b.timestamp - a.timestamp);
+            const moTable = document.getElementById("moTableBody"); moTable.innerHTML = ""; let moData = dataList.filter(d => d.category === "Mahaonline").sort((a, b) => b.timestamp - a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||"";
             moData.forEach((data) => {
-                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "Loading..."; let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
-                moTable.innerHTML += `<tr><td>${dateStr}</td><td><b>${data.service}</b></td><td>${data.details}<br><small>${data.mobile}</small></td><td>${data.village}</td><td>${payMode}</td><td><b>₹ ${data.totalFee || 0}</b></td><td class="text-green">+ ₹ ${data.amount}</td><td class="text-red">₹ ${data.pendingAmount || 0}</td><td class="no-print"><button class="edit-btn" onclick="editMaha('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+                let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}) : "-"; let payMode = data.bankSource === "Cash" ? "Cash" : data.bankSource;
+                let waLink = ""; if(data.mobile && data.mobile !== "-") { let msg = encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${data.details}*,\nसेवा: ${data.service}\nएकूण फी: ₹${data.totalFee||0}\nजमा: ₹${data.amount}\nबाकी: ₹${data.pendingAmount||0}\n${promo}`); waLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="margin-top:3px;">🟢 WhatsApp</a>`; }
+                moTable.innerHTML += `<tr><td>${dateStr}</td><td><b>${data.service}</b></td><td>${data.details}<br><small>${data.mobile}</small>${waLink}</td><td>${data.village}</td><td>${payMode}</td><td><b>₹ ${data.totalFee || 0}</b></td><td class="text-green">+ ₹ ${data.amount}</td><td class="text-red">₹ ${data.pendingAmount || 0}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
             });
         }
 
-        // ================= STATEMENT TABLE =================
         function renderStatementTable(dataList) {
-            const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; const selectedWallet = document.getElementById('walletFilter').value; let runningBal = 0; let sumPlus = 0; let sumMinus = 0; let sumComm = 0;
+            const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; const sel = document.getElementById('walletFilter').value; let runBal = 0; let sumP = 0; let sumM = 0; let sumC = 0; let promo = localStorage.getItem("wa_promo_msg")||"";
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
 
             dataList.forEach((data) => {
-                let dateStr = "Loading..."; if (data.timestamp) dateStr = data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
+                let dtStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}) : "-";
                 const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
                 let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
-                if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc];
-                if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening";
+                if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc]; if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening";
 
-                if (selectedWallet === "All") {
-                    if(svc.includes("Opening") || svc === "Advance Received" || svc === "Hand Loan Returned") runningBal += amt; else if(svc === "Shop Expense" || svc.includes("Cash Deposit") || svc === "Advance Used" || svc === "Hand Loan Given") runningBal -= amt;
-                    if(data.category === "Mahaonline") runningBal += amt; else if(comm > 0) runningBal += comm;
+                if (sel === "All") {
+                    if(svc.includes("Opening") || svc === "Advance Received" || svc === "Hand Loan Returned") runBal += amt; else if(svc === "Shop Expense" || svc.includes("Cash Deposit") || svc === "Advance Used" || svc === "Hand Loan Given") runBal -= amt;
+                    if(data.category === "Mahaonline") runBal += amt; else if(comm > 0) runBal += comm;
                 } else {
-                    let impactAmt = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === selectedWallet) impactAmt = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impactAmt = amt; } 
+                    let imp = 0;
+                    if(data.category === "Mahaonline") { if(bSrc === sel) imp = amt; else if(sel === "Cash" && bSrc === "Cash") imp = amt; } 
                     else {
-                        if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impactAmt = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impactAmt = -amt; }
-                        else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impactAmt = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impactAmt = -amt; }
-                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impactAmt = -amt; }
-                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impactAmt = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impactAmt = -amt; }
-                        else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impactAmt = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) impactAmt = -amt; }
-                        else if (selectedWallet === "Cash") { if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impactAmt = amt; else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impactAmt = -amt; } 
-                        else { if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impactAmt = amt; else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impactAmt = -amt; }
+                        if (sel === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) imp = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) imp = -amt; }
+                        else if (sel === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) imp = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) imp = -amt; }
+                        else if (sel === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) imp = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") imp = -amt; }
+                        else if (sel === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) imp = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") imp = -amt; }
+                        else if (sel === "Mahapower") { if (svc === "Mahapower Opening") imp = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) imp = -amt; }
+                        else if (sel === "Cash") {
+                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || svc === "Self Bank Withdrawal" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) imp = amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) imp = -amt;
+                        } else {
+                            if (svc === `${sel} Opening` || (svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === sel)) imp = amt;
+                            else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === sel)) imp = -amt;
+                        }
                     }
-                    runningBal += impactAmt;
+                    runBal += imp;
                 }
 
-                let serviceDisplay = svc; if(serviceDisplay.includes("Fino2")) serviceDisplay = serviceDisplay.replace("Fino2", f2); if(serviceDisplay.includes("Fino") && !serviceDisplay.includes(f2)) serviceDisplay = serviceDisplay.replace("Fino", f1); if(serviceDisplay.includes("Payworld")) serviceDisplay = serviceDisplay.replace("Payworld", pw); if(serviceDisplay.includes("Paynearby")) serviceDisplay = serviceDisplay.replace("Paynearby", pn); if(serviceDisplay.includes("Mahapower")) serviceDisplay = serviceDisplay.replace("Mahapower", mp);
-                let amtDisplay = `₹ ${data.amount}`; let isPlus = false; let isMinus = false;
+                let svcDisp = svc; if(svcDisp.includes("Fino2")) svcDisp = svcDisp.replace("Fino2", f2); if(svcDisp.includes("Fino") && !svcDisp.includes(f2)) svcDisp = svcDisp.replace("Fino", f1); if(svcDisp.includes("Payworld")) svcDisp = svcDisp.replace("Payworld", pw); if(svcDisp.includes("Paynearby")) svcDisp = svcDisp.replace("Paynearby", pn); if(svcDisp.includes("Mahapower")) svcDisp = svcDisp.replace("Mahapower", mp);
+                let amtDisp = `₹ ${data.amount}`; let isPlus = false; let isMinus = false;
 
-                if(data.category === "Mahaonline") { serviceDisplay = `<b>[Mahaonline]</b> ${svc}`; let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true; }
-                else if(svc === "Money Transfer" || svc === "UPI Cash Given") { let dispBank = localStorage.getItem("wallet_" + bSrc) || bSrc; serviceDisplay += ` (${dispBank})`; if(svc === "Money Transfer") isPlus = true; else isMinus = true; } 
-                else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") { let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn; amtDisplay = `<span class="text-red">- ₹ ${data.amount} (${dispExp})</span>`; isMinus = true; } 
-                else if(svc === "Advance Received" || svc === "Hand Loan Returned" || svc === "Payworld Cash Deposit" || svc === "Paynearby Cash Deposit") { let dispExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dispExp=f1; else if(eSrc==="Fino2") dispExp=f2; else if(eSrc==="Payworld") dispExp=pw; else if(eSrc==="Paynearby") dispExp=pn; amtDisplay = `<span class="text-green">+ ₹ ${data.amount} (${dispExp})</span>`; isPlus = true; } 
-                else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisplay = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true; } else if(!svc.includes("Opening")) { amtDisplay = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true; }
+                if(data.category === "Mahaonline") { svcDisp = `<b>[Mahaonline]</b> ${svc}`; let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; amtDisp = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true; }
+                else if(svc === "Money Transfer" || svc === "UPI Cash Given") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svcDisp += ` (${dBank})`; if(svc === "Money Transfer") isPlus = true; else isMinus = true; } 
+                else if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svcDisp = `<span class="text-blue">${svc} (${dBank})</span>`; if(svc === "Self Bank Deposit") isPlus = true; else isMinus = true; }
+                else if(svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") { let dExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dExp=f1; else if(eSrc==="Fino2") dExp=f2; else if(eSrc==="Payworld") dExp=pw; else if(eSrc==="Paynearby") dExp=pn; amtDisp = `<span class="text-red">- ₹ ${data.amount} (${dExp})</span>`; isMinus = true; } 
+                else if(svc === "Advance Received" || svc === "Hand Loan Returned" || svc === "Payworld Cash Deposit" || svc === "Paynearby Cash Deposit") { let dExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dExp=f1; else if(eSrc==="Fino2") dExp=f2; else if(eSrc==="Payworld") dExp=pw; else if(eSrc==="Paynearby") dExp=pn; amtDisp = `<span class="text-green">+ ₹ ${data.amount} (${dExp})</span>`; isPlus = true; } 
+                else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisp = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true; } else if(!svc.includes("Opening")) { amtDisp = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true; }
 
-                if(selectedWallet !== "All") {
-                    let impact = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === selectedWallet) impact = amt; else if(selectedWallet === "Cash" && bSrc === "Cash") impact = amt; } else {
-                        if (selectedWallet === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) impact = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) impact = -amt; }
-                        else if (selectedWallet === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) impact = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) impact = -amt; }
-                        else if (selectedWallet === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") impact = -amt; }
-                        else if (selectedWallet === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) impact = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") impact = -amt; }
-                        else if (selectedWallet === "Mahapower") { if (svc === "Mahapower Opening") impact = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) impact = -amt; }
-                        else if (selectedWallet === "Cash") { if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt; else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt; } 
-                        else { if (svc === `${selectedWallet} Opening` || (svc === "UPI Cash Given" && bSrc === selectedWallet) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === selectedWallet)) impact = amt; else if ((svc === "Money Transfer" && bSrc === selectedWallet) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === selectedWallet)) impact = -amt; }
+                if(sel !== "All") {
+                    let imp = 0;
+                    if(data.category === "Mahaonline") { if(bSrc === sel) imp = amt; else if(sel === "Cash" && bSrc === "Cash") imp = amt; } 
+                    else {
+                        if (sel === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino")) imp = amt; else if (svc === "Fino Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino")) imp = -amt; }
+                        else if (sel === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Fino2")) imp = amt; else if (svc === "Fino2 Cash Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Fino2")) imp = -amt; }
+                        else if (sel === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Payworld")) imp = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Payworld") imp = -amt; }
+                        else if (sel === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Paynearby")) imp = amt; else if ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Paynearby") imp = -amt; }
+                        else if (sel === "Mahapower") { if (svc === "Mahapower Opening") imp = amt; else if (svc === "Mahapower Bill Collection" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Mahapower")) imp = -amt; }
+                        else if (sel === "Cash") {
+                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || svc === "Self Bank Withdrawal" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) imp = amt;
+                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) imp = -amt;
+                        } else {
+                            if (svc === `${sel} Opening` || (svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel) || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === sel)) imp = amt;
+                            else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === sel)) imp = -amt;
+                        }
                     }
-                    if(impact > 0) { isPlus = true; isMinus = false; amtDisplay = `<span class="text-green">+ ₹ ${Math.abs(impact)}</span>`; } else if(impact < 0) { isPlus = false; isMinus = true; amtDisplay = `<span class="text-red">- ₹ ${Math.abs(impact)}</span>`; } else { isPlus = false; isMinus = false; }
+                    if(imp > 0) { isPlus = true; isMinus = false; amtDisp = `<span class="text-green">+ ₹ ${Math.abs(imp)}</span>`; } else if(imp < 0) { isPlus = false; isMinus = true; amtDisp = `<span class="text-red">- ₹ ${Math.abs(imp)}</span>`; } else { isPlus = false; isMinus = false; }
                 }
 
-                if(isPlus) sumPlus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); if(isMinus) sumMinus += (selectedWallet !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); sumComm += comm;
-                let purposeText = data.purpose || "-"; if(data.narration && data.narration !== "-") purposeText += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
-                let villageText = (data.village && data.village !== "-") ? `<br><small>📍 ${data.village}</small>` : "";
+                if(isPlus) sumP += (sel !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); if(isMinus) sumM += (sel !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); sumC += comm;
+                let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
+                
+                let waLink = ""; if(data.mobile && data.mobile !== "-") { let msg = encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${data.details}*,\nसेवा: ${data.service}\nरक्कम: ₹${data.amount}\nस्थिती: यशस्वी (Success)\n${promo}`); waLink = `<br><a href="https://wa.me/91${data.mobile}?text=${msg}" target="_blank" class="wa-btn" style="margin-top:3px;">🟢 WhatsApp</a>`; }
 
-                table.innerHTML += `<tr><td>${dateStr}</td><td>${serviceDisplay}</td><td><b>${data.details}</b>${villageText}</td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${data.payStatus}</td><td>${purposeText}</td><td>${amtDisplay}</td><td class="text-green">+ ₹ ${data.commission||0}</td><td><strong>₹ ${runningBal}</strong></td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b>${waLink}</td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${data.payStatus}</td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">+ ₹ ${data.commission||0}</td><td><strong>₹ ${runBal}</strong></td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
             });
-            document.getElementById("statementTotalFoot").innerHTML = `<tr><td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td><td><span class="text-green">+ ₹ ${sumPlus}</span><br><span class="text-red">- ₹ ${sumMinus}</span></td><td class="text-green" style="font-size:14px;">+ ₹ ${sumComm}</td><td colspan="2"></td></tr>`;
+            document.getElementById("statementTotalFoot").innerHTML = `<tr><td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td><td><span class="text-green">+ ₹ ${sumP}</span><br><span class="text-red">- ₹ ${sumM}</span></td><td class="text-green" style="font-size:14px;">+ ₹ ${sumC}</td><td colspan="2"></td></tr>`;
         }
         function filterData() {
-            const selectedWallet = document.getElementById('walletFilter').value; const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value;
+            const sel = document.getElementById('walletFilter').value; const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value;
             let filtered = allTransactions.filter(item => {
-                let matchWallet = true;
-                if(selectedWallet !== "All") {
+                let match = true;
+                if(sel !== "All") {
                     let bSrc = getSafeString(item.bankSource); let eSrc = getSafeString(item.expenseSource); let svc = getSafeString(item.service);
-                    if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc]; if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) { svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening"; }
-                    if(item.category === "Mahaonline") matchWallet = (bSrc === selectedWallet) || (selectedWallet === "Cash" && bSrc === "Cash"); else if(selectedWallet === "Fino") matchWallet = (svc.includes("Fino") && !svc.includes("Fino2")) || eSrc === "Fino"; else if(selectedWallet === "Fino2") matchWallet = svc.includes("Fino2") || eSrc === "Fino2"; else if(selectedWallet === "Payworld") matchWallet = svc.includes("Payworld") || eSrc === "Payworld"; else if(selectedWallet === "Paynearby") matchWallet = svc.includes("Paynearby") || eSrc === "Paynearby"; else if(selectedWallet === "Mahapower") matchWallet = svc.includes("Mahapower") || eSrc === "Mahapower"; else if(selectedAssetCheck(selectedWallet, svc, bSrc, eSrc)) matchWallet = true; else matchWallet = svc.includes(selectedWallet) || bSrc === selectedWallet || eSrc === selectedWallet;
-                } return matchWallet;
+                    if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc]; if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening";
+                    if(item.category === "Mahaonline") match = (bSrc === sel) || (sel === "Cash" && bSrc === "Cash");
+                    else if(sel === "Fino") match = (svc.includes("Fino") && !svc.includes("Fino2")) || eSrc === "Fino";
+                    else if(sel === "Fino2") match = svc.includes("Fino2") || eSrc === "Fino2"; else if(sel === "Payworld") match = svc.includes("Payworld") || eSrc === "Payworld"; else if(sel === "Paynearby") match = svc.includes("Paynearby") || eSrc === "Paynearby"; else if(sel === "Mahapower") match = svc.includes("Mahapower") || eSrc === "Mahapower"; else if(selectedAssetCheck(sel, svc, bSrc, eSrc)) match = true; else match = svc.includes(sel) || bSrc === sel || eSrc === sel;
+                } return match;
             });
             if(f && t) { const fromDate = new Date(f); fromDate.setHours(0,0,0,0); const toDate = new Date(t); toDate.setHours(23,59,59,999); filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; }); }
             renderStatementTable(filtered);
         }
-        function selectedAssetCheck(sel, svc, bSrc, eSrc) { if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash"; return false; }
+        function selectedAssetCheck(sel, svc, bSrc, eSrc) { if(sel === "Cash") return svc.includes("Cash") || svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "UPI Cash Given" || svc === "Printing & Xerox" || eSrc === "Cash"; return false; }
         function resetFilter() { document.getElementById('walletFilter').value = "All"; document.getElementById('fromDate').value = ""; document.getElementById('toDate').value = ""; renderStatementTable(allTransactions); }
 
         function clearUdhar(docId, category, pendingAmount, name, mobile) {
@@ -1003,10 +1048,11 @@
         }
         function renderUdharKhata(dataList) {
             const tbody = document.getElementById("udharTableBody"); const tickerBox = document.getElementById("udharTickerBox"); const tickerText = document.getElementById("udharTickerText");
-            if(!tbody || !tickerBox) return; tbody.innerHTML = ""; let totalUdhar = 0; let tickerStr = ""; let udharData = dataList.filter(d => d.payStatus === "Udhar");
+            if(!tbody || !tickerBox) return; tbody.innerHTML = ""; let totalUdhar = 0; let tickerStr = ""; let udharData = dataList.filter(d => d.payStatus === "Udhar"); let promo = localStorage.getItem("wa_promo_msg")||"";
             udharData.forEach(data => {
                 let pending = data.category === "Mahaonline" ? (data.pendingAmount || 0) : data.amount; totalUdhar += pending; let dateStr = data.timestamp ? data.timestamp.toDate().toLocaleDateString('en-IN') : "-";
-                tbody.innerHTML += `<tr><td>${dateStr}</td><td><b>${data.details}</b></td><td>${data.mobile}</td><td>${data.service}</td><td class="text-red"><b>₹ ${pending}</b></td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="done-btn" onclick="clearUdhar('${data.id}', '${data.category}', ${pending}, '${data.details}', '${data.mobile}')">✔️ जमा झाली</button></td></tr>`;
+                let waMsg = encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${data.details}*,\nआपली उधारी बाकी आहे.\nसर्व्हिस: ${data.service}\nबाकी रक्कम: ₹${pending}\n${promo}`); let waLink = data.mobile !== "-" ? `<a href="https://wa.me/91${data.mobile}?text=${waMsg}" target="_blank" class="wa-btn">🟢 WhatsApp</a>` : '';
+                tbody.innerHTML += `<tr><td>${dateStr}</td><td><b>${data.details}</b></td><td>${data.mobile}</td><td>${data.service}</td><td class="text-red"><b>₹ ${pending}</b></td><td class="no-print">${waLink}<button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="done-btn" onclick="clearUdhar('${data.id}', '${data.category}', ${pending}, '${data.details}', '${data.mobile}')">✔️ जमा झाली</button></td></tr>`;
                 tickerStr += ` &nbsp;&nbsp;🔴 <b>${data.details || "अज्ञात"}</b> &nbsp;👉&nbsp; <b>₹ ${pending}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `;
             });
             let tl = document.getElementById("totalUdharAmount"); if(tl) tl.innerText = `₹ ${totalUdhar}`;
