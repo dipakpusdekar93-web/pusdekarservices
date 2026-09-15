@@ -40,15 +40,17 @@
         .tally-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #fde68a; flex: 1; min-width: 150px; text-align: center; }
         .tally-item span { font-size: 12px; color: #475569; display: block; margin-bottom: 5px; }
 
-        /* Balances Design */
+        /* Cards & Containers */
         .grand-total-card { background: linear-gradient(135deg, #059669, #047857); color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; box-shadow: var(--card-shadow); }
         .grand-total-card h4 { margin: 0 0 5px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .grand-total-card h2 { margin: 0; font-size: 28px; font-weight: 700; }
+        
         .wallet-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .w-card { color: white; padding: 12px 10px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); }
         .w-card h4 { margin: 0 0 5px 0; font-size: 11px; opacity: 0.9; font-weight: 600; }
         .w-card h3 { margin: 0; font-size: 18px; font-weight: 700; }
         .bg-fino1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); } .bg-fino2 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); } .bg-payworld { background: linear-gradient(135deg, #f59e0b, #d97706); } .bg-paynearby { background: linear-gradient(135deg, #ec4899, #be185d); } .bg-mahapower { background: linear-gradient(135deg, #06b6d4, #0e7490); } .bg-cash { background: linear-gradient(135deg, #10b981, #047857); }
+        
         .banks-container { background: white; padding: 12px; border-radius: 8px; box-shadow: var(--card-shadow); margin-bottom: 15px; border: 1px solid #e2e8f0; }
         .banks-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid #e2e8f0; }
         .banks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; }
@@ -58,8 +60,6 @@
 
         .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
         .card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
-        .card h4 { margin: 0 0 5px 0; color: #64748b; font-size: 11px; font-weight: 600; }
-        .card h3 { margin: 0; font-size: 18px; font-weight: 700; }
         .card.income h3 { color: var(--success); } .card.expense h3 { color: var(--danger); }
 
         .container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
@@ -76,8 +76,9 @@
         th, td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 12px; }
         th { background-color: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
         tr:hover { background-color: #f1f5f9; }
-        .text-green { color: var(--success); font-weight: 600; } .text-red { color: var(--danger); font-weight: 600; }
+        .text-green { color: var(--success); font-weight: 600; } .text-red { color: var(--danger); font-weight: 600; } .text-blue { color: var(--primary); font-weight: 600; }
         
+        /* Buttons */
         .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
         .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px;}
@@ -88,12 +89,19 @@
         .udhar-ticker { background: #fef2f2; color: #dc2626; padding: 10px 15px; font-weight: bold; border-left: 4px solid #dc2626; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: var(--card-shadow); font-size: 14px; }
         .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
 
+        /* Modals */
+        .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+        .modal-content { background: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
+        .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
+        .popup-task-list { max-height: 350px; overflow-y: auto; padding: 0; margin: 0; list-style: none; }
+        .popup-task-item { background: #fffbeb; border-left: 5px solid var(--warning); padding: 12px 15px; margin-bottom: 12px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+
         @media print { .sidebar, .no-print { display: none !important; } .main-content { margin-left: 0; padding: 0; } }
     </style>
 </head>
 <body>
 
-    <!-- Sidebar -->
+    <!-- ================= SIDEBAR ================= -->
     <div class="sidebar no-print">
         <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
         <ul class="sidebar-menu">
@@ -102,6 +110,7 @@
             <li id="menuUdhar" onclick="switchTab('udhar')">📒 उधारी / बाकी (Udhar)</li>
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट (लॉग)</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
+            <li id="menuLinks" onclick="switchTab('links')">🔗 क्विक लिंक्स</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
             <li id="menuPending" onclick="switchTab('pending')">🔔 पेंडिंग कामे</li>
             <li id="menuMahaonline" onclick="switchTab('mahaonline')">📝 महाऑनलाइन (सेतू)</li>
@@ -109,32 +118,43 @@
         </ul>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- ================= MAIN CONTENT ================= -->
     <div class="main-content">
         <div class="header">
             <div><h2>Pusdekar Online Center</h2></div>
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD (PRIVATE & CLEAN) ================= -->
+        <!-- ================= VIEW 1: DASHBOARD ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
             <div class="udhar-ticker no-print" id="udharTickerBox" style="display:none;">
-                <span>⚠️ उधारी बाकी</span><marquee id="udharTickerText" behavior="scroll" direction="left"></marquee>
+                <span>⚠️ उधारी बाकी</span>
+                <marquee id="udharTickerText" behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();"></marquee>
             </div>
 
             <!-- TALLY BOX -->
             <div class="tally-box no-print">
                 <h3>⚖️ आजचा कॅश हिशोब (Smart Tally Checker)</h3>
                 <div class="tally-flex">
-                    <div class="tally-item"><span>सिस्टीमनुसार कॅश:</span><b id="sysCashBal" style="font-size:22px; color:#0f172a;">₹ 0</b></div>
+                    <div class="tally-item">
+                        <span>सिस्टीमनुसार कॅश:</span>
+                        <b id="sysCashBal" style="font-size:22px; color:#0f172a;">₹ 0</b>
+                    </div>
                     <div style="font-size:24px; color:#94a3b8; font-weight:bold;">-</div>
-                    <div class="tally-item"><span>गल्ल्यातील प्रत्यक्ष कॅश टाका:</span><input type="number" id="actualCashInput" placeholder="उदा. 5000" oninput="checkTally()" style="width: 100%; font-size:16px; font-weight:bold; color:#0f172a; text-align:center; border:1px solid #cbd5e1;"></div>
+                    <div class="tally-item">
+                        <span>गल्ल्यातील प्रत्यक्ष कॅश टाका:</span>
+                        <input type="number" id="actualCashInput" placeholder="उदा. 5000" oninput="checkTally()" style="width: 100%; font-size:16px; font-weight:bold; color:#0f172a; text-align:center; border:1px solid #cbd5e1;">
+                    </div>
                     <div style="font-size:24px; color:#94a3b8; font-weight:bold;">=</div>
-                    <div class="tally-item" style="background:#f8fafc; border:none;"><span>हिशोबाचा निकाल:</span><div id="tallyResult" style="font-size: 15px; font-weight: bold; margin-top:5px; color:#64748b;">👈 रक्कम टाका</div></div>
+                    <div class="tally-item" style="background:#f8fafc; border:none;">
+                        <span>हिशोबाचा निकाल:</span>
+                        <div id="tallyResult" style="font-size: 15px; font-weight: bold; margin-top:5px; color:#64748b;">👈 रक्कम टाका</div>
+                    </div>
                 </div>
             </div>
-            
+
+            <!-- SUMMARY CARDS -->
             <div class="summary-cards">
                 <div class="card income"><h4>आजची एकूण कमाई</h4><h3 id="todayInc">₹ 0</h3></div>
                 <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="todayExp">₹ 0</h3></div>
@@ -142,11 +162,17 @@
                 <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
             </div>
 
+            <!-- NEW ENTRY FORM -->
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
+                
                 <div class="form-row" style="background:#f8fafc; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
-                    <div class="form-group" style="margin-bottom:0;"><label style="color:var(--primary);">व्यवहाराची तारीख व वेळ (जुनी नोंद करायची असल्यास बदला)</label><input type="datetime-local" id="entryCustomDate" style="background:#fff;"></div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label style="color:var(--primary);">व्यवहाराची तारीख व वेळ (जुनी नोंद करायची असल्यास बदला)</label>
+                        <input type="datetime-local" id="entryCustomDate" style="background:#fff;">
+                    </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>सर्व्हिसचा प्रकार</label>
@@ -175,32 +201,67 @@
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
-                    <div class="form-group"><label>ग्राहक मोबाईल</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:2px; font-size:11px;"></span></div>
+                    <div class="form-group"><label>ग्राहक मोबाईल (नंबर टाका)</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:2px; font-size:11px;"></span></div>
                     <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील)</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
+
                 <input type="hidden" id="villageInput" value="-">
+
                 <div class="form-row" id="bankSelectRow" style="display: none; background: #f0f9ff; padding: 10px; border-radius: 6px; border: 1px dashed var(--primary);">
                     <div class="form-group">
                         <label id="bankSelectLabel" style="color: var(--primary); font-size: 14px;">कोणत्या बँकेतून/बँकेत व्यवहार झाला?</label>
-                        <select id="upiBank"><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                        <select id="upiBank">
+                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
+                            <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
+                            <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
+                            <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
+                            <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                            <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
+                            <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
+                            <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
+                            <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                        </select>
                     </div>
                 </div>
+
                 <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff5f5; padding: 10px; border-radius: 6px; border: 1px dashed var(--danger);">
                     <div class="form-group">
                         <label id="dynamicSourceLabel" style="color: var(--danger);">हा खर्च कोणत्या माध्यमातून केला?</label>
-                        <select id="expenseSource"><option value="Cash">Cash in Hand (रोख गल्ला)</option><option value="Fino" class="lbl-fino1">Fino 1</option><option value="Fino2" class="lbl-fino2">Fino 2</option><option value="Payworld" class="lbl-payworld">Payworld</option><option value="Paynearby" class="lbl-paynearby">Paynearby</option><option value="Mahapower" class="lbl-mahapower">Mahapower</option><option value="AXIS-2669" class="lbl-b1-upi">AXIS-2669 UPI</option><option value="BOI-0005" class="lbl-b2-upi">BOI-0005 UPI</option><option value="BOI-0168" class="lbl-b3-upi">BOI-0168 UPI</option><option value="WANA-0027" class="lbl-b4-upi">WANA-0027 UPI</option><option value="BOI-4281" class="lbl-b5-upi">BOI-4281 UPI</option><option value="AXIS-12548" class="lbl-b6-upi">AXIS-12548 UPI</option><option value="BOI-0735" class="lbl-b7-upi">BOI-0735 UPI</option><option value="UNION-1529" class="lbl-b8-upi">UNION-1529 UPI</option><option value="SBI-9083" class="lbl-b9-upi">SBI-9083 UPI</option></select>
+                        <select id="expenseSource">
+                            <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                            <option value="Fino" class="lbl-fino1">Fino 1</option>
+                            <option value="Fino2" class="lbl-fino2">Fino 2</option>
+                            <option value="Payworld" class="lbl-payworld">Payworld</option>
+                            <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
+                            <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
+                            <option value="AXIS-2669" class="lbl-b1-upi">AXIS-2669 UPI</option>
+                            <option value="BOI-0005" class="lbl-b2-upi">BOI-0005 UPI</option>
+                            <option value="BOI-0168" class="lbl-b3-upi">BOI-0168 UPI</option>
+                            <option value="WANA-0027" class="lbl-b4-upi">WANA-0027 UPI</option>
+                            <option value="BOI-4281" class="lbl-b5-upi">BOI-4281 UPI</option>
+                            <option value="AXIS-12548" class="lbl-b6-upi">AXIS-12548 UPI</option>
+                            <option value="BOI-0735" class="lbl-b7-upi">BOI-0735 UPI</option>
+                            <option value="UNION-1529" class="lbl-b8-upi">UNION-1529 UPI</option>
+                            <option value="SBI-9083" class="lbl-b9-upi">SBI-9083 UPI</option>
+                        </select>
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group"><label>पेमेंट स्थिती</label><select id="payStatus"><option value="Paid">Paid (जमा)</option><option value="Udhar">Udhar (उधार)</option></select></div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
                     <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
                     <div class="form-group"><label>कमिशन (₹) (कॅशमध्ये जमा होईल)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                 </div>
-                <div class="form-row"><div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div></div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="काही टीप असल्यास..."></div>
+                </div>
+
                 <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">Save Transaction Entry</button>
             </div>
 
+            <!-- CHART (BOTTOM OF DASHBOARD) -->
             <div class="chart-container no-print">
                 <h3 style="margin-top:0; font-size:14px; color:#475569; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">📊 चालू महिन्याचा रिपोर्ट (Income vs Cash Flow)</h3>
                 <canvas id="monthlyChart"></canvas>
@@ -209,7 +270,11 @@
 
         <!-- ================= VIEW 2: BALANCES (PRIVATE) ================= -->
         <div id="viewBalances" class="view-section">
-            <div class="grand-total-card"><h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4><h2 id="grandTotalBal">₹ 0</h2></div>
+            <div class="grand-total-card">
+                <h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4>
+                <h2 id="grandTotalBal">₹ 0</h2>
+            </div>
+            
             <div class="wallet-cards">
                 <div class="w-card bg-fino1"><h4 class="lbl-fino1">Fino 1</h4><h3 id="f1Bal">₹ 0</h3></div>
                 <div class="w-card bg-fino2"><h4 class="lbl-fino2">Fino 2</h4><h3 id="f2Bal">₹ 0</h3></div>
@@ -218,8 +283,11 @@
                 <div class="w-card bg-mahapower"><h4 class="lbl-mahapower">Mahapower</h4><h3 id="mBal">₹ 0</h3></div>
                 <div class="w-card bg-cash"><h4>Cash in Hand</h4><h3 id="cBal">₹ 0</h3></div>
             </div>
+
             <div class="banks-container">
-                <div class="banks-header"><h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3></div>
+                <div class="banks-header">
+                    <h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3>
+                </div>
                 <div class="banks-grid">
                     <div class="b-card"><span class="lbl-b1">AXIS-2669</span><strong id="bal-b1">₹ 0</strong></div>
                     <div class="b-card"><span class="lbl-b2">BOI-0005</span><strong id="bal-b2">₹ 0</strong></div>
@@ -232,11 +300,28 @@
                     <div class="b-card"><span class="lbl-b9">SBI-9083</span><strong id="bal-b9">₹ 0</strong></div>
                 </div>
             </div>
+
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
-                        <select id="adjWallet"><option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option><option value="Fino Opening" class="lbl-fino1-opt">Fino 1 ॲडजस्टमेंट</option><option value="Fino2 Opening" class="lbl-fino2-opt">Fino 2 ॲडजस्टमेंट</option><option value="Payworld Opening" class="lbl-payworld-opt">Payworld ॲडजस्टमेंट</option><option value="Paynearby Opening" class="lbl-paynearby-opt">Paynearby ॲडजस्टमेंट</option><option value="Mahapower Opening" class="lbl-mahapower-opt">Mahapower ॲडजस्टमेंट</option><option value="AXIS-2669 Opening" class="lbl-b1-opt">AXIS-2669 ॲडजस्टमेंट</option><option value="BOI-0005 Opening" class="lbl-b2-opt">BOI-0005 ॲडजस्टमेंट</option><option value="BOI-0168 Opening" class="lbl-b3-opt">BOI-0168 ॲडजस्टमेंट</option><option value="WANA-0027 Opening" class="lbl-b4-opt">WANA-0027 ॲडजस्टमेंट</option><option value="BOI-4281 Opening" class="lbl-b5-opt">BOI-4281 ॲडजस्टमेंट</option><option value="AXIS-12548 Opening" class="lbl-b6-opt">AXIS-12548 ॲडजस्टमेंट</option><option value="BOI-0735 Opening" class="lbl-b7-opt">BOI-0735 ॲडजस्टमेंट</option><option value="UNION-1529 Opening" class="lbl-b8-opt">UNION-1529 ॲडजस्टमेंट</option><option value="SBI-9083 Opening" class="lbl-b9-opt">SBI-9083 ॲडजस्टमेंट</option></select>
+                        <select id="adjWallet">
+                            <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
+                            <option value="Fino Opening" class="lbl-fino1-opt">Fino 1 ॲडजस्टमेंट</option>
+                            <option value="Fino2 Opening" class="lbl-fino2-opt">Fino 2 ॲडजस्टमेंट</option>
+                            <option value="Payworld Opening" class="lbl-payworld-opt">Payworld ॲडजस्टमेंट</option>
+                            <option value="Paynearby Opening" class="lbl-paynearby-opt">Paynearby ॲडजस्टमेंट</option>
+                            <option value="Mahapower Opening" class="lbl-mahapower-opt">Mahapower ॲडजस्टमेंट</option>
+                            <option value="AXIS-2669 Opening" class="lbl-b1-opt">AXIS-2669 ॲडजस्टमेंट</option>
+                            <option value="BOI-0005 Opening" class="lbl-b2-opt">BOI-0005 ॲडजस्टमेंट</option>
+                            <option value="BOI-0168 Opening" class="lbl-b3-opt">BOI-0168 ॲडजस्टमेंट</option>
+                            <option value="WANA-0027 Opening" class="lbl-b4-opt">WANA-0027 ॲडजस्टमेंट</option>
+                            <option value="BOI-4281 Opening" class="lbl-b5-opt">BOI-4281 ॲडजस्टमेंट</option>
+                            <option value="AXIS-12548 Opening" class="lbl-b6-opt">AXIS-12548 ॲडजस्टमेंट</option>
+                            <option value="BOI-0735 Opening" class="lbl-b7-opt">BOI-0735 ॲडजस्टमेंट</option>
+                            <option value="UNION-1529 Opening" class="lbl-b8-opt">UNION-1529 ॲडजस्टमेंट</option>
+                            <option value="SBI-9083 Opening" class="lbl-b9-opt">SBI-9083 ॲडजस्टमेंट</option>
+                        </select>
                     </div>
                     <div class="form-group"><input type="number" id="adjAmount" placeholder="रक्कम टाका (₹) *"></div>
                     <div class="form-group"><input type="text" id="adjNarration" placeholder="नरेशन / टीप"></div>
@@ -255,12 +340,14 @@
                 <table id="udharTable">
                     <thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>सर्व्हिस</th><th>बाकी रक्कम (₹)</th><th class="no-print">कृती</th></tr></thead>
                     <tbody id="udharTableBody"></tbody>
-                    <tfoot style="background: #f8fafc; font-weight: bold; font-size: 14px;"><tr><td colspan="4" style="text-align: right; color: var(--danger);">एकूण मार्केटमधील उधारी:</td><td colspan="2"><span class="text-red" id="totalUdharAmount">₹ 0</span></td></tr></tfoot>
+                    <tfoot style="background: #f8fafc; font-weight: bold; font-size: 14px;">
+                        <tr><td colspan="4" style="text-align: right; color: var(--danger);">एकूण मार्केटमधील उधारी:</td><td colspan="2"><span class="text-red" id="totalUdharAmount">₹ 0</span></td></tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
 
-        <!-- ================= VIEW 4: BANK CASH DEPOSIT LOG (NEW) ================= -->
+        <!-- ================= VIEW 4: BANK CASH DEPOSIT LOG ================= -->
         <div id="viewBankDep" class="view-section">
             <div class="container" style="border-left: 4px solid #10b981;">
                 <h3 style="color: #047857;">🏦 बँकेत भरलेली कॅश (Cash Deposit Log)</h3>
@@ -269,7 +356,17 @@
                     <div class="form-group"><label>तारीख व वेळ</label><input type="datetime-local" id="bdDate"></div>
                     <div class="form-group">
                         <label>कोणत्या बँकेत भरली?</label>
-                        <select id="bdBank"><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                        <select id="bdBank">
+                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
+                            <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
+                            <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
+                            <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
+                            <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                            <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
+                            <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
+                            <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
+                            <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                        </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="किती कॅश भरली?"></div>
                     <div class="form-group"><label>कोणाकडे दिली / टीप</label><input type="text" id="bdNote" placeholder="उदा. प्रशांतकडे दिली"></div>
@@ -292,7 +389,20 @@
                     <select id="walletFilter" onchange="filterData()">
                         <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
                         <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                        <option value="Fino" class="lbl-fino1">Fino 1</option><option value="Fino2" class="lbl-fino2">Fino 2</option><option value="Payworld" class="lbl-payworld">Payworld</option><option value="Paynearby" class="lbl-paynearby">Paynearby</option><option value="Mahapower" class="lbl-mahapower">Mahapower</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                        <option value="Fino" class="lbl-fino1">Fino 1</option>
+                        <option value="Fino2" class="lbl-fino2">Fino 2</option>
+                        <option value="Payworld" class="lbl-payworld">Payworld</option>
+                        <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
+                        <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
+                        <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
+                        <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
+                        <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
+                        <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
+                        <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                        <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
+                        <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
+                        <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
+                        <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
                     </select>
                 </div>
                 <div class="form-group" style="margin-bottom:0;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
@@ -335,40 +445,87 @@
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा</h3>
                 <div class="form-row">
-                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div><div class="form-group"><label>मोबाईल नंबर *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी"></div><div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div><div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन/आधार"></div>
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी"></div>
+                    <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div>
+                    <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन/आधार"></div>
                 </div>
                 <button class="save-btn" id="saveCustomerBtn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह करा</button>
             </div>
-            <div class="container filter-section"><input type="text" id="customerSearchInput" placeholder="🔍 शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
-            <div class="table-responsive"><table id="customersTable"><thead><tr><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव / पत्ता</th><th>पॅन / आधार नंबर</th><th class="no-print">कृती</th></tr></thead><tbody id="customersTableBody"></tbody></table></div>
+            <div class="container filter-section">
+                <input type="text" id="customerSearchInput" placeholder="🔍 शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;">
+            </div>
+            <div class="table-responsive">
+                <table id="customersTable">
+                    <thead><tr><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव / पत्ता</th><th>पॅन / आधार नंबर</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 8: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
-                <div class="form-row"><div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div><div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div></div>
-                <div class="form-row"><div class="form-group" style="max-width:100%;"><label>काय काम आहे? *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="max-width:100%;"><label>काय काम आहे? *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div>
+                </div>
                 <button class="save-btn" id="savePendingBtn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
             </div>
-            <div class="table-responsive"><table id="pendingTable"><thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>कामाचा तपशील</th><th>स्थिती</th><th>कृती</th></tr></thead><tbody id="pendingTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="pendingTable">
+                    <thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>कामाचा तपशील</th><th>स्थिती</th><th>कृती</th></tr></thead>
+                    <tbody id="pendingTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 9: MAHAONLINE ================= -->
         <div id="viewMahaonline" class="view-section">
             <div class="container" style="border-left: 4px solid #8b5cf6;">
                 <h3 style="color: #8b5cf6;">📝 सेतू केंद्र / महाऑनलाइन</h3>
-                <div class="form-row" style="background:#f5f3ff; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;"><div class="form-group" style="margin-bottom:0;"><label style="color:#7c3aed;">तारीख व वेळ बदला (ऑप्शनल)</label><input type="datetime-local" id="moCustomDate" style="background:#fff;"></div></div>
+                <div class="form-row" style="background:#f5f3ff; padding:10px; border-radius:6px; border:1px dashed #cbd5e1; margin-bottom:12px;">
+                    <div class="form-group" style="margin-bottom:0;"><label style="color:#7c3aed;">तारीख व वेळ बदला (ऑप्शनल)</label><input type="datetime-local" id="moCustomDate" style="background:#fff;"></div>
+                </div>
                 <div class="form-row">
-                    <div class="form-group"><label>सर्व्हिस निवडा</label><select id="moService"><option value="Income Certificate">उत्पन्न प्रमाणपत्र</option><option value="Domicile Certificate">रहिवासी प्रमाणपत्र</option><option value="Caste Certificate">जात प्रमाणपत्र</option><option value="General Affidavit">प्रतिज्ञापत्र</option><option value="Other Mahaonline">इतर सेवा</option></select></div>
-                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()"><span id="searchMsgMo" style="display:none; font-size:11px;"></span></div><div class="form-group"><label>नाव</label><input type="text" id="moName" readonly style="background:#f8fafc;"></div>
+                    <div class="form-group">
+                        <label>सर्व्हिस निवडा</label>
+                        <select id="moService"><option value="Income Certificate">उत्पन्न प्रमाणपत्र</option><option value="Domicile Certificate">रहिवासी प्रमाणपत्र</option><option value="Caste Certificate">जात प्रमाणपत्र</option><option value="General Affidavit">प्रतिज्ञापत्र</option><option value="Other Mahaonline">इतर सेवा</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>मोबाईल नंबर</label>
+                        <input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()">
+                        <span id="searchMsgMo" style="display:none; font-size:11px;"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>नाव</label>
+                        <input type="text" id="moName" readonly style="background:#f8fafc;">
+                    </div>
                 </div>
                 <input type="hidden" id="moVillage" value="-">
-                <div class="form-row"><div class="form-group"><label>एकूण फी (₹) *</label><input type="number" id="moTotal" oninput="calcUdhar()"></div><div class="form-group"><label>आज जमा (₹) *</label><input type="number" id="moPaid" oninput="calcUdhar()"></div><div class="form-group"><label>बाकी (₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div></div>
-                <div class="form-row"><div class="form-group"><label>पेमेंट कुठे जमा झाले?</label><select id="moPayMode"><option value="Cash">Cash in Hand</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>एकूण फी (₹) *</label><input type="number" id="moTotal" oninput="calcUdhar()"></div>
+                    <div class="form-group"><label>आज जमा (₹) *</label><input type="number" id="moPaid" oninput="calcUdhar()"></div>
+                    <div class="form-group"><label>बाकी (₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>पेमेंट कुठे जमा झाले?</label>
+                        <select id="moPayMode"><option value="Cash">Cash in Hand</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                    </div>
+                </div>
                 <button class="save-btn" id="saveMahaBtn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
             </div>
-            <div class="table-responsive"><table id="mahaonlineTable"><thead><tr><th>तारीख</th><th>सर्व्हिस</th><th>नाव व मोबाईल</th><th>गाव</th><th>पेमेंट मोड</th><th>एकूण फी</th><th class="text-green">जमा</th><th class="text-red">उधार</th><th class="no-print">कृती</th></tr></thead><tbody id="moTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="mahaonlineTable">
+                    <thead><tr><th>तारीख</th><th>सर्व्हिस</th><th>नाव व मोबाईल</th><th>गाव</th><th>पेमेंट मोड</th><th>एकूण फी</th><th class="text-green">जमा</th><th class="text-red">उधार</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="moTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 10: SETTINGS ================= -->
@@ -378,7 +535,11 @@
                 <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
                     <div style="flex:1; min-width:250px; background:#f8fafc; padding:15px; border-radius:8px;">
                         <h4 style="color:var(--primary); margin-top:0;">५ मुख्य वॉलेट्स</h4>
-                        <div class="form-group"><label>Fino १</label><input type="text" id="renameFino1"></div><br><div class="form-group"><label>Fino २</label><input type="text" id="renameFino2"></div><br><div class="form-group"><label>Payworld</label><input type="text" id="renamePayworld"></div><br><div class="form-group"><label>Paynearby</label><input type="text" id="renamePaynearby"></div><br><div class="form-group"><label>Mahapower</label><input type="text" id="renameMahapower"></div>
+                        <div class="form-group"><label>Fino १</label><input type="text" id="renameFino1"></div><br>
+                        <div class="form-group"><label>Fino २</label><input type="text" id="renameFino2"></div><br>
+                        <div class="form-group"><label>Payworld</label><input type="text" id="renamePayworld"></div><br>
+                        <div class="form-group"><label>Paynearby</label><input type="text" id="renamePaynearby"></div><br>
+                        <div class="form-group"><label>Mahapower</label><input type="text" id="renameMahapower"></div>
                     </div>
                     <div style="flex:2; min-width:350px; background:#f5f3ff; padding:15px; border-radius:8px;">
                         <h4 style="color:#7c3aed; margin-top:0;">९ UPI बँका</h4>
@@ -402,6 +563,7 @@
         <div class="modal-content"><span class="close-popup" onclick="closePopup()">&times;</span><h3 style="margin-top:0; color:var(--warning);">आजची पेंडिंग कामे</h3><ul class="popup-task-list" id="popupTaskList"></ul></div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -417,21 +579,26 @@
         let editLinkId = null, editTaskId = null, editEntryId = null, editAdjId = null, editMahaId = null, editBdId = null;
         let myChartInstance = null;
 
-        firebase.auth().onAuthStateChanged((user) => { if (!user) window.location.href = "login.html"; else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); loadQuickLinks(); loadBankDeposits(); } });
+        firebase.auth().onAuthStateChanged((user) => { 
+            if (!user) { window.location.href = "login.html"; }
+            else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); loadQuickLinks(); loadBankDeposits(); } 
+        });
+
         function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
 
         function switchTab(tabName) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
+            
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
             else if(tabName === 'balances') { document.getElementById('viewBalances').classList.add('active-view'); document.getElementById('menuBalances').classList.add('active'); }
             else if(tabName === 'udhar') { document.getElementById('viewUdhar').classList.add('active-view'); document.getElementById('menuUdhar').classList.add('active'); }
             else if(tabName === 'bankDep') { document.getElementById('viewBankDep').classList.add('active-view'); document.getElementById('menuBankDep').classList.add('active'); }
+            else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'links') { document.getElementById('viewLinks').classList.add('active-view'); document.getElementById('menuLinks').classList.add('active'); }
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
             else if(tabName === 'pending') { document.getElementById('viewPending').classList.add('active-view'); document.getElementById('menuPending').classList.add('active'); } 
             else if(tabName === 'mahaonline') { document.getElementById('viewMahaonline').classList.add('active-view'); document.getElementById('menuMahaonline').classList.add('active'); } 
-            else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'settings') { document.getElementById('viewSettings').classList.add('active-view'); document.getElementById('menuSettings').classList.add('active'); }
         }
 
@@ -448,6 +615,30 @@
             else { res.innerHTML = `❌ गल्ल्यात ₹ ${Math.abs(diff)} कमी आहेत.`; res.style.color = "var(--danger)"; }
         }
 
+        // ================= QUICK LINKS =================
+        function saveQuickLink() {
+            const btn = document.getElementById('saveQuickLinkBtn'); const name = document.getElementById('qlName').value; const url = document.getElementById('qlUrl').value; const icon = document.getElementById('qlIcon').value || "🌐";
+            if(!name || !url) return alert("लिंकचे नाव आणि URL भरणे आवश्यक आहे!");
+            btn.disabled = true; btn.innerText = "Saving...";
+            if(editLinkId) {
+                db.collection("quicklinks").doc(editLinkId).update({ name, url, icon }).then(() => { document.getElementById('qlName').value=""; document.getElementById('qlUrl').value=""; document.getElementById('qlIcon').value=""; editLinkId = null; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक अपडेट झाली!"); }).catch(e => { btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; });
+            } else {
+                db.collection("quicklinks").add({ name, url, icon, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { document.getElementById('qlName').value=""; document.getElementById('qlUrl').value=""; document.getElementById('qlIcon').value=""; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक सेव्ह झाली!"); }).catch(e => { btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; });
+            }
+        }
+        function editLink(id) { db.collection("quicklinks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; switchTab('links'); window.scrollTo(0,0); } }); }
+        function deleteQuickLink(docId) { if(confirm("ही लिंक डिलीट करायची का?")) db.collection("quicklinks").doc(docId).delete(); }
+        function loadQuickLinks() {
+            db.collection("quicklinks").onSnapshot((snapshot) => {
+                const dg = document.getElementById('dashboardQuickLinks'); const tb = document.getElementById('linksTableBody'); dg.innerHTML = ""; tb.innerHTML = ""; let links = [];
+                snapshot.forEach(doc => links.push({id: doc.id, ...doc.data()})); links.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+                links.forEach(data => {
+                    dg.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
+                    tb.innerHTML += `<tr><td style="font-size:18px; text-align:center;">${data.icon}</td><td><b>${data.name}</b></td><td><a href="${data.url}" target="_blank" style="color:var(--primary); text-decoration:none;">${data.url}</a></td><td class="no-print"><button class="edit-btn" onclick="editLink('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteQuickLink('${data.id}')">❌</button></td></tr>`;
+                });
+            });
+        }
+
         // ================= SETTINGS =================
         function saveWalletNames() {
             localStorage.setItem("wallet_fino1", document.getElementById('renameFino1').value || "Fino 1"); localStorage.setItem("wallet_fino2", document.getElementById('renameFino2').value || "Fino 2"); localStorage.setItem("wallet_payworld", document.getElementById('renamePayworld').value || "Payworld"); localStorage.setItem("wallet_paynearby", document.getElementById('renamePaynearby').value || "Paynearby"); localStorage.setItem("wallet_mahapower", document.getElementById('renameMahapower').value || "Mahapower");
@@ -460,12 +651,13 @@
             updateLabels('lbl-fino1', f1); updateLabels('lbl-fino2', f2); updateLabels('lbl-payworld', pw); updateLabels('lbl-paynearby', pn); updateLabels('lbl-mahapower', mp); updateLabels('lbl-fino1-opt', f1+" ॲडजस्टमेंट"); updateLabels('lbl-fino2-opt', f2+" ॲडजस्टमेंट"); updateLabels('lbl-payworld-opt', pw+" ॲडजस्टमेंट"); updateLabels('lbl-paynearby-opt', pn+" ॲडजस्टमेंट"); updateLabels('lbl-mahapower-opt', mp+" ॲडजस्टमेंट"); updateLabels('lbl-fino1-dep', f1+" Cash Deposit"); updateLabels('lbl-fino2-dep', f2+" Cash Deposit"); updateLabels('lbl-payworld-dep', pw+" Cash Deposit"); updateLabels('lbl-paynearby-dep', pn+" Cash Deposit"); updateLabels('lbl-fino1-pay', f1+" Payment Bank"); updateLabels('lbl-fino2-pay', f2+" Payment Bank"); updateLabels('lbl-payworld-srv', pw+" Services"); updateLabels('lbl-paynearby-srv', pn+" Services"); updateLabels('lbl-mahapower-srv', mp+" Bill Collection");
             document.getElementById('renameFino1').value=f1==="Fino 1"?"":f1; document.getElementById('renameFino2').value=f2==="Fino 2"?"":f2; document.getElementById('renamePayworld').value=pw==="Payworld"?"":pw; document.getElementById('renamePaynearby').value=pn==="Paynearby"?"":pn; document.getElementById('renameMahapower').value=mp==="Mahapower"?"":mp;
             BANK_KEYS.forEach((key, i) => { let nm = localStorage.getItem("wallet_" + key) || key; updateLabels('lbl-b' + (i+1), nm); updateLabels('lbl-b' + (i+1) + '-opt', nm+" ॲडजस्टमेंट"); updateLabels('lbl-b' + (i+1) + '-upi', nm+" UPI"); document.getElementById('renameB' + (i+1)).value = nm===key?"":nm; });
-            document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, नावात बदल (राजपत्र), पॅन कार्ड इत्यादी.";
+            document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, पॅन कार्ड, आधार कार्ड इत्यादी.";
         }
 
+        // ================= FORM LOGIC =================
         function toggleFormFields() {
             const st = document.getElementById('serviceType').value; const bRow = document.getElementById('bankSelectRow'); const eRow = document.getElementById('expenseSourceRow'); const eLabel = document.getElementById('dynamicSourceLabel');
-            if(st === "Money Transfer" || st === "UPI Cash Given") { bRow.style.display = "flex"; eRow.style.display = "none"; document.getElementById('bankSelectLabel').innerText = "कोणत्या बँकेतून/बँकेत व्यवहार झाला?"; }
+            if(st === "Money Transfer" || st === "UPI Cash Given") { bRow.style.display = "flex"; eRow.style.display = "none"; }
             else if(st === "Shop Expense" || st === "Advance Received" || st === "Advance Used" || st === "Hand Loan Given" || st === "Hand Loan Returned") {
                 bRow.style.display = "none"; 
                 if(st === "Advance Received" || st === "Hand Loan Returned") { eLabel.innerHTML = "पैसे <b>कुठे जमा</b> झाले?"; eLabel.style.color = "var(--success)"; eRow.style.border = "1px dashed var(--success)"; eRow.style.background = "#f0fdf4"; } 
@@ -476,7 +668,31 @@
         function checkCAuditRule() { const amt = parseFloat(document.getElementById('amount').value) || 0; const label = document.getElementById('idProofLabel'); if(amt >= 10000) { label.innerHTML = "पॅन/आधार (₹10k+ मुळे <b>सक्तीचे</b>)"; label.style.color = "var(--danger)"; } else { label.innerHTML = "पॅन/आधार (₹10k+ साठी)"; label.style.color = "#334155"; } }
         function calcUdhar() { let t = parseFloat(document.getElementById('moTotal').value) || 0; let p = parseFloat(document.getElementById('moPaid').value) || 0; document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0; }
 
-        // ================= BANK CASH DEPOSIT LOG (NEW) =================
+        // ================= CUSTOMERS =================
+        function searchCustomer() { searchCustLogic('mobile', 'details', 'searchMsg', 'idProof'); }
+        function searchCustomerMaha() { searchCustLogic('moMobile', 'moName', 'searchMsgMo', 'moVillage', true); }
+        function searchCustLogic(mId, nId, msgId, exId, isMo=false) {
+            const mobile = document.getElementById(mId).value; const msgSpan = document.getElementById(msgId);
+            if (mobile.length === 10) {
+                db.collection("customers").doc(mobile).get().then((doc) => {
+                    if (doc.exists) { const d = doc.data(); document.getElementById(nId).value = d.name || ""; document.getElementById(exId).value = isMo ? (d.village||"-") : (d.idProof||"-"); msgSpan.innerHTML="✔️ जुना ग्राहक!"; msgSpan.style.color="var(--success)"; msgSpan.style.display="inline-block"; setTimeout(()=>msgSpan.style.display="none", 3000); } 
+                    else { msgSpan.innerHTML=`❌ नंबर नाही! <a href="#" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold;">ॲड करा</a>`; msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById(nId).value=""; }
+                });
+            }
+        }
+        function goToAddCustomer(mobile) { switchTab('customers'); document.getElementById('cMobile').value = mobile; document.getElementById('cName').focus(); }
+        function addNewCustomerManually() {
+            const btn = document.getElementById('saveCustomerBtn'); const name = document.getElementById('cName').value; const mobile = document.getElementById('cMobile').value; const village = document.getElementById('cVillage').value || "-"; const idProof = document.getElementById('cIdProof').value || "-";
+            if(name === "" || mobile.length !== 10) return alert("नाव आणि 10 अंकी नंबर आवश्यक!");
+            btn.disabled = true; btn.innerText = "Saving...";
+            db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { document.getElementById('cName').value=""; document.getElementById('cMobile').value=""; document.getElementById('cVillage').value=""; document.getElementById('cIdProof').value=""; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा"; alert("ग्राहक सेव्ह झाला!"); }).catch(e => { btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह / अपडेट करा"; });
+        }
+        function editCust(mobile) { let c = allCustomers.find(x => x.mobile === mobile); if(c) { document.getElementById('cName').value = c.name||""; document.getElementById('cMobile').value = c.mobile||""; document.getElementById('cVillage').value = c.village||""; document.getElementById('cIdProof').value = c.idProof||""; document.getElementById('saveCustomerBtn').innerText = "🔄 ग्राहक अपडेट करा"; switchTab('customers'); window.scrollTo(0,0); } }
+        function loadCustomersList() { db.collection("customers").onSnapshot((snap) => { allCustomers = []; snap.forEach(doc => allCustomers.push(doc.data())); renderCustTable(allCustomers); }); }
+        function renderCustTable(data) { const tb = document.getElementById("customersTableBody"); tb.innerHTML = ""; data.forEach(c => { tb.innerHTML += `<tr><td><b>${c.name}</b></td><td>${c.mobile}</td><td>${c.village}</td><td>${c.idProof}</td><td class="no-print"><button class="edit-btn" onclick="editCust('${c.mobile}')">✏️ Edit</button><button class="delete-btn" onclick="if(confirm('डिलीट करायचे?')) db.collection('customers').doc('${c.mobile}').delete();">❌</button></td></tr>`; }); }
+        function filterCustomerTable() { const q = document.getElementById("customerSearchInput").value.toLowerCase(); renderCustTable(allCustomers.filter(c => c.name.toLowerCase().includes(q) || c.mobile.includes(q) || c.village.toLowerCase().includes(q) || (c.idProof && c.idProof.toLowerCase().includes(q)))); }
+
+        // ================= BANK CASH DEPOSIT LOG =================
         function loadBankDeposits() {
             db.collection("bankDeposits").orderBy("timestamp", "asc").onSnapshot(snap => {
                 allBankDeps = []; const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
@@ -547,7 +763,26 @@
         function deleteEntry(docId) { if(confirm("कायमची डिलीट करायची का?")) db.collection("transactions").doc(docId).delete(); }
         function deleteAllEntries() { if(prompt("डिलीट करण्यासाठी 'DELETE' टाईप करा:")==="DELETE") { allTransactions.forEach(t => db.collection("transactions").doc(t.id).delete()); alert("डेटा डिलीट झाला!"); } }
 
-        // ================= CALCULATIONS & RENDER (COMMISSION STRICTLY TO CASH) =================
+        // ================= PENDING TASKS =================
+        function addPendingTask() {
+            const btn=document.getElementById('savePendingBtn'); const name=document.getElementById('ptName').value; const mobile=document.getElementById('ptMobile').value||"-"; const details=document.getElementById('ptDetails').value;
+            if(!name||!details) return alert("माहिती भरा!"); btn.disabled=true; btn.innerText="Saving...";
+            if(editTaskId) { db.collection("pendingTasks").doc(editTaskId).update({ customerName: name, mobile, taskDetails: details }).then(() => { document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; editTaskId=null; btn.disabled=false; btn.innerText="Save Pending Task"; alert("अपडेट झाले!"); }).catch(e => { btn.disabled=false; btn.innerText="Save Pending Task"; }); }
+            else { db.collection("pendingTasks").add({ customerName: name, mobile, taskDetails: details, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; btn.disabled=false; btn.innerText="Save Pending Task"; alert("सेव्ह झाले!"); }).catch(e => { btn.disabled=false; btn.innerText="Save Pending Task"; }); }
+        }
+        function editTask(id) { db.collection("pendingTasks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('ptName').value=data.customerName; document.getElementById('ptMobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('ptDetails').value=data.taskDetails; editTaskId=id; document.getElementById('savePendingBtn').innerText="🔄 पेंडिंग काम अपडेट करा"; switchTab('pending'); window.scrollTo(0,0); }}); }
+        function markTaskDone(docId) { db.collection("pendingTasks").doc(docId).update({ status: "Done" }); }
+        function deletePendingTask(docId) { if(confirm("डिलीट करायचे?")) db.collection("pendingTasks").doc(docId).delete(); }
+        function closePopup() { document.getElementById('pendingModal').style.display = 'none'; }
+        function loadPendingTasks() {
+            db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot(snap => {
+                const tb = document.getElementById('pendingTableBody'); const pp = document.getElementById('popupTaskList'); tb.innerHTML=""; pp.innerHTML=""; let tasks=[]; snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()})); tasks.sort((a,b)=>b.timestamp-a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||"";
+                tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="edit-btn" onclick="editTask('${d.id}')">✏️ Edit</button><button class="done-btn" onclick="markTaskDone('${d.id}')">✔</button><button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; });
+                if(tasks.length>0 && !hasShownPopup) { document.getElementById('pendingModal').style.display='block'; hasShownPopup=true; } else if(tasks.length===0) document.getElementById('pendingModal').style.display='none';
+            });
+        }
+
+        // ================= CALCULATIONS & RENDER =================
         function loadDataFromFirebase() {
             db.collection("transactions").orderBy("timestamp", "asc").onSnapshot(snap => {
                 allTransactions = []; snap.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
@@ -585,11 +820,8 @@
                     if(isToday && svc==="Shop Expense") expT+=amt; if(isThisMonth && svc==="Shop Expense") expM+=amt;
                 }
 
-                // COMMISSION: ALWAYS GOES TO CASH IN HAND!
                 if(comm > 0 && !svc.includes("Opening") && svc !== "Shop Expense" && !svc.includes("Advance") && !svc.includes("Hand Loan") && svc !== "Udhar Received") {
-                    cBal += comm;
-                    if(isToday) incT += comm;
-                    if(isThisMonth) incM += comm;
+                    cBal += comm; if(isToday) incT += comm; if(isThisMonth) incM += comm;
                 }
             });
 
@@ -628,7 +860,7 @@
                             if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
                             else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
                             
-                            if(comm > 0) impact += comm; // Commission adds to cash
+                            if(comm > 0) impact += comm;
 
                             if(impact > 0) cashIn[day] += impact; else if(impact < 0) cashOut[day] += Math.abs(impact);
                         }
@@ -651,7 +883,7 @@
             });
         }
 
-        // ================= STATEMENT TABLE (SMART SEARCH & COMM TO CASH) =================
+        // ================= STATEMENT TABLE (SMART SEARCH) =================
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; const sel = document.getElementById('walletFilter').value; let runBal = 0; let sumP = 0; let sumM = 0; let sumC = 0; let promo = localStorage.getItem("wa_promo_msg")||"";
             const f1=localStorage.getItem("wallet_fino1")||"Fino1"; const f2=localStorage.getItem("wallet_fino2")||"Fino2"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
@@ -682,9 +914,7 @@
                             else if ((svc === "Money Transfer" && bSrc === sel) || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === sel)) imp = -amt;
                         }
                     }
-                    
                     if(sel === "Cash" && comm > 0 && !svc.includes("Opening") && svc !== "Shop Expense" && !svc.includes("Advance") && !svc.includes("Hand Loan")) imp += comm;
-                    
                     runBal += imp;
                 }
 
@@ -761,7 +991,6 @@
             }
         }
         
-        // PENDING TASKS, QUICK LINKS, CUSTOMERS ETC ARE HANDLED ABOVE
         function downloadExcel() { let csv = []; let rows = document.querySelectorAll("#reportTable tr"); for (let i = 0; i < rows.length; i++) { let row = []; let cols = rows[i].querySelectorAll("td, th"); for (let j = 0; j < cols.length; j++) { if(cols[j].classList.contains("no-print")) continue; let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); row.push('"' + data + '"'); } csv.push(row.join(",")); } let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"}); let downloadLink = document.createElement("a"); downloadLink.download = "Pusdekar_Full_Statement.csv"; downloadLink.href = window.URL.createObjectURL(csvFile); downloadLink.style.display = "none"; document.body.appendChild(downloadLink); downloadLink.click(); }
     </script>
 </body>
