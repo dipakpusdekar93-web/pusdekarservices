@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusdekar Online Center - Management</title>
-    <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2563eb; --primary-dark: #1d4ed8;
@@ -34,19 +32,19 @@
         .view-section { display: none; }
         .view-section.active-view { display: block; }
 
-        /* Tally Box */
+        /* Udhar Ticker / Marquee */
+        .udhar-ticker { background: #fef2f2; color: #dc2626; padding: 10px 15px; font-weight: bold; border-left: 4px solid #dc2626; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: var(--card-shadow); font-size: 14px; }
+        .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
+        .udhar-ticker marquee { flex-grow: 1; cursor: pointer; }
+
+        /* Tally Box (Moved to Balances) */
         .tally-box { background: linear-gradient(to right, #fffbeb, #fef3c7); padding: 15px; border-radius: 8px; border: 1px solid #f59e0b; margin-bottom: 15px; box-shadow: var(--card-shadow); }
         .tally-box h3 { margin-top: 0; color: #b45309; font-size: 16px; border-bottom: 1px solid #fcd34d; padding-bottom: 8px; margin-bottom: 10px; }
         .tally-flex { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
         .tally-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #fde68a; flex: 1; min-width: 150px; text-align: center; }
         .tally-item span { font-size: 12px; color: #475569; display: block; margin-bottom: 5px; }
 
-        /* Udhar Ticker / Marquee */
-        .udhar-ticker { background: #fef2f2; color: #dc2626; padding: 10px 15px; font-weight: bold; border-left: 4px solid #dc2626; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: var(--card-shadow); font-size: 14px; }
-        .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
-        .udhar-ticker marquee { flex-grow: 1; cursor: pointer; }
-
-        /* Quick Links Dashboard */
+        /* Quick Links */
         .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
         .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
         .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
@@ -54,7 +52,14 @@
         .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
         .ql-icon { font-size: 20px; margin-bottom: 4px; }
 
-        /* Cards & Containers */
+        /* Summary Cards */
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
+        .card h4 { margin: 0 0 5px 0; color: #64748b; font-size: 11px; font-weight: 600; }
+        .card h3 { margin: 0; font-size: 18px; font-weight: 700; }
+        .card.income h3 { color: var(--success); } .card.expense h3 { color: var(--danger); }
+
+        /* Balances Design */
         .grand-total-card { background: linear-gradient(135deg, #059669, #047857); color: white; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 15px; box-shadow: var(--card-shadow); }
         .grand-total-card h4 { margin: 0 0 5px 0; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
         .grand-total-card h2 { margin: 0; font-size: 28px; font-weight: 700; }
@@ -72,10 +77,6 @@
         .b-card span { display: block; font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 2px; }
         .b-card strong { font-size: 13px; color: #0f172a; }
 
-        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .card { background: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
-        .card.income h3 { color: var(--success); } .card.expense h3 { color: var(--danger); }
-
         .container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
         .form-group { flex: 1; min-width: 180px; }
@@ -85,8 +86,8 @@
         select, input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px; background: #fff; font-family: inherit; }
         input[type="date"] { max-width: 140px; cursor: pointer; font-weight: 600; color: #0f172a; }
         input[type="datetime-local"] { max-width: 190px; cursor: pointer; font-weight: 600; color: #0f172a; }
-        
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        
         .save-btn, .adj-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; margin-top: 5px; }
         .save-btn:disabled { background: #94a3b8; cursor: not-allowed; } .adj-btn { background: var(--primary); }
         
@@ -103,14 +104,13 @@
         .done-btn { background: #dcfce7; color: var(--success); border: 1px solid #6ee7b7; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px;}
         .wa-btn { background: #25d366; color: white; border: none; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; text-decoration: none; display: inline-block; margin-right: 4px; margin-bottom: 2px;}
         
-        /* HIGHLIGHT BANK SELECTION CSS (Compact & Bottom) */
+        /* HIGHLIGHT BANK SELECTION CSS */
         @keyframes blinkRed { 0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.8); } 100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } }
         .highlight-bank-row { background: #fef2f2 !important; border: 2px dashed #dc2626 !important; animation: blinkRed 1.5s infinite; justify-content: center; }
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
         .highlight-bank-row select { border: 2px solid #dc2626 !important; font-weight: bold; color: #dc2626; text-align: center; cursor: pointer; }
 
-        .chart-container { background: white; padding: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; margin-top: 15px; height: 350px; position: relative; }
-        
+        /* Modals */
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
         .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
@@ -146,53 +146,20 @@
             <button class="logout-btn no-print" onclick="logoutUser()">Logout</button>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD ================= -->
+        <!-- ================= VIEW 1: DASHBOARD (CLEANED UP) ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
+            <!-- 1. UDHARI TICKER (TOP) -->
             <div class="udhar-ticker no-print" id="udharTickerBox" style="display:none;">
                 <span>⚠️ उधारी बाकी</span>
                 <marquee id="udharTickerText" behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();"></marquee>
             </div>
 
-            <!-- TALLY BOX -->
-            <div class="tally-box no-print">
-                <h3>⚖️ आजचा कॅश हिशोब (Smart Tally Checker)</h3>
-                <div class="tally-flex">
-                    <div class="tally-item">
-                        <span>सिस्टीमनुसार कॅश:</span>
-                        <b id="sysCashBal" style="font-size:22px; color:#0f172a;">₹ 0</b>
-                    </div>
-                    <div style="font-size:24px; color:#94a3b8; font-weight:bold;">-</div>
-                    <div class="tally-item">
-                        <span>गल्ल्यातील प्रत्यक्ष कॅश टाका:</span>
-                        <input type="number" id="actualCashInput" placeholder="उदा. 5000" oninput="checkTally()" style="width: 100%; font-size:16px; font-weight:bold; color:#0f172a; text-align:center; border:1px solid #cbd5e1;">
-                    </div>
-                    <div style="font-size:24px; color:#94a3b8; font-weight:bold;">=</div>
-                    <div class="tally-item" style="background:#f8fafc; border:none;">
-                        <span>हिशोबाचा निकाल:</span>
-                        <div id="tallyResult" style="font-size: 15px; font-weight: bold; margin-top:5px; color:#64748b;">👈 रक्कम टाका</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QUICK LINKS CONTAINER -->
-            <div class="quick-links-container no-print">
-                <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
-                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
-            </div>
-
-            <!-- SUMMARY CARDS -->
-            <div class="summary-cards">
-                <div class="card income"><h4>आजची एकूण कमाई</h4><h3 id="todayInc">₹ 0</h3></div>
-                <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="todayExp">₹ 0</h3></div>
-                <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="monthInc">₹ 0</h3></div>
-                <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
-            </div>
-
-            <!-- NEW ENTRY FORM -->
+            <!-- 2. NEW ENTRY FORM (MIDDLE) -->
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 
+                <!-- COMPACT DATE PICKER BADGE -->
                 <div style="background:#f0f9ff; padding:8px 12px; border-radius:6px; border:1px dashed #bae6fd; margin-bottom:12px; display:inline-block;">
                     <label style="color:#0284c7; margin-bottom:4px;">🕒 तारीख व वेळ (जुनी नोंद करायची असल्यास बदला)</label>
                     <input type="datetime-local" id="entryCustomDate" style="border-color:#bae6fd;">
@@ -273,7 +240,7 @@
 
                 <input type="hidden" id="villageInput" value="-">
 
-                <!-- BANK SELECT ROW (MOVED TO BOTTOM & COMPACT) -->
+                <!-- BANK SELECT ROW (BOTTOM & COMPACT) -->
                 <div class="form-row highlight-bank-row" id="bankSelectRow" style="display: none; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
                     <div class="form-group" style="max-width: 300px;">
                         <label id="bankSelectLabel">⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला?</label>
@@ -294,25 +261,98 @@
 
                 <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">Save Transaction Entry</button>
             </div>
+
+            <!-- 3. QUICK LINKS CONTAINER (BOTTOM) -->
+            <div class="quick-links-container no-print">
+                <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स (Quick Links)</h3>
+                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
+            </div>
         </div>
 
-        <!-- ================= VIEW 2: BALANCES (PRIVATE) ================= -->
+        <!-- ================= VIEW 2: BALANCES (MASTER FINANCE TAB) ================= -->
         <div id="viewBalances" class="view-section">
-            <div class="grand-total-card"><h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4><h2 id="grandTotalBal">₹ 0</h2></div>
-            <div class="wallet-cards">
-                <div class="w-card bg-fino1"><h4 class="lbl-fino1">Fino Dipak</h4><h3 id="f1Bal">₹ 0</h3></div><div class="w-card bg-fino2"><h4 class="lbl-fino2">Fino Pallavi</h4><h3 id="f2Bal">₹ 0</h3></div><div class="w-card bg-payworld"><h4 class="lbl-payworld">Payworld</h4><h3 id="pwBal">₹ 0</h3></div><div class="w-card bg-paynearby"><h4 class="lbl-paynearby">Paynearby</h4><h3 id="pnBal">₹ 0</h3></div><div class="w-card bg-mahapower"><h4 class="lbl-mahapower">Mahapower</h4><h3 id="mBal">₹ 0</h3></div><div class="w-card bg-cash"><h4>Cash in Hand</h4><h3 id="cBal">₹ 0</h3></div>
-            </div>
-            <div class="banks-container">
-                <div class="banks-header"><h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3></div>
-                <div class="banks-grid">
-                    <div class="b-card"><span class="lbl-b1">AXIS-2669</span><strong id="bal-b1">₹ 0</strong></div><div class="b-card"><span class="lbl-b2">BOI-0005</span><strong id="bal-b2">₹ 0</strong></div><div class="b-card"><span class="lbl-b3">BOI-0168</span><strong id="bal-b3">₹ 0</strong></div><div class="b-card"><span class="lbl-b4">WANA-0027</span><strong id="bal-b4">₹ 0</strong></div><div class="b-card"><span class="lbl-b5">BOI-4281</span><strong id="bal-b5">₹ 0</strong></div><div class="b-card"><span class="lbl-b6">AXIS-12548</span><strong id="bal-b6">₹ 0</strong></div><div class="b-card"><span class="lbl-b7">BOI-0735</span><strong id="bal-b7">₹ 0</strong></div><div class="b-card"><span class="lbl-b8">UNION-1529</span><strong id="bal-b8">₹ 0</strong></div><div class="b-card"><span class="lbl-b9">SBI-9083</span><strong id="bal-b9">₹ 0</strong></div>
+            
+            <!-- TALLY BOX (MOVED HERE) -->
+            <div class="tally-box no-print">
+                <h3>⚖️ आजचा कॅश हिशोब (Smart Tally Checker)</h3>
+                <div class="tally-flex">
+                    <div class="tally-item">
+                        <span>सिस्टीमनुसार कॅश:</span>
+                        <b id="sysCashBal" style="font-size:22px; color:#0f172a;">₹ 0</b>
+                    </div>
+                    <div style="font-size:24px; color:#94a3b8; font-weight:bold;">-</div>
+                    <div class="tally-item">
+                        <span>गल्ल्यातील प्रत्यक्ष कॅश टाका:</span>
+                        <input type="number" id="actualCashInput" placeholder="उदा. 5000" oninput="checkTally()" style="width: 100%; font-size:16px; font-weight:bold; color:#0f172a; text-align:center; border:1px solid #cbd5e1;">
+                    </div>
+                    <div style="font-size:24px; color:#94a3b8; font-weight:bold;">=</div>
+                    <div class="tally-item" style="background:#f8fafc; border:none;">
+                        <span>हिशोबाचा निकाल:</span>
+                        <div id="tallyResult" style="font-size: 15px; font-weight: bold; margin-top:5px; color:#64748b;">👈 रक्कम टाका</div>
+                    </div>
                 </div>
             </div>
+
+            <!-- SUMMARY CARDS (MOVED HERE) -->
+            <div class="summary-cards">
+                <div class="card income"><h4>आजची एकूण कमाई</h4><h3 id="todayInc">₹ 0</h3></div>
+                <div class="card expense"><h4>आजचा एकूण खर्च</h4><h3 id="todayExp">₹ 0</h3></div>
+                <div class="card monthly"><h4>या महिन्याची कमाई</h4><h3 id="monthInc">₹ 0</h3></div>
+                <div class="card monthly" style="border-top: 3px solid var(--danger);"><h4>या महिन्याचा खर्च</h4><h3 id="monthExp" style="color:var(--danger);">₹ 0</h3></div>
+            </div>
+
+            <div class="grand-total-card">
+                <h4>💰 सर्व वॉलेट्स + बँका + गल्ला = एकूण उपलब्ध बॅलन्स</h4>
+                <h2 id="grandTotalBal">₹ 0</h2>
+            </div>
+            
+            <div class="wallet-cards">
+                <div class="w-card bg-fino1"><h4 class="lbl-fino1">Fino Dipak</h4><h3 id="f1Bal">₹ 0</h3></div>
+                <div class="w-card bg-fino2"><h4 class="lbl-fino2">Fino Pallavi</h4><h3 id="f2Bal">₹ 0</h3></div>
+                <div class="w-card bg-payworld"><h4 class="lbl-payworld">Payworld</h4><h3 id="pwBal">₹ 0</h3></div>
+                <div class="w-card bg-paynearby"><h4 class="lbl-paynearby">Paynearby</h4><h3 id="pnBal">₹ 0</h3></div>
+                <div class="w-card bg-mahapower"><h4 class="lbl-mahapower">Mahapower</h4><h3 id="mBal">₹ 0</h3></div>
+                <div class="w-card bg-cash"><h4>Cash in Hand</h4><h3 id="cBal">₹ 0</h3></div>
+            </div>
+
+            <div class="banks-container">
+                <div class="banks-header">
+                    <h4>UPI Banks Balance</h4><h3 id="totalUpiBal">₹ 0</h3>
+                </div>
+                <div class="banks-grid">
+                    <div class="b-card"><span class="lbl-b1">AXIS-2669</span><strong id="bal-b1">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b2">BOI-0005</span><strong id="bal-b2">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b3">BOI-0168</span><strong id="bal-b3">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b4">WANA-0027</span><strong id="bal-b4">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b5">BOI-4281</span><strong id="bal-b5">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b6">AXIS-12548</span><strong id="bal-b6">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b7">BOI-0735</span><strong id="bal-b7">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b8">UNION-1529</span><strong id="bal-b8">₹ 0</strong></div>
+                    <div class="b-card"><span class="lbl-b9">SBI-9083</span><strong id="bal-b9">₹ 0</strong></div>
+                </div>
+            </div>
+
             <div class="container" style="border-left: 4px solid #0891b2;">
                 <h3>सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
                 <div class="form-row">
                     <div class="form-group">
-                        <select id="adjWallet"><option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option><option value="Fino Opening" class="lbl-fino1-opt">Fino 1 ॲडजस्टमेंट</option><option value="Fino2 Opening" class="lbl-fino2-opt">Fino 2 ॲडजस्टमेंट</option><option value="Payworld Opening" class="lbl-payworld-opt">Payworld ॲडजस्टमेंट</option><option value="Paynearby Opening" class="lbl-paynearby-opt">Paynearby ॲडजस्टमेंट</option><option value="Mahapower Opening" class="lbl-mahapower-opt">Mahapower ॲडजस्टमेंट</option><option value="AXIS-2669 Opening" class="lbl-b1-opt">AXIS-2669 ॲडजस्टमेंट</option><option value="BOI-0005 Opening" class="lbl-b2-opt">BOI-0005 ॲडजस्टमेंट</option><option value="BOI-0168 Opening" class="lbl-b3-opt">BOI-0168 ॲडजस्टमेंट</option><option value="WANA-0027 Opening" class="lbl-b4-opt">WANA-0027 ॲडजस्टमेंट</option><option value="BOI-4281 Opening" class="lbl-b5-opt">BOI-4281 ॲडजस्टमेंट</option><option value="AXIS-12548 Opening" class="lbl-b6-opt">AXIS-12548 ॲडजस्टमेंट</option><option value="BOI-0735 Opening" class="lbl-b7-opt">BOI-0735 ॲडजस्टमेंट</option><option value="UNION-1529 Opening" class="lbl-b8-opt">UNION-1529 ॲडजस्टमेंट</option><option value="SBI-9083 Opening" class="lbl-b9-opt">SBI-9083 ॲडजस्टमेंट</option></select>
+                        <select id="adjWallet">
+                            <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
+                            <option value="Fino Opening" class="lbl-fino1-opt">Fino 1 ॲडजस्टमेंट</option>
+                            <option value="Fino2 Opening" class="lbl-fino2-opt">Fino 2 ॲडजस्टमेंट</option>
+                            <option value="Payworld Opening" class="lbl-payworld-opt">Payworld ॲडजस्टमेंट</option>
+                            <option value="Paynearby Opening" class="lbl-paynearby-opt">Paynearby ॲडजस्टमेंट</option>
+                            <option value="Mahapower Opening" class="lbl-mahapower-opt">Mahapower ॲडजस्टमेंट</option>
+                            <option value="AXIS-2669 Opening" class="lbl-b1-opt">AXIS-2669 ॲडजस्टमेंट</option>
+                            <option value="BOI-0005 Opening" class="lbl-b2-opt">BOI-0005 ॲडजस्टमेंट</option>
+                            <option value="BOI-0168 Opening" class="lbl-b3-opt">BOI-0168 ॲडजस्टमेंट</option>
+                            <option value="WANA-0027 Opening" class="lbl-b4-opt">WANA-0027 ॲडजस्टमेंट</option>
+                            <option value="BOI-4281 Opening" class="lbl-b5-opt">BOI-4281 ॲडजस्टमेंट</option>
+                            <option value="AXIS-12548 Opening" class="lbl-b6-opt">AXIS-12548 ॲडजस्टमेंट</option>
+                            <option value="BOI-0735 Opening" class="lbl-b7-opt">BOI-0735 ॲडजस्टमेंट</option>
+                            <option value="UNION-1529 Opening" class="lbl-b8-opt">UNION-1529 ॲडजस्टमेंट</option>
+                            <option value="SBI-9083 Opening" class="lbl-b9-opt">SBI-9083 ॲडजस्टमेंट</option>
+                        </select>
                     </div>
                     <div class="form-group"><input type="number" id="adjAmount" placeholder="रक्कम टाका (₹) *"></div>
                     <div class="form-group"><input type="text" id="adjNarration" placeholder="नरेशन / टीप"></div>
@@ -324,12 +364,16 @@
 
         <!-- ================= VIEW 3: UDHAR KHATA ================= -->
         <div id="viewUdhar" class="view-section">
-            <div class="container" style="border-left: 4px solid var(--danger);"><h3 style="color: var(--danger);">📒 ग्राहकांची उधारी / बाकी (Udhar Khata)</h3></div>
+            <div class="container" style="border-left: 4px solid var(--danger);">
+                <h3 style="color: var(--danger);">📒 ग्राहकांची उधारी / बाकी (Udhar Khata)</h3>
+            </div>
             <div class="table-responsive">
                 <table id="udharTable">
                     <thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>सर्व्हिस</th><th>बाकी रक्कम (₹)</th><th class="no-print">कृती</th></tr></thead>
                     <tbody id="udharTableBody"></tbody>
-                    <tfoot style="background: #f8fafc; font-weight: bold; font-size: 14px;"><tr><td colspan="4" style="text-align: right; color: var(--danger);">एकूण मार्केटमधील उधारी:</td><td colspan="2"><span class="text-red" id="totalUdharAmount">₹ 0</span></td></tr></tfoot>
+                    <tfoot style="background: #f8fafc; font-weight: bold; font-size: 14px;">
+                        <tr><td colspan="4" style="text-align: right; color: var(--danger);">एकूण मार्केटमधील उधारी:</td><td colspan="2"><span class="text-red" id="totalUdharAmount">₹ 0</span></td></tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -341,13 +385,31 @@
                 <p style="font-size:12px; color:#64748b;">टीप: या नोंदी फक्त तुझ्या माहितीसाठी आहेत. याचा मुख्य बॅलन्सवर कोणताही परिणाम होणार नाही.</p>
                 <div class="form-row">
                     <div class="form-group"><label>तारीख व वेळ</label><input type="datetime-local" id="bdDate"></div>
-                    <div class="form-group"><label>कोणत्या बँकेत भरली?</label><select id="bdBank"><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select></div>
+                    <div class="form-group">
+                        <label>कोणत्या बँकेत भरली?</label>
+                        <select id="bdBank">
+                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
+                            <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
+                            <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
+                            <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
+                            <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                            <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
+                            <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
+                            <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
+                            <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                        </select>
+                    </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="किती कॅश भरली?"></div>
                     <div class="form-group"><label>कोणाकडे दिली / टीप</label><input type="text" id="bdNote" placeholder="उदा. प्रशांतकडे दिली"></div>
                 </div>
                 <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
             </div>
-            <div class="table-responsive"><table id="bdTable"><thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप / नरेशन</th><th class="no-print">कृती</th></tr></thead><tbody id="bdTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="bdTable">
+                    <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप / नरेशन</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="bdTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 5: STATEMENT ================= -->
@@ -355,7 +417,24 @@
             <div class="container filter-section">
                 <div class="form-group" style="margin-bottom:0; max-width: 180px;">
                     <label>खाते / वॉलेट निवडा:</label>
-                    <select id="walletFilter" onchange="filterData()"><option value="All">सर्व वॉलेट्स व बँका</option><option value="Cash">Cash in Hand</option><option value="Fino" class="lbl-fino1">Fino Dipak</option><option value="Fino2" class="lbl-fino2">Fino Pallavi</option><option value="Payworld" class="lbl-payworld">Payworld</option><option value="Paynearby" class="lbl-paynearby">Paynearby</option><option value="Mahapower" class="lbl-mahapower">Mahapower</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                    <select id="walletFilter" onchange="filterData()">
+                        <option value="All">सर्व वॉलेट्स व बँका (All Statement)</option>
+                        <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                        <option value="Fino" class="lbl-fino1">Fino Dipak</option>
+                        <option value="Fino2" class="lbl-fino2">Fino Pallavi</option>
+                        <option value="Payworld" class="lbl-payworld">Payworld</option>
+                        <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
+                        <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
+                        <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
+                        <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
+                        <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
+                        <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
+                        <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                        <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
+                        <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
+                        <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
+                        <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                    </select>
                 </div>
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
@@ -377,32 +456,61 @@
         <div id="viewLinks" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
-                <div class="form-row"><div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="वेबसाईटचे नाव"></div><div class="form-group"><label>वेबसाईटची लिंक (URL) *</label><input type="text" id="qlUrl" placeholder="https://..."></div><div class="form-group"><label>आयकॉन / इमोजी</label><input type="text" id="qlIcon" placeholder="इमोजी टाका"></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>लिंकचे नाव (उदा. महाऑनलाइन) *</label><input type="text" id="qlName" placeholder="वेबसाईटचे नाव"></div>
+                    <div class="form-group"><label>वेबसाईटची लिंक (URL) *</label><input type="text" id="qlUrl" placeholder="https://..."></div>
+                    <div class="form-group"><label>आयकॉन / इमोजी (उदा. 📝)</label><input type="text" id="qlIcon" placeholder="इमोजी टाका"></div>
+                </div>
                 <button class="save-btn" id="saveQuickLinkBtn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
             </div>
-            <div class="table-responsive"><table id="linksTable"><thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th class="no-print">कृती</th></tr></thead><tbody id="linksTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="linksTable">
+                    <thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="linksTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 7: CUSTOMERS ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा</h3>
-                <div class="form-row"><div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div><div class="form-group"><label>मोबाईल नंबर *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी"></div><div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div><div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन/आधार"></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="cName" placeholder="पूर्ण नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर *</label><input type="tel" id="cMobile" maxlength="10" placeholder="१० अंकी"></div>
+                    <div class="form-group"><label>गाव / पत्ता</label><input type="text" id="cVillage" placeholder="गाव"></div>
+                    <div class="form-group"><label>पॅन / आधार नंबर</label><input type="text" id="cIdProof" placeholder="पॅन/आधार"></div>
+                </div>
                 <button class="save-btn" id="saveCustomerBtn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह करा</button>
             </div>
             <div class="container filter-section"><input type="text" id="customerSearchInput" placeholder="🔍 शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
-            <div class="table-responsive"><table id="customersTable"><thead><tr><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव / पत्ता</th><th>पॅन / आधार नंबर</th><th class="no-print">कृती</th></tr></thead><tbody id="customersTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="customersTable">
+                    <thead><tr><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव / पत्ता</th><th>पॅन / आधार नंबर</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 8: PENDING TASKS ================= -->
         <div id="viewPending" class="view-section">
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
-                <div class="form-row"><div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div><div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div></div>
-                <div class="form-row"><div class="form-group" style="max-width:100%;"><label>काय काम आहे? *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>ग्राहकाचे नाव *</label><input type="text" id="ptName" placeholder="नाव"></div>
+                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="max-width:100%;"><label>काय काम आहे? *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div>
+                </div>
                 <button class="save-btn" id="savePendingBtn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
             </div>
-            <div class="table-responsive"><table id="pendingTable"><thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>कामाचा तपशील</th><th>स्थिती</th><th>कृती</th></tr></thead><tbody id="pendingTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="pendingTable">
+                    <thead><tr><th>तारीख</th><th>ग्राहकाचे नाव</th><th>मोबाईल</th><th>कामाचा तपशील</th><th>स्थिती</th><th>कृती</th></tr></thead>
+                    <tbody id="pendingTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 9: MAHAONLINE ================= -->
@@ -414,14 +522,29 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group"><label>सर्व्हिस निवडा</label><select id="moService"><option value="Income Certificate">उत्पन्न प्रमाणपत्र</option><option value="Domicile Certificate">रहिवासी प्रमाणपत्र</option><option value="Caste Certificate">जात प्रमाणपत्र</option><option value="General Affidavit">प्रतिज्ञापत्र</option><option value="Other Mahaonline">इतर सेवा</option></select></div>
-                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()"><span id="searchMsgMo" style="display:none; font-size:11px;"></span></div><div class="form-group"><label>नाव</label><input type="text" id="moName" readonly style="background:#f8fafc;"></div>
+                    <div class="form-group"><label>मोबाईल नंबर</label><input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()"><span id="searchMsgMo" style="display:none; font-size:11px;"></span></div>
+                    <div class="form-group"><label>नाव</label><input type="text" id="moName" readonly style="background:#f8fafc;"></div>
                 </div>
                 <input type="hidden" id="moVillage" value="-">
-                <div class="form-row"><div class="form-group"><label>एकूण फी (₹) *</label><input type="number" id="moTotal" oninput="calcUdhar()"></div><div class="form-group"><label>आज जमा (₹) *</label><input type="number" id="moPaid" oninput="calcUdhar()"></div><div class="form-group"><label>बाकी (₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div></div>
-                <div class="form-row"><div class="form-group"><label>पेमेंट कुठे जमा झाले?</label><select id="moPayMode"><option value="Cash">Cash in Hand</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>एकूण फी (₹) *</label><input type="number" id="moTotal" oninput="calcUdhar()"></div>
+                    <div class="form-group"><label>आज जमा (₹) *</label><input type="number" id="moPaid" oninput="calcUdhar()"></div>
+                    <div class="form-group"><label>बाकी (₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>पेमेंट कुठे जमा झाले?</label>
+                        <select id="moPayMode"><option value="Cash">Cash in Hand</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
+                    </div>
+                </div>
                 <button class="save-btn" id="saveMahaBtn" style="background:#8b5cf6;" onclick="saveMahaonline()">Save Mahaonline Entry</button>
             </div>
-            <div class="table-responsive"><table id="mahaonlineTable"><thead><tr><th>तारीख</th><th>सर्व्हिस</th><th>नाव व मोबाईल</th><th>गाव</th><th>पेमेंट मोड</th><th>एकूण फी</th><th class="text-green">जमा</th><th class="text-red">उधार</th><th class="no-print">कृती</th></tr></thead><tbody id="moTableBody"></tbody></table></div>
+            <div class="table-responsive">
+                <table id="mahaonlineTable">
+                    <thead><tr><th>तारीख</th><th>सर्व्हिस</th><th>नाव व मोबाईल</th><th>गाव</th><th>पेमेंट मोड</th><th>एकूण फी</th><th class="text-green">जमा</th><th class="text-red">उधार</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="moTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- ================= VIEW 10: SETTINGS ================= -->
@@ -453,6 +576,7 @@
         <div class="modal-content"><span class="close-popup" onclick="closePopup()">&times;</span><h3 style="margin-top:0; color:var(--warning);">आजची पेंडिंग कामे</h3><ul class="popup-task-list" id="popupTaskList"></ul></div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
