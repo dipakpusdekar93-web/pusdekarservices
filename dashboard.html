@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pusdekar Online Center - Management</title>
-    <!-- Chart.js Library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #2563eb; --primary-dark: #1d4ed8;
@@ -34,13 +32,21 @@
         .view-section { display: none; }
         .view-section.active-view { display: block; }
 
-        /* Udhar Ticker */
+        /* Udhar Ticker / Marquee */
         .udhar-ticker { background: #fef2f2; color: #dc2626; padding: 10px 15px; font-weight: bold; border-left: 4px solid #dc2626; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; box-shadow: var(--card-shadow); font-size: 14px; }
         .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
         .udhar-ticker marquee { flex-grow: 1; cursor: pointer; }
 
+        /* Tally Box */
+        .tally-box { background: linear-gradient(to right, #fffbeb, #fef3c7); padding: 15px; border-radius: 8px; border: 1px solid #f59e0b; margin-bottom: 15px; box-shadow: var(--card-shadow); }
+        .tally-box h3 { margin-top: 0; color: #b45309; font-size: 16px; border-bottom: 1px solid #fcd34d; padding-bottom: 8px; margin-bottom: 10px; }
+        .tally-flex { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .tally-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #fde68a; flex: 1; min-width: 150px; text-align: center; }
+        .tally-item span { font-size: 12px; color: #475569; display: block; margin-bottom: 5px; }
+
         /* Quick Links */
         .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
+        .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
         .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
         .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; transition: all 0.2s; }
         .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
@@ -110,6 +116,7 @@
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
         .highlight-bank-row select { border: 2px solid #dc2626 !important; font-weight: bold; color: #dc2626; text-align: center; cursor: pointer; }
 
+        /* Modals */
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
         .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
@@ -382,11 +389,6 @@
                 </div>
                 <button class="save-btn" style="background:#475569; margin-top:15px;" onclick="clearAllTallies()">🔄 सर्व रकाने रिकामे करा (Clear All)</button>
             </div>
-            
-            <div class="chart-container no-print">
-                <h3 style="margin-top:0; font-size:14px; color:#475569; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">📊 चालू महिन्याचा कॅश रिपोर्ट (Income vs Cash Flow)</h3>
-                <canvas id="monthlyChart"></canvas>
-            </div>
         </div>
 
         <!-- ================= VIEW 4: UDHAR KHATA ================= -->
@@ -526,7 +528,6 @@
         <div class="modal-content"><span class="close-popup" onclick="closePopup()">&times;</span><h3 style="margin-top:0; color:var(--warning);">आजची पेंडिंग कामे</h3><ul class="popup-task-list" id="popupTaskList"></ul></div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -540,7 +541,6 @@
         
         let hasShownPopup = false; let allTransactions = []; let allCustomers = []; let allBankDeps = [];
         let editLinkId = null, editTaskId = null, editEntryId = null, editAdjId = null, editMahaId = null, editBdId = null;
-        let myChartInstance = null;
 
         firebase.auth().onAuthStateChanged((user) => { 
             if (!user) { window.location.href = "login.html"; }
@@ -583,6 +583,16 @@
             else { resTd.innerHTML = `❌ -₹ ${Math.abs(diff)} कमी`; resTd.style.color = "var(--danger)"; }
         }
 
+        function checkTally() {
+            const actual = parseFloat(document.getElementById('actualCashInput').value) || 0;
+            const sysStr = document.getElementById('sysCashBal').innerText.replace('₹ ', '').replace(/,/g, '');
+            const sys = parseFloat(sysStr) || 0; const diff = actual - sys; const res = document.getElementById('tallyResult');
+            if(document.getElementById('actualCashInput').value === "") { res.innerHTML = "👈 रक्कम टाका"; res.style.color = "#64748b"; return; }
+            if(diff === 0) { res.innerHTML = "✅ हिशोब एकदम बरोबर जुळला! (Tally)"; res.style.color = "var(--success)"; }
+            else if(diff > 0) { res.innerHTML = `⚠️ गल्ल्यात ₹ ${Math.abs(diff)} जास्त आहेत.`; res.style.color = "var(--primary)"; }
+            else { res.innerHTML = `❌ गल्ल्यात ₹ ${Math.abs(diff)} कमी आहेत.`; res.style.color = "var(--danger)"; }
+        }
+
         function clearAllTallies() {
             ['cBal','f1Bal','f2Bal','pwBal','pnBal','mBal','b1','b2','b3','b4','b5','b6','b7','b8','b9'].forEach(k => {
                 let el = document.getElementById('tact_' + k);
@@ -605,7 +615,7 @@
             document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, पॅन कार्ड इत्यादी.";
         }
 
-        // ================= FORM LOGIC (COMMISSION ALWAYS VISIBLE) =================
+        // ================= FORM LOGIC =================
         function toggleFormFields() {
             const st = document.getElementById('serviceType').value; 
             const bRow = document.getElementById('bankSelectRow'); 
@@ -613,7 +623,7 @@
             const aRow = document.getElementById('aepsRow');
 
             bRow.style.display = "none"; eRow.style.display = "none"; aRow.style.display = "none";
-            document.getElementById('commissionBox').style.display = "block"; // ALWAYS VISIBLE
+            document.getElementById('commissionBox').style.display = "block";
 
             if(st === "Money Transfer" || st === "UPI Cash Given" || st === "Self Bank Deposit" || st === "Self Bank Withdrawal") { 
                 bRow.style.display = "flex"; 
@@ -829,8 +839,11 @@
                     if(isThisMonth) { if(svc==="Shop Expense") expM+=amt; else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment") incM+=amt; }
                 }
 
+                // COMMISSION LOGIC: ALWAYS ADD TO CASH
                 if(comm > 0 && !svc.includes("Opening") && svc !== "Shop Expense" && svc !== "Udhar Received") {
-                    cBal += comm; if(isToday) incT += comm; if(isThisMonth) incM += comm;
+                    cBal += comm; 
+                    if(isToday) incT += comm; 
+                    if(isThisMonth) incM += comm;
                 }
             });
 
@@ -848,7 +861,6 @@
                 let tsEl = document.getElementById('tsys_'+key); if(tsEl) tsEl.innerText = "₹ "+idMap[key];
             }
             
-            // NO CRASH HERE ANYMORE
             let tUpiEl = document.getElementById('totalUpiBal'); if(tUpiEl) tUpiEl.innerText="₹ "+tUpi;
             let tInc = document.getElementById('todayInc'); if(tInc) tInc.innerText="₹ "+incT; 
             let tExp = document.getElementById('todayExp'); if(tExp) tExp.innerText="₹ "+expT; 
@@ -857,41 +869,7 @@
             
             ['cBal','f1Bal','f2Bal','pwBal','pnBal','mBal','b1','b2','b3','b4','b5','b6','b7','b8','b9'].forEach(k => { if(document.getElementById('tsys_'+k)) calcTally(k); });
             
-            filterData(); generateMonthlyChart(dataList);
-        }
-
-        function generateMonthlyChart(dataList) {
-            const ctx = document.getElementById('monthlyChart'); if(!ctx) return;
-            const now = new Date(); const currM = now.getMonth(); const currY = now.getFullYear(); const todayDate = now.getDate();
-            let labels = []; let incData = new Array(todayDate).fill(0); let cashIn = new Array(todayDate).fill(0); let cashOut = new Array(todayDate).fill(0);
-            for(let i=1; i<=todayDate; i++) labels.push(i);
-            
-            dataList.forEach(data => {
-                if(!data.timestamp) return; let d = data.timestamp.toDate();
-                if(d.getMonth() === currM && d.getFullYear() === currY) {
-                    let day = d.getDate() - 1; 
-                    if(day < todayDate) {
-                        const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
-                        let svc = getSafeString(data.service); let eSrc = getSafeString(data.expenseSource); 
-                        
-                        if(data.category === "Mahaonline") {
-                            incData[day] += amt; cashIn[day] += amt;
-                        } else {
-                            if(svc !== "Shop Expense" && !svc.includes("Opening") && !svc.includes("Advance") && !svc.includes("Hand Loan") && svc !== "Udhar Received") incData[day] += comm;
-                            let impact = 0;
-                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Printing & Xerox" || svc === "PAN / Aadhaar Services" || svc === "Bill Payment" || ((svc === "Advance Received" || svc === "Hand Loan Returned") && eSrc === "Cash")) impact = amt;
-                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || ((svc === "Shop Expense" || svc === "Advance Used" || svc === "Hand Loan Given") && eSrc === "Cash")) impact = -amt;
-                            
-                            if(comm > 0) impact += comm;
-
-                            if(impact > 0) cashIn[day] += impact; else if(impact < 0) cashOut[day] += Math.abs(impact);
-                        }
-                    }
-                }
-            });
-
-            if(myChartInstance) myChartInstance.destroy();
-            myChartInstance = new Chart(ctx, { type: 'line', data: { labels: labels, datasets: [ { label: 'एकूण कमाई (Income)', data: incData, borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.1)', tension: 0.3, fill: true }, { label: 'गल्ल्यात कॅश आली (Cash In)', data: cashIn, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.1)', tension: 0.3 }, { label: 'गल्ल्यातून कॅश गेली (Cash Out)', data: cashOut, borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', tension: 0.3 } ] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12 } } }, scales: { x: { title: { display: true, text: 'चालू महिन्याची तारीख' } }, y: { title: { display: true, text: 'रक्कम (₹)' }, suggestedMin: 100 } } } });
+            filterData();
         }
 
         // ================= STATEMENT & TABLES =================
