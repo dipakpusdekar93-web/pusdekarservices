@@ -39,16 +39,8 @@
         .udhar-ticker span { white-space: nowrap; margin-right: 15px; background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; }
         .udhar-ticker marquee { flex-grow: 1; cursor: pointer; }
 
-        /* Tally Box */
-        .tally-box { background: linear-gradient(to right, #fffbeb, #fef3c7); padding: 15px; border-radius: 8px; border: 1px solid #f59e0b; margin-bottom: 15px; box-shadow: var(--card-shadow); }
-        .tally-box h3 { margin-top: 0; color: #b45309; font-size: 16px; border-bottom: 1px solid #fcd34d; padding-bottom: 8px; margin-bottom: 10px; }
-        .tally-flex { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
-        .tally-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #fde68a; flex: 1; min-width: 150px; text-align: center; }
-        .tally-item span { font-size: 12px; color: #475569; display: block; margin-bottom: 5px; }
-
         /* Quick Links */
         .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
-        .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
         .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
         .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; transition: all 0.2s; }
         .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
@@ -118,9 +110,6 @@
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
         .highlight-bank-row select { border: 2px solid #dc2626 !important; font-weight: bold; color: #dc2626; text-align: center; cursor: pointer; }
 
-        .chart-container { background: white; padding: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; margin-top: 15px; height: 350px; position: relative; }
-        
-        /* Modals */
         .modal-overlay { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
         .modal-content { background: #fff; margin: 8% auto; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; position: relative; }
         .close-popup { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; font-weight: bold; }
@@ -160,11 +149,13 @@
         <!-- ================= VIEW 1: DASHBOARD (CLEANED UP) ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
+            <!-- 1. UDHARI TICKER (TOP) -->
             <div class="udhar-ticker no-print" id="udharTickerBox" style="display:none;">
                 <span>⚠️ उधारी बाकी</span>
                 <marquee id="udharTickerText" behavior="scroll" direction="left" scrollamount="6" onmouseover="this.stop();" onmouseout="this.start();"></marquee>
             </div>
 
+            <!-- 2. NEW ENTRY FORM (MIDDLE) -->
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 
@@ -181,6 +172,7 @@
                             <option value="Money Transfer">Money Transfer (PhonePe/GPay)</option>
                             <option value="UPI Cash Given">UPI Cash Given (युपीआय घेऊन रोख देणे)</option>
                             <option value="AEPS" style="font-weight:bold; color:#d97706;">💳 AEPS / Wallet Services</option>
+                            <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- इतर सर्व्हिसेस ---</option>
                             <option value="Mahapower Bill Collection" class="lbl-mahapower-srv">Mahapower Bill Collection</option>
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                         </select>
@@ -190,7 +182,7 @@
                     <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील)</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
 
-                <!-- AEPS SPECIFIC DROPDOWNS (Hidden by default) -->
+                <!-- AEPS SPECIFIC DROPDOWNS -->
                 <div class="form-row" id="aepsRow" style="display:none; background:#fffbeb; padding:10px; border-radius:6px; border:1px dashed var(--warning);">
                     <div class="form-group" style="max-width: 250px;">
                         <label style="color:var(--warning);">पोर्टल निवडा (Portal)</label>
@@ -238,7 +230,7 @@
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
                     <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
                     
-                    <!-- COMMISSION BOX IS ALWAYS VISIBLE NOW -->
+                    <!-- COMMISSION BOX ALWAYS VISIBLE -->
                     <div class="form-group" id="commissionBox">
                         <label style="color:var(--success);">कमिशन (₹) (कॅशमध्ये ॲड होईल)</label>
                         <input type="number" id="commission" placeholder="कमिशन टाका (उदा. 10)">
@@ -534,6 +526,7 @@
         <div class="modal-content"><span class="close-popup" onclick="closePopup()">&times;</span><h3 style="margin-top:0; color:var(--warning);">आजची पेंडिंग कामे</h3><ul class="popup-task-list" id="popupTaskList"></ul></div>
     </div>
 
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -772,7 +765,6 @@
                     if(st.includes("Cash Deposit")) document.getElementById('aepsType').value = "Deposit"; else document.getElementById('aepsType').value = "Withdrawal";
                 } 
                 else if(st === "PAN / Aadhaar Services" || st === "Printing & Xerox" || st === "Bill Payment" || st.includes("Bank Deposit") || st.includes("Bank Withdrawal") || st.includes("Advance") || st.includes("Hand Loan")) {
-                    // This handles OLD entries that used removed service types
                     document.getElementById('serviceType').innerHTML += `<option value="${st}" style="display:none;">${st}</option>`;
                     document.getElementById('serviceType').value = st;
                 }
@@ -785,7 +777,6 @@
         function deleteEntry(docId) { if(confirm("कायमची डिलीट करायची का?")) db.collection("transactions").doc(docId).delete(); }
         function deleteAllEntries() { if(prompt("डिलीट करण्यासाठी 'DELETE' टाईप करा:")==="DELETE") { allTransactions.forEach(t => db.collection("transactions").doc(t.id).delete()); alert("डेटा डिलीट झाला!"); } }
 
-        // ================= PENDING TASKS =================
         function addPendingTask() { const btn=document.getElementById('savePendingBtn'); const name=document.getElementById('ptName').value; const mobile=document.getElementById('ptMobile').value||"-"; const details=document.getElementById('ptDetails').value; if(!name||!details) return alert("माहिती भरा!"); btn.disabled=true; btn.innerText="Saving..."; if(editTaskId) { db.collection("pendingTasks").doc(editTaskId).update({ customerName: name, mobile, taskDetails: details }).then(() => { document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; editTaskId=null; btn.disabled=false; btn.innerText="Save Pending Task"; alert("अपडेट झाले!"); }).catch(e => { btn.disabled=false; btn.innerText="Save Pending Task"; }); } else { db.collection("pendingTasks").add({ customerName: name, mobile, taskDetails: details, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; btn.disabled=false; btn.innerText="Save Pending Task"; alert("सेव्ह झाले!"); }).catch(e => { btn.disabled=false; btn.innerText="Save Pending Task"; }); } }
         function editTask(id) { db.collection("pendingTasks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('ptName').value=data.customerName; document.getElementById('ptMobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('ptDetails').value=data.taskDetails; editTaskId=id; document.getElementById('savePendingBtn').innerText="🔄 पेंडिंग काम अपडेट करा"; switchTab('pending'); window.scrollTo(0,0); }}); }
         function markTaskDone(docId) { db.collection("pendingTasks").doc(docId).update({ status: "Done" }); }
@@ -793,7 +784,7 @@
         function closePopup() { document.getElementById('pendingModal').style.display = 'none'; }
         function loadPendingTasks() { db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot(snap => { const tb = document.getElementById('pendingTableBody'); const pp = document.getElementById('popupTaskList'); tb.innerHTML=""; pp.innerHTML=""; let tasks=[]; snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()})); tasks.sort((a,b)=>b.timestamp-a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||""; tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="edit-btn" onclick="editTask('${d.id}')">✏️ Edit</button><button class="done-btn" onclick="markTaskDone('${d.id}')">✔</button><button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; }); if(tasks.length>0 && !hasShownPopup) { document.getElementById('pendingModal').style.display='block'; hasShownPopup=true; } else if(tasks.length===0) document.getElementById('pendingModal').style.display='none'; }); }
 
-        // ================= CALCULATIONS (BACKWARD COMPATIBLE & COMMISSION FIX) =================
+        // ================= CALCULATIONS (BUG FREE & COMMISSION FIX) =================
         function loadDataFromFirebase() {
             db.collection("transactions").orderBy("timestamp", "asc").onSnapshot(snap => {
                 allTransactions = []; snap.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
@@ -804,11 +795,15 @@
         
         function processCalculations(dataList) {
             let incT=0, expT=0, incM=0, expM=0; let f1Bal=0, f2Bal=0, pwBal=0, pnBal=0, mBal=0, cBal=0; let bankBal = {}; BANK_KEYS.forEach(k => bankBal[k]=0);
-            const now = new Date(); const todayDateStr = now.toLocaleDateString('en-IN'); const currentMonth = now.getMonth(); const currentYear = now.getFullYear();
+            const now = new Date(); const currentMonth = now.getMonth(); const currentYear = now.getFullYear();
 
             dataList.forEach(data => {
                 let isToday=false, isThisMonth=false;
-                if (data.timestamp) { let docDate = data.timestamp.toDate(); if(docDate.toLocaleDateString('en-IN') === todayDateStr) isToday=true; if(docDate.getMonth()===currentMonth && docDate.getFullYear()===currentYear) isThisMonth=true; }
+                if (data.timestamp) { 
+                    let docDate = data.timestamp.toDate(); 
+                    if(docDate.getDate() === now.getDate() && docDate.getMonth() === now.getMonth() && docDate.getFullYear() === now.getFullYear()) { isToday=true; }
+                    if(docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) { isThisMonth=true; } 
+                }
                 const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
                 let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
                 if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc];
@@ -828,27 +823,14 @@
                     else if(svc==="Self Bank Deposit") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]+=amt; cBal-=amt; } else if(svc==="Self Bank Withdrawal") { if(bankBal[bSrc]!==undefined) bankBal[bSrc]-=amt; cBal+=amt; }
                     else if(svc==="Advance Received"||svc==="Hand Loan Returned") { if(bankBal[eSrc]!==undefined) bankBal[eSrc]+=amt; else if(eSrc==="Fino") f1Bal+=amt; else if(eSrc==="Fino2") f2Bal+=amt; else if(eSrc==="Payworld") pwBal+=amt; else if(eSrc==="Paynearby") pnBal+=amt; else if(eSrc==="Mahapower") mBal+=amt; else cBal+=amt; }
                     else if(svc==="Shop Expense"||svc==="Advance Used"||svc==="Hand Loan Given") { if(bankBal[eSrc]!==undefined) bankBal[eSrc]-=amt; else if(eSrc==="Fino") f1Bal-=amt; else if(eSrc==="Fino2") f2Bal-=amt; else if(eSrc==="Payworld") pwBal-=amt; else if(eSrc==="Paynearby") pnBal-=amt; else if(eSrc==="Mahapower") mBal-=amt; else cBal-=amt; }
-                    
-                    // Old Removed Generic Services fallback
-                    else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment" || svc==="Udhar Received") {
-                        cBal += amt;
-                    }
+                    else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment" || svc==="Udhar Received") { cBal += amt; }
 
-                    if(isToday) {
-                        if(svc==="Shop Expense") expT+=amt; 
-                        else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment") incT+=amt; 
-                    }
-                    if(isThisMonth) {
-                        if(svc==="Shop Expense") expM+=amt; 
-                        else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment") incM+=amt; 
-                    }
+                    if(isToday) { if(svc==="Shop Expense") expT+=amt; else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment") incT+=amt; }
+                    if(isThisMonth) { if(svc==="Shop Expense") expM+=amt; else if(svc==="PAN / Aadhaar Services" || svc==="Printing & Xerox" || svc==="Bill Payment") incM+=amt; }
                 }
 
-                // COMMISSION LOGIC: ALWAYS ADD TO CASH
                 if(comm > 0 && !svc.includes("Opening") && svc !== "Shop Expense" && svc !== "Udhar Received") {
-                    cBal += comm; 
-                    if(isToday) incT += comm; 
-                    if(isThisMonth) incM += comm;
+                    cBal += comm; if(isToday) incT += comm; if(isThisMonth) incM += comm;
                 }
             });
 
@@ -866,8 +848,7 @@
                 let tsEl = document.getElementById('tsys_'+key); if(tsEl) tsEl.innerText = "₹ "+idMap[key];
             }
             
-            let cInput = document.getElementById('sysCashBal'); if(cInput) cInput.innerText="₹ "+cBal; checkTally();
-            
+            // NO CRASH HERE ANYMORE
             let tUpiEl = document.getElementById('totalUpiBal'); if(tUpiEl) tUpiEl.innerText="₹ "+tUpi;
             let tInc = document.getElementById('todayInc'); if(tInc) tInc.innerText="₹ "+incT; 
             let tExp = document.getElementById('todayExp'); if(tExp) tExp.innerText="₹ "+expT; 
