@@ -425,9 +425,8 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
-        // 🚀 नवीन फीचर: फोटोची साईझ कमी करणारा फंक्शन (Image Compressor)
+        // 🚀 फोटोची साईझ एकदम कमी करणारा फंक्शन (800px / 30% Quality)
         async function compressImage(file) {
-            // जर फाईल PDF असेल तर साईझ कमी करायची गरज नाही, तशीच पुढे पाठवा
             if (!file.type.match(/image.*/)) {
                 return file;
             }
@@ -441,8 +440,7 @@
                         let width = img.width;
                         let height = img.height;
 
-                        // फोटो खूप मोठा असेल तर त्याची साईझ लिमिट करणे (Max 1200px)
-                        const MAX_SIZE = 1200;
+                        const MAX_SIZE = 800;
                         if (width > height) {
                             if (width > MAX_SIZE) {
                                 height *= MAX_SIZE / width;
@@ -460,10 +458,10 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // फोटो कंप्रेस करणे (60% Quality) जेणेकरून तो KB मध्ये होईल
+                        // क्वालिटी 30% ठेवली आहे जेणेकरून साईझ 30KB ते 80KB राहील
                         canvas.toBlob((blob) => {
                             resolve(new File([blob], file.name, { type: 'image/jpeg' }));
-                        }, 'image/jpeg', 0.6);
+                        }, 'image/jpeg', 0.3);
                     };
                     img.src = e.target.result;
                 };
@@ -494,30 +492,19 @@
             try {
                 let uploadedFileUrls = [];
 
-                // 🚀 नवीन फीचर: फास्ट आणि पॅरलल अपलोड (Fast Parallel Upload)
                 if (fileInput.files.length > 0) {
-                    // सर्व फाईल्स एकाच वेळी प्रोसेस करण्यासाठी Array.map वापरला आहे
                     const uploadPromises = Array.from(fileInput.files).map(async (originalFile) => {
-                        
-                        // आधी फोटो कंप्रेस करा (साईझ कमी करा)
                         let file = await compressImage(originalFile);
-
-                        // फाईलचे नाव युनिक बनवणे
                         let uniqueName = Date.now() + "_" + file.name;
                         let storageRef = storage.ref('customer_docs/' + uniqueName);
-                        
-                        // फाईल अपलोड करणे
                         let uploadTask = await storageRef.put(file);
                         return await uploadTask.ref.getDownloadURL();
                     });
-
-                    // सर्व फाईल्स अपलोड होण्याची एकाच वेळी वाट पाहणे (यामुळे वेळ 4 पटीने वाचेल)
                     uploadedFileUrls = await Promise.all(uploadPromises);
                 }
 
                 btn.innerText = "💾 माहिती सेव्ह होत आहे...";
 
-                // सर्व माहिती Firestore मध्ये सेव्ह करणे
                 await db.collection("onlineLeads").add({
                     customerName: name,
                     mobile: mobile,
@@ -530,7 +517,6 @@
 
                 alert("✅ तुमची रिक्वेस्ट यशस्वीरित्या पाठवली गेली आहे! आम्ही लवकरच तुमच्याशी संपर्क करू.");
                 
-                // फॉर्म रिकामा करणे
                 document.getElementById('leadForm').reset();
                 btn.disabled = false;
                 btn.innerText = "🚀 रिक्वेस्ट पाठवा";
