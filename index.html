@@ -109,6 +109,7 @@
             font-weight: bold;
             display: inline-block;
             border: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 15px;
         }
 
         /* Founder Card on Hero */
@@ -144,7 +145,7 @@
 
         /* Services Section */
         .section-container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 0 20px;
         }
@@ -190,6 +191,72 @@
             line-height: 1.6;
         }
 
+        /* Customer Lead Form Section */
+        .lead-form-container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #334155;
+            font-size: 13px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background: #f8fafc;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0043c2;
+            background: #ffffff;
+        }
+        .form-group input[type="file"] {
+            padding: 9px;
+            background: #ffffff;
+        }
+        .submit-btn {
+            background: #0043c2;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background: #003399;
+        }
+        .submit-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
         /* Footer */
         footer {
             background: #0f172a;
@@ -224,9 +291,8 @@
         <div class="nav-menu">
             <a href="#">Home</a>
             <a href="#services">Services</a>
-            <a href="#about">About Us</a>
-            <a href="#contact">Contact</a>
-            <a href="Login.html" class="login-nav-btn">Admin Login</a>
+            <a href="#order">Order Online</a>
+            <a href="login.html" class="login-nav-btn">Admin Login</a>
         </div>
     </header>
 
@@ -279,10 +345,152 @@
         </div>
     </div>
 
-    <footer id="contact">
+    <!-- CUSTOMER LEAD FORM SECTION -->
+    <div class="section-container" id="order">
+        <div class="section-title">ऑनलाईन काम सांगा (Order Online)</div>
+        <div class="section-subtitle">दुकानात येण्याची गरज नाही, घरबसल्या माहिती आणि कागदपत्रे अपलोड करा.</div>
+
+        <div class="lead-form-container">
+            <form id="leadForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>तुमचे नाव *</label>
+                        <input type="text" id="custName" placeholder="संपूर्ण नाव टाका" required>
+                    </div>
+                    <div class="form-group">
+                        <label>मोबाईल नंबर (WhatsApp) *</label>
+                        <input type="tel" id="custMobile" maxlength="10" placeholder="10 अंकी नंबर" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>कोणते काम करायचे आहे? *</label>
+                        <select id="custService" required>
+                            <option value="" disabled selected>-- सर्व्हिस निवडा --</option>
+                            <option value="उत्पन्न प्रमाणपत्र (Income)">उत्पन्न प्रमाणपत्र (Income)</option>
+                            <option value="रहिवासी प्रमाणपत्र (Domicile)">रहिवासी प्रमाणपत्र (Domicile)</option>
+                            <option value="जात प्रमाणपत्र (Caste)">जात प्रमाणपत्र (Caste)</option>
+                            <option value="पॅन कार्ड (PAN Card)">पॅन कार्ड (PAN Card)</option>
+                            <option value="गॅझेट / नाव बदल (Gazette)">गॅझेट / नाव बदल (Gazette)</option>
+                            <option value="नवीन मीटर कनेक्शन">नवीन मीटर कनेक्शन</option>
+                            <option value="इतर काम (Other)">इतर काम (Other)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>कागदपत्रे अपलोड करा (फोटो/PDF)</label>
+                        <input type="file" id="custDocs" multiple accept="image/*,.pdf">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>दिलेला ॲडव्हान्स (₹)</label>
+                        <input type="number" id="custAdvance" placeholder="उदा. 100">
+                    </div>
+                    <div class="form-group">
+                        <label>PhonePe / GPay UTR नंबर</label>
+                        <input type="text" id="custUtr" placeholder="ऑनलाईन पैसे दिले असल्यास">
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitLeadBtn">🚀 रिक्वेस्ट पाठवा</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
         <p>&copy; 2026 <strong>Pusdekar Digital</strong> (Pusdekar Online Center). All Rights Reserved.</p>
         <p>सि.डी.सी.सी. बँक समोर, माढेळी | संपर्क: 8007601734</p>
     </footer>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+
+    <script>
+        // Firebase Configuration (तुमच्या डॅशबोर्ड प्रमाणे)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U",
+            authDomain: "pusdekar-services.firebaseapp.com",
+            projectId: "pusdekar-services",
+            storageBucket: "pusdekar-services.firebasestorage.app"
+        };
+        
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Form Submit Handler
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // पान रिफ्रेश होण्यापासून थांबवणे
+
+            const btn = document.getElementById('submitLeadBtn');
+            const name = document.getElementById('custName').value;
+            const mobile = document.getElementById('custMobile').value;
+            const service = document.getElementById('custService').value;
+            const advance = document.getElementById('custAdvance').value || 0;
+            const utr = document.getElementById('custUtr').value || "-";
+            const fileInput = document.getElementById('custDocs');
+
+            if(mobile.length !== 10) {
+                alert("कृपया 10 अंकी मोबाईल नंबर टाका!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "⏳ कागदपत्रे अपलोड होत आहेत... कृपया थांबा";
+
+            try {
+                let uploadedFileUrls = [];
+
+                // जर ग्राहकाने फाईल्स निवडल्या असतील तर त्या Firebase Storage मध्ये अपलोड करणे
+                if (fileInput.files.length > 0) {
+                    for (let i = 0; i < fileInput.files.length; i++) {
+                        let file = fileInput.files[i];
+                        // फाईलचे नाव युनिक बनवणे
+                        let uniqueName = Date.now() + "_" + file.name;
+                        let storageRef = storage.ref('customer_docs/' + uniqueName);
+                        
+                        // फाईल अपलोड करणे
+                        let uploadTask = await storageRef.put(file);
+                        let downloadUrl = await uploadTask.ref.getDownloadURL();
+                        uploadedFileUrls.push(downloadUrl);
+                    }
+                }
+
+                btn.innerText = "💾 माहिती सेव्ह होत आहे...";
+
+                // सर्व माहिती Firestore च्या 'onlineLeads' कलेक्शन मध्ये सेव्ह करणे
+                await db.collection("onlineLeads").add({
+                    customerName: name,
+                    mobile: mobile,
+                    service: service,
+                    advancePaid: Number(advance),
+                    utrNumber: utr,
+                    documents: uploadedFileUrls,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                alert("✅ तुमची रिक्वेस्ट यशस्वीरित्या पाठवली गेली आहे! आम्ही लवकरच तुमच्याशी संपर्क करू.");
+                
+                // फॉर्म रिकामा करणे
+                document.getElementById('leadForm').reset();
+                btn.disabled = false;
+                btn.innerText = "🚀 रिक्वेस्ट पाठवा";
+
+            } catch (error) {
+                console.error("Error submitting lead: ", error);
+                alert("❌ काहीतरी तांत्रिक अडचण आली. कृपया पुन्हा प्रयत्न करा.");
+                btn.disabled = false;
+                btn.innerText = "🚀 रिक्वेस्ट पाठवा";
+            }
+        });
+    </script>
 
 </body>
 </html>
