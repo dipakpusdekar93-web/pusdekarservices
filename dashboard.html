@@ -265,7 +265,7 @@
             </div>
         </div>
 
-        <!-- ================= VIEW 2: ONLINE LEADS (NEW TAB) ================= -->
+        <!-- ================= VIEW 2: ONLINE LEADS ================= -->
         <div id="viewLeads" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">📥 ग्राहकांकडून आलेल्या ऑनलाईन ऑर्डर्स (Online Leads)</h3>
@@ -422,7 +422,7 @@
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="रक्कम"></div>
                     <div class="form-group"><label>टीप</label><input type="text" id="bdNote" placeholder="टीप"></div>
                 </div>
-                <button class="save-btn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
+                <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
             </div>
             <div class="table-responsive"><table id="bdTable"><thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead><tbody id="bdTableBody"></tbody></table></div>
         </div>
@@ -476,7 +476,7 @@
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color: var(--warning);">नवीन पेंडिंग काम जोडा</h3>
                 <div class="form-row"><div class="form-group"><label>नाव *</label><input type="text" id="ptName" placeholder="नाव"></div><div class="form-group"><label>मोबाईल</label><input type="tel" id="ptMobile" maxlength="10" placeholder="मोबाईल"></div></div>
-                <div class="form-row"><div class="form-group" style="max-width:100%;"><label>काम *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div></div>
+                <div class="form-row"><div class="form-group" style="max-width:100%;"><label>काय काम आहे? *</label><textarea id="ptDetails" rows="2" placeholder="तपशील..."></textarea></div></div>
                 <button class="save-btn" id="savePendingBtn" style="background:var(--warning);" onclick="addPendingTask()">Save Pending Task</button>
             </div>
             <div class="table-responsive"><table id="pendingTable"><thead><tr><th>तारीख</th><th>नाव</th><th>मोबाईल</th><th>तपशील</th><th>स्थिती</th><th>कृती</th></tr></thead><tbody id="pendingTableBody"></tbody></table></div>
@@ -505,7 +505,7 @@
         <!-- ================= VIEW 12: SETTINGS ================= -->
         <div id="viewSettings" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
-                <h3>⚙️ वॉलेट आणि बँकांची नावे</h3>
+                <h3>⚙️ वॉलेट आणि बँकांची नावे सेट करा</h3>
                 <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
                     <div style="flex:1; min-width:250px; background:#f8fafc; padding:15px; border-radius:8px;">
                         <h4 style="color:var(--primary); margin-top:0;">५ मुख्य वॉलेट्स</h4>
@@ -520,7 +520,7 @@
             <div class="container" style="border-left: 4px solid var(--warning);">
                 <h3 style="color:var(--warning);">WhatsApp प्रमोशनल मेसेज</h3>
                 <div class="form-group"><textarea id="promoMessage" rows="4"></textarea></div>
-                <button class="save-btn" style="background:var(--success); margin-top:15px;" onclick="saveWalletNames()">Save Settings</button>
+                <button class="save-btn" id="saveSettingsBtn" style="background:var(--success); margin-top:15px;" onclick="saveWalletNames()">Save Settings</button>
             </div>
         </div>
 
@@ -544,6 +544,15 @@
         
         let hasShownPopup = false; let allTransactions = []; let allCustomers = []; let allBankDeps = [];
         let editLinkId = null, editTaskId = null, editEntryId = null, editAdjId = null, editMahaId = null, editBdId = null;
+
+        // 🔴 ANTI-DOUBLE-CLICK LOCK VARIABLES 🔴
+        let isSavingGeneral = false;
+        let isSavingMaha = false;
+        let isSavingAdj = false;
+        let isSavingDep = false;
+        let isSavingCust = false;
+        let isSavingTask = false;
+        let isSavingLink = false;
 
         firebase.auth().onAuthStateChanged((user) => { 
             if (!user) { window.location.href = "login.html"; }
@@ -590,39 +599,15 @@
                         d.documents.forEach((url, idx) => {
                             docsHtml += `<a href="${url}" target="_blank" class="edit-btn" style="text-decoration:none; display:inline-block; margin-bottom:2px;">📁 Doc ${idx+1}</a> `;
                         });
-                    } else {
-                        docsHtml = "कागदपत्र नाही";
-                    }
+                    } else { docsHtml = "कागदपत्र नाही"; }
 
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${dateStr}</td>
-                            <td><b>${d.customerName}</b></td>
-                            <td><a href="https://wa.me/91${d.mobile}" target="_blank" style="color:#059669; font-weight:bold; text-decoration:none;">💬 ${d.mobile}</a></td>
-                            <td>${d.service}</td>
-                            <td class="text-green">₹ ${d.advancePaid}</td>
-                            <td><b>${d.utrNumber}</b></td>
-                            <td>${docsHtml}</td>
-                            <td class="no-print">
-                                <button class="done-btn" onclick="markLeadDone('${doc.id}')">✔ पूर्ण झाले</button>
-                                <button class="delete-btn" onclick="deleteLead('${doc.id}')">❌</button>
-                            </td>
-                        </tr>
-                    `;
+                    tbody.innerHTML += `<tr><td>${dateStr}</td><td><b>${d.customerName}</b></td><td><a href="https://wa.me/91${d.mobile}" target="_blank" style="color:#059669; font-weight:bold; text-decoration:none;">💬 ${d.mobile}</a></td><td>${d.service}</td><td class="text-green">₹ ${d.advancePaid}</td><td><b>${d.utrNumber}</b></td><td>${docsHtml}</td><td class="no-print"><button class="done-btn" onclick="markLeadDone('${doc.id}')">✔ पूर्ण झाले</button><button class="delete-btn" onclick="deleteLead('${doc.id}')">❌</button></td></tr>`;
                 });
             });
         }
 
-        function markLeadDone(id) {
-            if(confirm("ही ऑर्डर पूर्ण झाली म्हणून मार्क करायची का?")) {
-                db.collection("onlineLeads").doc(id).delete().then(() => { alert("ऑर्डर पूर्ण झाली!"); });
-            }
-        }
-        function deleteLead(id) {
-            if(confirm("ही ऑर्डर डिलीट करायची का?")) {
-                db.collection("onlineLeads").doc(id).delete();
-            }
-        }
+        function markLeadDone(id) { if(confirm("ही ऑर्डर पूर्ण झाली म्हणून मार्क करायची का?")) { db.collection("onlineLeads").doc(id).delete().then(() => { alert("ऑर्डर पूर्ण झाली!"); }); } }
+        function deleteLead(id) { if(confirm("ही ऑर्डर डिलीट करायची का?")) { db.collection("onlineLeads").doc(id).delete(); } }
 
         // Tally Checker & Wallet Functions
         function calcTally(key) {
@@ -680,9 +665,15 @@
             }
         }
         function addNewCustomerManually() {
+            if(isSavingCust) return;
+            const btn = document.getElementById('saveCustomerBtn');
             const name = document.getElementById('cName').value; const mobile = document.getElementById('cMobile').value; const village = document.getElementById('cVillage').value || "-"; const idProof = document.getElementById('cIdProof').value || "-";
             if(name === "" || mobile.length !== 10) return alert("नाव आणि 10 अंकी नंबर आवश्यक!");
-            db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { alert("ग्राहक सेव्ह झाला!"); });
+            
+            isSavingCust = true; btn.disabled = true; btn.innerText = "Saving...";
+            db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { 
+                isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; alert("ग्राहक सेव्ह झाला!"); 
+            }).catch(() => { isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; });
         }
         function editCust(mobile) { let c = allCustomers.find(x => x.mobile === mobile); if(c) { document.getElementById('cName').value = c.name||""; document.getElementById('cMobile').value = c.mobile||""; document.getElementById('cVillage').value = c.village||""; document.getElementById('cIdProof').value = c.idProof||""; switchTab('customers'); window.scrollTo(0,0); } }
         function loadCustomersList() { db.collection("customers").onSnapshot((snap) => { allCustomers = []; snap.forEach(doc => allCustomers.push(doc.data())); renderCustTable(allCustomers); }); }
@@ -701,18 +692,41 @@
             });
         }
         function saveBankDeposit() {
+            if(isSavingDep) return;
+            const btn = document.getElementById('saveBdBtn');
             const bank = document.getElementById('bdBank').value; const amt = document.getElementById('bdAmount').value; const note = document.getElementById('bdNote').value || "-"; const dVal = document.getElementById('bdDate').value;
-            if(amt === "") return alert("रक्कम भरा!");
+            if(amt === "") return alert("रक्कम भरणे आवश्यक आहे!");
+            
+            isSavingDep = true; btn.disabled = true; btn.innerText = "Saving...";
             let data = { bank: bank, amount: Number(amt), note: note };
             if(dVal) data.timestamp = firebase.firestore.Timestamp.fromDate(new Date(dVal)); else data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            db.collection("bankDeposits").add(data).then(() => { document.getElementById('bdAmount').value=""; document.getElementById('bdNote').value=""; alert("सेव्ह झाले!"); });
+            
+            db.collection("bankDeposits").add(data).then(() => { 
+                isSavingDep = false; btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा";
+                document.getElementById('bdAmount').value=""; document.getElementById('bdNote').value=""; alert("सेव्ह झाले!"); 
+            }).catch(() => { isSavingDep = false; btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा"; });
         }
+        function deleteBankDep(id) { if(confirm("ही नोंद डिलीट करायची का?")) db.collection("bankDeposits").doc(id).delete(); }
 
         function saveQuickLink() {
+            if(isSavingLink) return;
+            const btn = document.getElementById('saveQuickLinkBtn'); 
             const name = document.getElementById('qlName').value; const url = document.getElementById('qlUrl').value; const icon = document.getElementById('qlIcon').value || "🌐";
-            if(!name || !url) return alert("नाव आणि URL भरा!");
-            db.collection("quicklinks").add({ name, url, icon, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { document.getElementById('qlName').value=""; document.getElementById('qlUrl').value=""; alert("सेव्ह झाली!"); });
+            if(!name || !url) return alert("नाव आणि URL भरा!"); 
+            
+            isSavingLink = true; btn.disabled = true; btn.innerText = "Saving...";
+            if(editLinkId) { 
+                db.collection("quicklinks").doc(editLinkId).update({ name, url, icon }).then(() => { 
+                    isSavingLink = false; document.getElementById('qlName').value=""; document.getElementById('qlUrl').value=""; document.getElementById('qlIcon').value=""; editLinkId = null; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक अपडेट झाली!"); 
+                }).catch(e => { isSavingLink = false; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; }); 
+            } else { 
+                db.collection("quicklinks").add({ name, url, icon, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { 
+                    isSavingLink = false; document.getElementById('qlName').value=""; document.getElementById('qlUrl').value=""; document.getElementById('qlIcon').value=""; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; alert("लिंक सेव्ह झाली!"); 
+                }).catch(e => { isSavingLink = false; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; }); 
+            }
         }
+        function editLink(id) { db.collection("quicklinks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; switchTab('links'); window.scrollTo(0,0); } }); }
+        function deleteQuickLink(docId) { if(confirm("ही लिंक डिलीट करायची का?")) db.collection("quicklinks").doc(docId).delete(); }
         function loadQuickLinks() {
             db.collection("quicklinks").onSnapshot((snapshot) => {
                 const dg = document.getElementById('dashboardQuickLinks'); const tb = document.getElementById('linksTableBody'); dg.innerHTML = ""; tb.innerHTML = "";
@@ -724,15 +738,26 @@
             });
         }
 
+        // ================= TRANSACTIONS (SAVE/EDIT/DELETE) with DOUBLE-CLICK LOCK =================
         function saveAdjustment() {
+            if(isSavingAdj) return;
+            const btn = document.getElementById('saveAdjBtn'); 
             const adjWallet = document.getElementById('adjWallet').value; const amount = document.getElementById('adjAmount').value; const narration = document.getElementById('adjNarration').value; const customDateVal = document.getElementById('adjCustomDate').value;
             if(amount === "") return alert("रक्कम भरा!");
+            
+            isSavingAdj = true; btn.disabled = true; btn.innerText = "Updating...";
             let updateData = { category: "Adjustment", service: adjWallet, amount: Number(amount), bankSource: "-", expenseSource: "-", details: narration ? `Opening/Adjustment (${narration})` : "Opening/Adjustment", mobile: "-", village: "-", payStatus: "Paid", purpose: "Adjustment", idProof: "-", commission: 0 };
             if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            db.collection("transactions").add(updateData).then(() => { document.getElementById('adjAmount').value=""; document.getElementById('adjNarration').value=""; alert("अपडेट झाले!"); });
+            
+            db.collection("transactions").add(updateData).then(() => { 
+                isSavingAdj = false; btn.disabled = false; btn.innerText = "Update Balance";
+                document.getElementById('adjAmount').value=""; document.getElementById('adjNarration').value=""; alert("अपडेट झाले!"); 
+            }).catch(() => { isSavingAdj = false; btn.disabled = false; btn.innerText = "Update Balance"; });
         }
 
         function saveEntry() {
+            if(isSavingGeneral) return;
+            const btn = document.getElementById('saveEntryBtn'); 
             let baseService = document.getElementById('serviceType').value; const amount = parseFloat(document.getElementById('amount').value) || 0; 
             const upiBankVal = document.getElementById('upiBank').value;
             const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
@@ -740,6 +765,8 @@
             if(!baseService) return alert("सर्व्हिसचा प्रकार निवडा!");
             if(amount===""||details==="") return alert("माहिती पूर्ण भरा!"); 
             if((baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") && upiBankVal === "") { alert("⚠️ बँक निवडणे सक्तीचे आहे!"); document.getElementById('upiBank').focus(); return; }
+
+            isSavingGeneral = true; btn.disabled = true; btn.innerText = "Saving...";
 
             let service = baseService;
             if(baseService === "AEPS") {
@@ -756,16 +783,33 @@
             let updateData = { category: "General", service, amount: Number(amount), bankSource, expenseSource, details, mobile: mobile || "-", village, payStatus, purpose, idProof, commission: Number(commission), narration };
             if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
             
-            db.collection("transactions").add(updateData).then(() => { resetEntryForm(); alert("सेव्ह झाले!"); });
+            if(editEntryId) {
+                db.collection("transactions").doc(editEntryId).update(updateData).then(() => { 
+                    isSavingGeneral = false; resetEntryForm(); editEntryId=null; btn.disabled=false; btn.innerText="Save Transaction Entry"; alert("अपडेट झाले!"); 
+                }).catch(() => { isSavingGeneral = false; btn.disabled=false; btn.innerText="Save Transaction Entry"; });
+            } else {
+                db.collection("transactions").add(updateData).then(() => { 
+                    isSavingGeneral = false; resetEntryForm(); btn.disabled=false; btn.innerText="Save Transaction Entry"; alert("सेव्ह झाले!"); 
+                }).catch(() => { isSavingGeneral = false; btn.disabled=false; btn.innerText="Save Transaction Entry"; });
+            }
         }
         function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; }
 
         function saveMahaonline() {
+            if(isSavingMaha) return;
+            const btn = document.getElementById('saveMahaBtn'); 
             const service = document.getElementById('moService').value; const mobile = document.getElementById('moMobile').value; const details = document.getElementById('moName').value; const village = document.getElementById('moVillage').value || "-"; const totalAmount = document.getElementById('moTotal').value; const paidAmount = document.getElementById('moPaid').value; const pendingAmount = document.getElementById('moPending').value; const payMode = document.getElementById('moPayMode').value; const customDateVal = document.getElementById('moCustomDate').value;
             if(mobile.length!==10||details===""||totalAmount===""||paidAmount==="") return alert("माहिती पूर्ण भरा!");
+            
+            isSavingMaha = true; btn.disabled = true; btn.innerText = "Saving...";
+
             let updateData = { category: "Mahaonline", service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount), bankSource: payMode, expenseSource: "-", details, mobile, village, payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-", commission: 0, narration: "Mahaonline Service" };
             if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            db.collection("transactions").add(updateData).then(() => { resetMahaForm(); alert("सेव्ह झाले!"); });
+            
+            db.collection("transactions").add(updateData).then(() => { 
+                isSavingMaha = false; btn.disabled = false; btn.innerText = "Save Mahaonline Entry";
+                resetMahaForm(); alert("सेव्ह झाले!"); 
+            }).catch(() => { isSavingMaha = false; btn.disabled = false; btn.innerText = "Save Mahaonline Entry"; });
         }
         function resetMahaForm() { document.getElementById('moMobile').value=""; document.getElementById('moName').value=""; document.getElementById('moVillage').value=""; document.getElementById('moTotal').value=""; document.getElementById('moPaid').value=""; document.getElementById('moPending').value="0"; document.getElementById('moCustomDate').value=""; }
 
@@ -781,16 +825,36 @@
                     if(st.includes("Cash Deposit")) document.getElementById('aepsType').value = "Deposit"; else document.getElementById('aepsType').value = "Withdrawal";
                 } else { document.getElementById('serviceType').value = st; }
                 toggleFormFields(); 
-                document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('payStatus').value=data.payStatus; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; switchTab('dashboard'); window.scrollTo(0,0); 
+                document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('payStatus').value=data.payStatus; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; 
+                editEntryId = id; // Store ID for updating
+                switchTab('dashboard'); window.scrollTo(0,0); 
             }
         }
         function deleteEntry(docId) { if(confirm("डिलीट करायचे?")) db.collection("transactions").doc(docId).delete(); }
 
-        function addPendingTask() { const name=document.getElementById('ptName').value; const mobile=document.getElementById('ptMobile').value||"-"; const details=document.getElementById('ptDetails').value; if(!name||!details) return alert("माहिती भरा!"); db.collection("pendingTasks").add({ customerName: name, mobile, taskDetails: details, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; alert("सेव्ह झाले!"); }); }
+        function addPendingTask() { 
+            if(isSavingTask) return;
+            const btn=document.getElementById('savePendingBtn'); 
+            const name=document.getElementById('ptName').value; const mobile=document.getElementById('ptMobile').value||"-"; const details=document.getElementById('ptDetails').value; 
+            if(!name||!details) return alert("माहिती भरा!"); 
+            
+            isSavingTask = true; btn.disabled=true; btn.innerText="Saving..."; 
+            
+            if(editTaskId) {
+                db.collection("pendingTasks").doc(editTaskId).update({ customerName: name, mobile, taskDetails: details }).then(() => { 
+                    isSavingTask = false; document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; editTaskId=null; btn.disabled=false; btn.innerText="Save Pending Task"; alert("अपडेट झाले!"); 
+                }).catch(() => { isSavingTask = false; btn.disabled=false; btn.innerText="Save Pending Task"; });
+            } else {
+                db.collection("pendingTasks").add({ customerName: name, mobile, taskDetails: details, status: "Pending", timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(() => { 
+                    isSavingTask = false; document.getElementById('ptName').value=""; document.getElementById('ptMobile').value=""; document.getElementById('ptDetails').value=""; btn.disabled=false; btn.innerText="Save Pending Task"; alert("सेव्ह झाले!"); 
+                }).catch(() => { isSavingTask = false; btn.disabled=false; btn.innerText="Save Pending Task"; }); 
+            }
+        }
+        function editTask(id) { db.collection("pendingTasks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('ptName').value=data.customerName; document.getElementById('ptMobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('ptDetails').value=data.taskDetails; editTaskId=id; document.getElementById('savePendingBtn').innerText="🔄 पेंडिंग काम अपडेट करा"; switchTab('pending'); window.scrollTo(0,0); }}); }
         function markTaskDone(docId) { db.collection("pendingTasks").doc(docId).update({ status: "Done" }); }
         function deletePendingTask(docId) { if(confirm("डिलीट करायचे?")) db.collection("pendingTasks").doc(docId).delete(); }
         function closePopup() { document.getElementById('pendingModal').style.display = 'none'; }
-        function loadPendingTasks() { db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot(snap => { const tb = document.getElementById('pendingTableBody'); const pp = document.getElementById('popupTaskList'); tb.innerHTML=""; pp.innerHTML=""; let tasks=[]; snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()})); tasks.sort((a,b)=>b.timestamp-a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||""; tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; }); if(tasks.length>0 && !hasShownPopup) { document.getElementById('pendingModal').style.display='block'; hasShownPopup=true; } else if(tasks.length===0) document.getElementById('pendingModal').style.display='none'; }); }
+        function loadPendingTasks() { db.collection("pendingTasks").where("status", "==", "Pending").onSnapshot(snap => { const tb = document.getElementById('pendingTableBody'); const pp = document.getElementById('popupTaskList'); tb.innerHTML=""; pp.innerHTML=""; let tasks=[]; snap.forEach(doc => tasks.push({id: doc.id, ...doc.data()})); tasks.sort((a,b)=>b.timestamp-a.timestamp); let promo = localStorage.getItem("wa_promo_msg")||""; tasks.forEach(d => { let dtStr = d.timestamp?d.timestamp.toDate().toLocaleDateString('en-IN'):"-"; let waMsg=encodeURIComponent(`*Pusdekar Online Center*\nनमस्कार *${d.customerName}*,\nआपले काम: ${d.taskDetails} (Pending) आहे.\n${promo}`); let waLink=d.mobile!=="-"?`https://wa.me/91${d.mobile}?text=${waMsg}`:''; tb.innerHTML+=`<tr><td>${dtStr}</td><td><b>${d.customerName}</b></td><td>${d.mobile}</td><td>${d.taskDetails}</td><td class="text-red">Pending</td><td>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="edit-btn" onclick="editTask('${d.id}')">✏️ Edit</button><button class="done-btn" onclick="markTaskDone('${d.id}')">✔</button><button class="delete-btn" onclick="deletePendingTask('${d.id}')">❌</button></td></tr>`; pp.innerHTML+=`<li class="popup-task-item"><div class="popup-task-info"><h4>${d.customerName}</h4><p>${d.taskDetails}</p></div><div>${waLink!==''?`<a href="${waLink}" target="_blank" class="wa-btn">🟢 WhatsApp</a>`:''}<button class="done-btn" onclick="markTaskDone('${d.id}')">✔ झाले</button></div></li>`; }); if(tasks.length>0 && !hasShownPopup) { document.getElementById('pendingModal').style.display='block'; hasShownPopup=true; } else if(tasks.length===0) document.getElementById('pendingModal').style.display='none'; }); }
 
         // ================= CALCULATIONS =================
         function loadDataFromFirebase() {
