@@ -410,7 +410,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
 
     <script>
-        // Firebase Configuration (तुमच्या डॅशबोर्ड प्रमाणे)
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U",
             authDomain: "pusdekar-services.firebaseapp.com",
@@ -425,9 +425,55 @@
         const db = firebase.firestore();
         const storage = firebase.storage();
 
+        // 🚀 नवीन फीचर: फोटोची साईझ कमी करणारा फंक्शन (Image Compressor)
+        async function compressImage(file) {
+            // जर फाईल PDF असेल तर साईझ कमी करायची गरज नाही, तशीच पुढे पाठवा
+            if (!file.type.match(/image.*/)) {
+                return file;
+            }
+
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        // फोटो खूप मोठा असेल तर त्याची साईझ लिमिट करणे (Max 1200px)
+                        const MAX_SIZE = 1200;
+                        if (width > height) {
+                            if (width > MAX_SIZE) {
+                                height *= MAX_SIZE / width;
+                                width = MAX_SIZE;
+                            }
+                        } else {
+                            if (height > MAX_SIZE) {
+                                width *= MAX_SIZE / height;
+                                height = MAX_SIZE;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // फोटो कंप्रेस करणे (60% Quality) जेणेकरून तो KB मध्ये होईल
+                        canvas.toBlob((blob) => {
+                            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                        }, 'image/jpeg', 0.6);
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Form Submit Handler
         document.getElementById('leadForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // पान रिफ्रेश होण्यापासून थांबवणे
+            e.preventDefault(); 
 
             const btn = document.getElementById('submitLeadBtn');
             const name = document.getElementById('custName').value;
@@ -443,29 +489,35 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "⏳ कागदपत्रे अपलोड होत आहेत... कृपया थांबा";
+            btn.innerText = "⏳ फास्ट अपलोड होत आहे... कृपया थांबा";
 
             try {
                 let uploadedFileUrls = [];
 
-                // जर ग्राहकाने फाईल्स निवडल्या असतील तर त्या Firebase Storage मध्ये अपलोड करणे
+                // 🚀 नवीन फीचर: फास्ट आणि पॅरलल अपलोड (Fast Parallel Upload)
                 if (fileInput.files.length > 0) {
-                    for (let i = 0; i < fileInput.files.length; i++) {
-                        let file = fileInput.files[i];
+                    // सर्व फाईल्स एकाच वेळी प्रोसेस करण्यासाठी Array.map वापरला आहे
+                    const uploadPromises = Array.from(fileInput.files).map(async (originalFile) => {
+                        
+                        // आधी फोटो कंप्रेस करा (साईझ कमी करा)
+                        let file = await compressImage(originalFile);
+
                         // फाईलचे नाव युनिक बनवणे
                         let uniqueName = Date.now() + "_" + file.name;
                         let storageRef = storage.ref('customer_docs/' + uniqueName);
                         
                         // फाईल अपलोड करणे
                         let uploadTask = await storageRef.put(file);
-                        let downloadUrl = await uploadTask.ref.getDownloadURL();
-                        uploadedFileUrls.push(downloadUrl);
-                    }
+                        return await uploadTask.ref.getDownloadURL();
+                    });
+
+                    // सर्व फाईल्स अपलोड होण्याची एकाच वेळी वाट पाहणे (यामुळे वेळ 4 पटीने वाचेल)
+                    uploadedFileUrls = await Promise.all(uploadPromises);
                 }
 
                 btn.innerText = "💾 माहिती सेव्ह होत आहे...";
 
-                // सर्व माहिती Firestore च्या 'onlineLeads' कलेक्शन मध्ये सेव्ह करणे
+                // सर्व माहिती Firestore मध्ये सेव्ह करणे
                 await db.collection("onlineLeads").add({
                     customerName: name,
                     mobile: mobile,
@@ -485,7 +537,7 @@
 
             } catch (error) {
                 console.error("Error submitting lead: ", error);
-                alert("❌ काहीतरी तांत्रिक अडचण आली. कृपया पुन्हा प्रयत्न करा.");
+                alert("❌ काहीतरी तांत्रिक अडचण आली. इंटरनेट तपासा आणि पुन्हा प्रयत्न करा.");
                 btn.disabled = false;
                 btn.innerText = "🚀 रिक्वेस्ट पाठवा";
             }
