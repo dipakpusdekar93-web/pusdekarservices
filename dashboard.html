@@ -175,8 +175,8 @@
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
-                    <div class="form-group"><label>ग्राहक मोबाईल</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:2px; font-size:11px;"></span></div>
-                    <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील)</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
+                    <div class="form-group"><label>ग्राहक मोबाईल *</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:4px; font-size:12px;"></span></div>
+                    <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील) *</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
 
                 <div class="form-row" id="aepsRow" style="display:none; background:#fffbeb; padding:10px; border-radius:6px; border:1px dashed var(--warning);">
@@ -484,8 +484,8 @@
                             <option value="Other Mahaonline">इतर सेवा</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>मोबाईल</label><input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()"><span id="searchMsgMo" style="display:none; font-size:11px;"></span></div>
-                    <div class="form-group"><label>नाव</label><input type="text" id="moName" readonly style="background:#f8fafc;"></div>
+                    <div class="form-group"><label>मोबाईल *</label><input type="tel" id="moMobile" maxlength="10" placeholder="नंबर" onblur="searchCustomerMaha()"><span id="searchMsgMo" style="display:none; margin-top:4px; font-size:12px;"></span></div>
+                    <div class="form-group"><label>नाव *</label><input type="text" id="moName" readonly style="background:#f8fafc;"></div>
                 </div>
                 <input type="hidden" id="moVillage" value="-">
                 <div class="form-row"><div class="form-group"><label>एकूण फी (₹) *</label><input type="number" id="moTotal" oninput="calcUdhar()"></div><div class="form-group"><label>जमा (₹) *</label><input type="number" id="moPaid" oninput="calcUdhar()"></div><div class="form-group"><label>बाकी (₹)</label><input type="number" id="moPending" readonly style="background:#fef2f2; color:red; font-weight:bold;" placeholder="0"></div></div>
@@ -574,11 +574,11 @@
         }
 
         firebase.auth().onAuthStateChanged((user) => { 
-            if (!user) { window.location.href = "Login.html"; }
+            if (!user) { window.location.href = "login.html"; }
             else { loadDataFromFirebase(); loadPendingTasks(); loadCustomersList(); loadQuickLinks(); loadBankDeposits(); } 
         });
 
-        function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "Login.html"; }); }
+        function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
 
         function switchTab(tabName) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
@@ -636,17 +636,41 @@
         function checkCAuditRule() { const amt = parseFloat(document.getElementById('amount').value) || 0; const label = document.getElementById('idProofLabel'); if(amt >= 10000) { label.innerHTML = "पॅन/आधार (<b>सक्तीचे</b>)"; label.style.color = "var(--danger)"; } else { label.innerHTML = "पॅन/आधार"; label.style.color = "#334155"; } }
         function calcUdhar() { let t = parseFloat(document.getElementById('moTotal').value) || 0; let p = parseFloat(document.getElementById('moPaid').value) || 0; document.getElementById('moPending').value = (t - p) > 0 ? (t - p) : 0; }
 
-        function searchCustomer() { searchCustLogic('mobile', 'details', 'searchMsg', 'idProof'); }
+        // 🚀 SMART ADD CUSTOMER LOGIC
+        function goToAddCustomer(mob, isMo) {
+            window.returnToMaha = isMo;
+            document.getElementById('cMobile').value = mob;
+            switchTab('customers');
+            document.getElementById('cName').focus();
+        }
+
+        function searchCustomer() { searchCustLogic('mobile', 'details', 'searchMsg', 'idProof', false); }
         function searchCustomerMaha() { searchCustLogic('moMobile', 'moName', 'searchMsgMo', 'moVillage', true); }
-        function searchCustLogic(mId, nId, msgId, exId, isMo=false) {
+        
+        function searchCustLogic(mId, nId, msgId, exId, isMo) {
             const mobile = document.getElementById(mId).value; const msgSpan = document.getElementById(msgId);
             if (mobile.length === 10) {
                 db.collection("customers").doc(mobile).get().then((doc) => {
-                    if (doc.exists) { const d = doc.data(); document.getElementById(nId).value = d.name || ""; document.getElementById(exId).value = isMo ? (d.village||"-") : (d.idProof||"-"); msgSpan.innerHTML="✔️ जुना ग्राहक!"; msgSpan.style.color="var(--success)"; msgSpan.style.display="inline-block"; setTimeout(()=>msgSpan.style.display="none", 3000); } 
-                    else { msgSpan.innerHTML=`❌ नंबर नाही!`; msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById(nId).value=""; }
+                    if (doc.exists) { 
+                        const d = doc.data(); 
+                        document.getElementById(nId).value = d.name || ""; 
+                        document.getElementById(exId).value = isMo ? (d.village||"-") : (d.idProof||"-"); 
+                        msgSpan.innerHTML="✔️ जुना ग्राहक!"; 
+                        msgSpan.style.color="var(--success)"; 
+                        msgSpan.style.display="inline-block"; 
+                        setTimeout(()=>msgSpan.style.display="none", 3000); 
+                    } 
+                    else { 
+                        // 🚀 NEW CUSTOMER BUTTON
+                        msgSpan.innerHTML=`❌ जुना नंबर नाही! <a href="javascript:void(0)" onclick="goToAddCustomer('${mobile}', ${isMo})" style="color:var(--primary); font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px; text-decoration:none;">+ नवीन ॲड करा</a>`; 
+                        msgSpan.style.color="var(--danger)"; 
+                        msgSpan.style.display="block"; 
+                        document.getElementById(nId).value=""; 
+                    }
                 });
             }
         }
+
         function addNewCustomerManually() {
             if(isSavingCust) return;
             const btn = document.getElementById('saveCustomerBtn');
@@ -655,7 +679,21 @@
             
             isSavingCust = true; btn.disabled = true; btn.innerText = "Saving...";
             db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { 
-                isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; alert("ग्राहक सेव्ह झाला!"); 
+                isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; 
+                alert("ग्राहक सेव्ह झाला!"); 
+                
+                // 🚀 AUTO REDIRECT AFTER SAVING CUSTOMER
+                document.getElementById('cName').value = ""; document.getElementById('cMobile').value = ""; document.getElementById('cVillage').value = ""; document.getElementById('cIdProof').value = "";
+                if(window.returnToMaha) {
+                    document.getElementById('moMobile').value = mobile;
+                    switchTab('mahaonline');
+                    searchCustomerMaha();
+                    window.returnToMaha = false;
+                } else {
+                    document.getElementById('mobile').value = mobile;
+                    switchTab('dashboard');
+                    searchCustomer();
+                }
             }).catch(() => { isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; });
         }
         function editCust(mobile) { let c = allCustomers.find(x => x.mobile === mobile); if(c) { document.getElementById('cName').value = c.name||""; document.getElementById('cMobile').value = c.mobile||""; document.getElementById('cVillage').value = c.village||""; document.getElementById('cIdProof').value = c.idProof||""; switchTab('customers'); window.scrollTo(0,0); } }
@@ -763,9 +801,12 @@
             const aepsType = document.getElementById('aepsType').value;
             const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
             
-            if(!baseService) return alert("सर्व्हिसचा प्रकार निवडा!");
-            if(amount===""||details==="") return alert("माहिती पूर्ण भरा!"); 
-            if(payStatus === "") return alert("पेमेंट स्थिती (Paid किंवा Udhar) निवडणे सक्तीचे आहे!");
+            // 🚀 STRICT VALIDATIONS
+            if(!baseService) return alert("⚠️ सर्व्हिसचा प्रकार निवडणे सक्तीचे आहे!");
+            if(!amount || amount <= 0) return alert("⚠️ रक्कम भरणे सक्तीचे आहे!");
+            if(mobile.length !== 10) return alert("⚠️ १० अंकी ग्राहक मोबाईल नंबर भरणे सक्तीचे आहे!");
+            if(!details) return alert("⚠️ ग्राहकाचे नाव आलेले नाही! (आधी नवीन ग्राहक ॲड करा)");
+            if(payStatus === "") return alert("⚠️ पेमेंट स्थिती (Paid किंवा Udhar) निवडणे सक्तीचे आहे!");
             if((baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") && upiBankVal === "") { alert("⚠️ बँक निवडणे सक्तीचे आहे!"); document.getElementById('upiBank').focus(); return; }
             if(baseService === "Shop Expense" && expenseSource === "") { alert("⚠️ खर्च कुठून झाला ते निवडणे सक्तीचे आहे!"); document.getElementById('expenseSource').focus(); return; }
             if(baseService === "AEPS" && (aepsPortal === "" || aepsType === "")) { alert("⚠️ AEPS पोर्टल आणि व्यवहार निवडणे सक्तीचे आहे!"); return; }
@@ -818,9 +859,12 @@
             const btn = document.getElementById('saveMahaBtn'); 
             const service = document.getElementById('moService').value; const mobile = document.getElementById('moMobile').value; const details = document.getElementById('moName').value; const village = document.getElementById('moVillage').value || "-"; const totalAmount = document.getElementById('moTotal').value; const paidAmount = document.getElementById('moPaid').value; const pendingAmount = document.getElementById('moPending').value; const payMode = document.getElementById('moPayMode').value; const customDateVal = document.getElementById('moCustomDate').value;
             
-            if(service === "") return alert("कोणती सर्व्हिस दिली ते निवडा!");
-            if(payMode === "") return alert("पेमेंट कुठे जमा झाले ते निवडा!");
-            if(mobile.length!==10||details===""||totalAmount===""||paidAmount==="") return alert("माहिती पूर्ण भरा!");
+            // 🚀 STRICT VALIDATIONS
+            if(service === "") return alert("⚠️ कोणती सर्व्हिस दिली ते निवडा!");
+            if(payMode === "") return alert("⚠️ पेमेंट कुठे जमा झाले ते निवडा!");
+            if(!mobile || mobile.length !== 10) return alert("⚠️ १० अंकी ग्राहक मोबाईल नंबर भरणे सक्तीचे आहे!");
+            if(!details) return alert("⚠️ ग्राहकाचे नाव आलेले नाही! (आधी नवीन ग्राहक ॲड करा)");
+            if(totalAmount===""||paidAmount==="") return alert("⚠️ एकूण फी आणि जमा रक्कम भरणे सक्तीचे आहे!");
             
             isSavingMaha = true; btn.disabled = true; btn.innerText = "Saving...";
             let updateData = { category: "Mahaonline", service, amount: Number(paidAmount), totalFee: Number(totalAmount), pendingAmount: Number(pendingAmount), bankSource: payMode, expenseSource: "-", details, mobile, village, payStatus: Number(pendingAmount) > 0 ? "Udhar" : "Paid", purpose: `Total: ₹${totalAmount}, Pending: ₹${pendingAmount}`, idProof: "-", commission: 0, narration: "Mahaonline Service" };
