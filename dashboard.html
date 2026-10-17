@@ -199,6 +199,22 @@
                     </div>
                 </div>
 
+                <!-- Beneficiary Details Row (Money Transfer साठी) -->
+                <div class="form-row" id="beneficiaryRow" style="display:none; background:#f0fdf4; padding:10px; border-radius:6px; border:1px dashed #86efac;">
+                    <div class="form-group">
+                        <label style="color:#166534;">Beneficiary Name (ज्याला पैसे पाठवायचे त्याचे नाव)</label>
+                        <input type="text" id="benName" placeholder="नाव टाका">
+                   </div>
+                   <div class="form-group">
+                       <label style="color:#166534;">Beneficiary Mobile</label>
+                       <input type="tel" id="benMobile" maxlength="10" placeholder="मोबाईल नंबर">
+                  </div>
+                  <div class="form-group">
+                      <label style="color:#166534;">Account No / UPI / पत्ता</label>
+                      <input type="text" id="benAccount" placeholder="A/c No, UPI किंवा पत्ता">
+                 </div>
+            </div>
+             
                 <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff5f5; padding: 10px; border-radius: 6px; border: 1px dashed var(--danger);">
                     <div class="form-group">
                         <label id="dynamicSourceLabel" style="color: var(--danger);">हा खर्च कोणत्या माध्यमातून केला? *</label>
@@ -623,9 +639,21 @@
 
         function toggleFormFields() {
             const st = document.getElementById('serviceType').value; 
-            const bRow = document.getElementById('bankSelectRow'); const eRow = document.getElementById('expenseSourceRow'); const aRow = document.getElementById('aepsRow');
+            const bRow = document.getElementById('bankSelectRow'); 
+            const eRow = document.getElementById('expenseSourceRow'); 
+            const aRow = document.getElementById('aepsRow');
+            const benRow = document.getElementById('beneficiaryRow'); // नवीन
+            
             bRow.style.display = "none"; eRow.style.display = "none"; aRow.style.display = "none";
+            if(benRow) benRow.style.display = "none"; // लपवा
+            
             document.getElementById('commissionBox').style.display = "block";
+
+            // जर Money Transfer असेल तर Beneficiary बॉक्स दाखवा
+            if(st === "Money Transfer" && benRow) {
+                benRow.style.display = "flex";
+            }
+            
             if(st === "Money Transfer" || st === "UPI Cash Given" || st === "Self Bank Deposit" || st === "Self Bank Withdrawal") { 
                 bRow.style.display = "flex"; 
                 document.getElementById('bankSelectLabel').innerText = (st.includes("Deposit") || st.includes("Withdrawal")) ? "कोणत्या बँकेत/बँकेतून व्यवहार झाला? *" : "⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला? *";
