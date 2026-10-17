@@ -306,35 +306,66 @@
             </div>
 
             <div class="container" style="border-left: 4px solid #0891b2;">
-                <h3>सकाळची वॉलेट/कॅश ॲडजस्टमेंट</h3>
-                <div class="form-row">
-                    <div class="form-group">
-                        <select id="adjWallet">
-                            <option value="" disabled selected>-- 👇 खाते निवडा --</option>
-                            <option value="Cash Opening">Cash in Hand (रोख गल्ला) ॲडजस्टमेंट</option>
-                            <option value="Fino Opening" class="lbl-fino1-opt">Fino 1 ॲडजस्टमेंट</option>
-                            <option value="Fino2 Opening" class="lbl-fino2-opt">Fino 2 ॲडजस्टमेंट</option>
-                            <option value="Payworld Opening" class="lbl-payworld-opt">Payworld ॲडजस्टमेंट</option>
-                            <option value="Paynearby Opening" class="lbl-paynearby-opt">Paynearby ॲडजस्टमेंट</option>
-                            <option value="Mahapower Opening" class="lbl-mahapower-opt">Mahapower ॲडजस्टमेंट</option>
-                            <option value="AXIS-2669 Opening" class="lbl-b1-opt">AXIS-2669 ॲडजस्टमेंट</option>
-                            <option value="BOI-0005 Opening" class="lbl-b2-opt">BOI-0005 ॲडजस्टमेंट</option>
-                            <option value="BOI-0168 Opening" class="lbl-b3-opt">BOI-0168 ॲडजस्टमेंट</option>
-                            <option value="WANA-0027 Opening" class="lbl-b4-opt">WANA-0027 ॲडजस्टमेंट</option>
-                            <option value="BOI-4281 Opening" class="lbl-b5-opt">BOI-4281 ॲडजस्टमेंट</option>
-                            <option value="AXIS-12548 Opening" class="lbl-b6-opt">AXIS-12548 ॲडजस्टमेंट</option>
-                            <option value="BOI-0735 Opening" class="lbl-b7-opt">BOI-0735 ॲडजस्टमेंट</option>
-                            <option value="UNION-1529 Opening" class="lbl-b8-opt">UNION-1529 ॲडजस्टमेंट</option>
-                            <option value="SBI-9083 Opening" class="lbl-b9-opt">SBI-9083 ॲडजस्टमेंट</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><input type="number" id="adjAmount" placeholder="रक्कम टाका (₹) *"></div>
-                    <div class="form-group"><input type="text" id="adjNarration" placeholder="नरेशन / टीप"></div>
-                    <div class="form-group"><input type="datetime-local" id="adjCustomDate" style="background:#fff;" title="तारीख बदला"></div>
-                </div>
-                <button class="adj-btn" id="saveAdjBtn" onclick="saveAdjustment()">Update Balance</button>
-            </div>
+    <h3>सकाळची वॉलेट/कॅश ॲडजस्टमेंट व ट्रान्सफर</h3>
+    <div class="form-row">
+        <div class="form-group">
+            <label>प्रकार निवडा</label>
+            <select id="adjType" onchange="toggleAdj()">
+                <option value="Transfer" selected>🔄 एका खात्यातून दुसऱ्यात ट्रान्सफर</option>
+                <option value="Add">फक्त ॲड करा (प्लस +)</option>
+                <option value="Minus">फक्त कमी करा (मायनस -)</option>
+            </select>
         </div>
+        <div class="form-group">
+            <label id="lblFrom">कुठून (From)? *</label>
+            <select id="adjWallet">
+                <option value="" disabled selected>-- 👇 खाते निवडा --</option>
+                <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                <option value="Fino" class="lbl-fino1-opt">Fino 1</option>
+                <option value="Fino2" class="lbl-fino2-opt">Fino 2</option>
+                <option value="Payworld" class="lbl-payworld-opt">Payworld</option>
+                <option value="Paynearby" class="lbl-paynearby-opt">Paynearby</option>
+                <option value="Mahapower" class="lbl-mahapower-opt">Mahapower</option>
+                <option value="AXIS-2669" class="lbl-b1-opt">AXIS-2669</option>
+                <option value="BOI-0005" class="lbl-b2-opt">BOI-0005</option>
+                <option value="BOI-0168" class="lbl-b3-opt">BOI-0168</option>
+                <option value="WANA-0027" class="lbl-b4-opt">WANA-0027</option>
+                <option value="BOI-4281" class="lbl-b5-opt">BOI-4281</option>
+                <option value="AXIS-12548" class="lbl-b6-opt">AXIS-12548</option>
+                <option value="BOI-0735" class="lbl-b7-opt">BOI-0735</option>
+                <option value="UNION-1529" class="lbl-b8-opt">UNION-1529</option>
+                <option value="SBI-9083" class="lbl-b9-opt">SBI-9083</option>
+            </select>
+        </div>
+        <div class="form-group" id="adjToGroup">
+            <label>कुठे (To)? *</label>
+            <select id="adjToWallet">
+                <option value="" disabled selected>-- 👇 खाते निवडा --</option>
+                <option value="Cash">Cash in Hand (रोख गल्ला)</option>
+                <option value="Fino" class="lbl-fino1-opt">Fino 1</option>
+                <option value="Fino2" class="lbl-fino2-opt">Fino 2</option>
+                <option value="Payworld" class="lbl-payworld-opt">Payworld</option>
+                <option value="Paynearby" class="lbl-paynearby-opt">Paynearby</option>
+                <option value="Mahapower" class="lbl-mahapower-opt">Mahapower</option>
+                <option value="AXIS-2669" class="lbl-b1-opt">AXIS-2669</option>
+                <option value="BOI-0005" class="lbl-b2-opt">BOI-0005</option>
+                <option value="BOI-0168" class="lbl-b3-opt">BOI-0168</option>
+                <option value="WANA-0027" class="lbl-b4-opt">WANA-0027</option>
+                <option value="BOI-4281" class="lbl-b5-opt">BOI-4281</option>
+                <option value="AXIS-12548" class="lbl-b6-opt">AXIS-12548</option>
+                <option value="BOI-0735" class="lbl-b7-opt">BOI-0735</option>
+                <option value="UNION-1529" class="lbl-b8-opt">UNION-1529</option>
+                <option value="SBI-9083" class="lbl-b9-opt">SBI-9083</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="adjAmount" placeholder="रक्कम टाका"></div>
+        <div class="form-group"><label>नरेशन / टीप</label><input type="text" id="adjNarration" placeholder="टीप"></div>
+        <div class="form-group"><label>तारीख</label><input type="datetime-local" id="adjCustomDate" style="background:#fff;"></div>
+    </div>
+    <button class="adj-btn" id="saveAdjBtn" onclick="saveAdjustment()">🔄 Update / Transfer Balance</button>
+</div>
 
         <!-- ================= VIEW 4: TALLY CHECKER ================= -->
         <div id="viewTally" class="view-section">
