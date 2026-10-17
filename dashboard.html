@@ -404,8 +404,10 @@
 
         <!-- ================= VIEW 6: BANK CASH DEPOSIT LOG ================= -->
         <div id="viewBankDep" class="view-section">
+            <!-- नवीन एंट्री फॉर्म -->
             <div class="container" style="border-left: 4px solid #10b981;">
-                <h3 style="color: #047857;">🏦 बँकेत भरलेली कॅश (Cash Deposit Log)</h3>
+                <h3 style="color: #047857;">🏦 फक्त माहितीसाठी (No Balance Effect) - बँक कॅश डिपॉझिट</h3>
+                <p style="font-size:12px; color:#64748b; margin-top:-10px;">टीप: १ एप्रिल २०२६ पासूनच्या जुन्या नोंदी करण्यासाठी फक्त 'तारीख व वेळ' बदलून सेव्ह करा.</p>
                 <div class="form-row">
                     <div class="form-group"><label>तारीख व वेळ</label><input type="datetime-local" id="bdDate"></div>
                     <div class="form-group">
@@ -417,11 +419,37 @@
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="रक्कम"></div>
                     <div class="form-group"><label>टीप</label><input type="text" id="bdNote" placeholder="टीप"></div>
-                </div>
-                <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
-            </div>
-            <div class="table-responsive"><table id="bdTable"><thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead><tbody id="bdTableBody"></tbody></table></div>
-        </div>
+               </div>
+               <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
+           </div>
+
+           <div style="display:flex; flex-wrap:wrap; gap:15px;">
+               <!-- बँकेनुसार एकूण रक्कम (Summary) -->
+               <div class="container" style="flex:1; min-width:300px; border-left: 4px solid var(--primary);">
+                   <h3 style="color: var(--primary);">📊 बँकेनुसार एकूण जमा (Total)</h3>
+                   <div class="table-responsive">
+                       <table style="width: 100%;">
+                           <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
+                           <tbody id="bdSummaryBody"></tbody>
+                           <tfoot style="background: #f8fafc; font-weight: bold;">
+                               <tr><td style="color:var(--primary);">सर्व बँकांची एकूण:</td><td style="text-align:right; color:var(--success); font-size:16px;" id="bdGrandTotal">₹ 0</td></tr>
+                           </tfoot>
+                       </table>
+                   </div>
+               </div>
+
+               <!-- लाईन-शीर स्टेटमेंट -->
+               <div class="container" style="flex:2; min-width:400px; border-left: 4px solid #475569;">
+                   <h3 style="color: #475569;">📝 लाईन-शीर स्टेटमेंट</h3>
+                   <div class="table-responsive">
+                       <table id="bdTable">
+                           <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead>
+                           <tbody id="bdTableBody"></tbody>
+                       </table>
+                   </div>
+               </div>
+           </div>
+       </div>
 
         <!-- ================= VIEW 7: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
@@ -743,15 +771,39 @@
 
         function loadBankDeposits() {
             db.collection("bankDeposits").orderBy("timestamp", "desc").onSnapshot(snap => {
-                allBankDeps = []; const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
+                allBankDeps = []; 
+                const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
+                const sumTb = document.getElementById('bdSummaryBody'); sumTb.innerHTML = "";
+        
                 snap.forEach(doc => { allBankDeps.push({id: doc.id, ...doc.data()}); });
+        
+                let bankTotals = {};
+                let grandTotal = 0;
+
                 allBankDeps.forEach(d => {
+                    // १. लाईन-शीर स्टेटमेंटसाठी
                     let dt = d.timestamp ? d.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : "-";
                     let bName = localStorage.getItem("wallet_" + d.bank) || d.bank;
                     tb.innerHTML += `<tr><td>${dt}</td><td><b>${bName}</b></td><td class="text-green">₹ ${d.amount}</td><td>${d.note}</td><td class="no-print"><button class="delete-btn" onclick="db.collection('bankDeposits').doc('${d.id}').delete()">❌</button></td></tr>`;
+            
+                    // २. बँकेनुसार टोटल काढण्यासाठी
+                    if(!bankTotals[bName]) bankTotals[bName] = 0;
+                    bankTotals[bName] += Number(d.amount);
+                    grandTotal += Number(d.amount);
                 });
+
+                // ३. टोटलचा टेबल दाखवण्यासाठी
+                for(let b in bankTotals) {
+                    sumTb.innerHTML += `<tr><td><b>${b}</b></td><td style="text-align:right;" class="text-green">₹ ${bankTotals[b]}</td></tr>`;
+                }
+                if(Object.keys(bankTotals).length === 0) {
+                    sumTb.innerHTML = `<tr><td colspan="2" style="text-align:center;">कोणतीही नोंद नाही</td></tr>`;
+                }
+                document.getElementById('bdGrandTotal').innerText = `₹ ${grandTotal}`;
+
             }, err => console.log(err));
         }
+        
         function saveBankDeposit() {
             if(isSavingDep) return;
             const btn = document.getElementById('saveBdBtn');
