@@ -85,6 +85,7 @@
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
+            <li id="menuLinks" onclick="switchTab('links')">🔗 लिंक्स व्यवस्थापन</li>
         </ul>
         <div class="logout-container no-print">
             <button class="logout-btn-sidebar" onclick="logoutUser()">🚪 Logout (लॉगआऊट)</button>
@@ -97,7 +98,7 @@
             <div><h2>Pusdekar Online Center</h2></div>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD (ENTRY + LINKS) ================= -->
+        <!-- ================= VIEW 1: DASHBOARD (ENTRY + QUICK LINKS) ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
             <!-- New Entry Form -->
@@ -203,25 +204,6 @@
                 <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स</h3>
                 <div class="quick-links-grid" id="dashboardQuickLinks"></div>
             </div>
-
-            <!-- Add/Manage Quick Links -->
-            <div class="container no-print" style="border-left: 4px solid #8b5cf6;">
-                <h3 style="color: #8b5cf6;">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
-                <div class="form-row">
-                    <div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="नाव"></div>
-                    <div class="form-group"><label>URL *</label><input type="text" id="qlUrl" placeholder="https://..."></div>
-                    <div class="form-group"><label>इमोजी</label><input type="text" id="qlIcon" placeholder="🌐"></div>
-                </div>
-                <button class="save-btn" id="saveQuickLinkBtn" style="background:#8b5cf6;" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
-                
-                <div class="table-responsive" style="margin-top:15px; border:none; box-shadow:none;">
-                    <table id="linksTable">
-                        <thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th>कृती</th></tr></thead>
-                        <tbody id="linksTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
 
         <!-- ================= VIEW 2: BANK CASH DEPOSIT LOG ================= -->
@@ -332,6 +314,26 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 5: MANAGE LINKS ================= -->
+        <div id="viewLinks" class="view-section">
+            <div class="container no-print" style="border-left: 4px solid #8b5cf6;">
+                <h3 style="color: #8b5cf6;">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
+                <div class="form-row">
+                    <div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="नाव"></div>
+                    <div class="form-group"><label>URL *</label><input type="text" id="qlUrl" placeholder="https://..."></div>
+                    <div class="form-group"><label>इमोजी</label><input type="text" id="qlIcon" placeholder="🌐"></div>
+                </div>
+                <button class="save-btn" id="saveQuickLinkBtn" style="background:#8b5cf6;" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
+                
+                <div class="table-responsive" style="margin-top:15px; border:none; box-shadow:none;">
+                    <table id="linksTable">
+                        <thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th>कृती</th></tr></thead>
+                        <tbody id="linksTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- Firebase Scripts -->
@@ -374,6 +376,7 @@
             else if(tabName === 'bankDep') { document.getElementById('viewBankDep').classList.add('active-view'); document.getElementById('menuBankDep').classList.add('active'); }
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
+            else if(tabName === 'links') { document.getElementById('viewLinks').classList.add('active-view'); document.getElementById('menuLinks').classList.add('active'); }
         }
 
         function checkCAuditRule() { 
