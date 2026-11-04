@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusdekar Online Center - Simplified</title>
+    <title>Pusdekar Online Center - Simple Management</title>
     <style>
         :root {
             --primary: #2563eb; --primary-dark: #1d4ed8;
@@ -33,6 +33,15 @@
         .view-section { display: none; }
         .view-section.active-view { display: block; }
 
+        /* Quick Links */
+        .quick-links-container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; border-left: 4px solid #f59e0b; }
+        .quick-links-container h3 { margin: 0 0 12px 0; font-size: 15px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; }
+        .quick-links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .ql-btn { background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: #1e293b; font-size: 11.5px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60px; transition: all 0.2s; }
+        .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+        .ql-icon { font-size: 20px; margin-bottom: 4px; }
+
+        /* Form Elements */
         .container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
         .form-group { flex: 1; min-width: 180px; }
@@ -44,7 +53,8 @@
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); }
         
         .save-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; margin-top: 5px; }
-        .save-btn:disabled { background: #94a3b8; cursor: not-allowed; } 
+        .save-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .print-btn { background: #475569; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
         
         .table-responsive { overflow-x: auto; background: white; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
@@ -55,7 +65,7 @@
         
         .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
-        
+
         @keyframes blinkRed { 0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.8); } 100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } }
         .highlight-bank-row { background: #fef2f2 !important; border: 2px dashed #dc2626 !important; animation: blinkRed 1.5s infinite; justify-content: center; }
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
@@ -70,11 +80,11 @@
     <div class="sidebar no-print">
         <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
         <ul class="sidebar-menu">
-            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 नवीन व्यवहार नोंद</li>
+            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 मुख्य डॅशबोर्ड (Entry)</li>
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
+            <li id="menuLinks" onclick="switchTab('links')">🔗 क्विक लिंक्स (Websites)</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
-            <li id="menuSettings" onclick="switchTab('settings')">⚙️ सेटिंग्स</li>
         </ul>
         <div class="logout-container no-print">
             <button class="logout-btn-sidebar" onclick="logoutUser()">🚪 Logout (लॉगआऊट)</button>
@@ -89,6 +99,7 @@
 
         <!-- ================= VIEW 1: DASHBOARD (ENTRY) ================= -->
         <div id="viewDashboard" class="view-section active-view">
+            
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 <div style="background:#f0f9ff; padding:8px 12px; border-radius:6px; border:1px dashed #bae6fd; margin-bottom:12px; display:inline-block;">
@@ -112,12 +123,11 @@
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम"></div>
+                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
                     <div class="form-group"><label>ग्राहक मोबाईल *</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:4px; font-size:12px;"></span></div>
                     <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील) *</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
 
-                <!-- AEPS Row -->
                 <div class="form-row" id="aepsRow" style="display:none; background:#fffbeb; padding:10px; border-radius:6px; border:1px dashed var(--warning);">
                     <div class="form-group" style="max-width: 250px;">
                         <label style="color:var(--warning);">पोर्टल निवडा *</label>
@@ -137,24 +147,7 @@
                         </select>
                     </div>
                 </div>
-
-                <!-- Beneficiary Details Row (Money Transfer साठी) -->
-                <div class="form-row" id="beneficiaryRow" style="display:none; background:#f0fdf4; padding:10px; border-radius:6px; border:1px dashed #86efac;">
-                    <div class="form-group">
-                        <label style="color:#166534;">Beneficiary Name (ज्याला पैसे पाठवायचे त्याचे नाव)</label>
-                        <input type="text" id="benName" placeholder="नाव टाका">
-                   </div>
-                   <div class="form-group">
-                       <label style="color:#166534;">Beneficiary Mobile</label>
-                       <input type="tel" id="benMobile" maxlength="10" placeholder="मोबाईल नंबर">
-                  </div>
-                  <div class="form-group">
-                      <label style="color:#166534;">Account No / UPI / पत्ता</label>
-                      <input type="text" id="benAccount" placeholder="A/c No, UPI किंवा पत्ता">
-                 </div>
-                </div>
              
-                <!-- Expense Source -->
                 <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff5f5; padding: 10px; border-radius: 6px; border: 1px dashed var(--danger);">
                     <div class="form-group">
                         <label id="dynamicSourceLabel" style="color: var(--danger);">हा खर्च कोणत्या माध्यमातून केला? *</label>
@@ -166,11 +159,15 @@
                             <option value="Payworld" class="lbl-payworld">Payworld</option>
                             <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
                             <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
-                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
-                            <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
-                            <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
-                            <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
-                            <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
+                            <option value="AXIS-2669" class="lbl-b1-upi">AXIS-2669 UPI</option>
+                            <option value="BOI-0005" class="lbl-b2-upi">BOI-0005 UPI</option>
+                            <option value="BOI-0168" class="lbl-b3-upi">BOI-0168 UPI</option>
+                            <option value="WANA-0027" class="lbl-b4-upi">WANA-0027 UPI</option>
+                            <option value="BOI-4281" class="lbl-b5-upi">BOI-4281 UPI</option>
+                            <option value="AXIS-12548" class="lbl-b6-upi">AXIS-12548 UPI</option>
+                            <option value="BOI-0735" class="lbl-b7-upi">BOI-0735 UPI</option>
+                            <option value="UNION-1529" class="lbl-b8-upi">UNION-1529 UPI</option>
+                            <option value="SBI-9083" class="lbl-b9-upi">SBI-9083 UPI</option>
                         </select>
                     </div>
                 </div>
@@ -184,14 +181,13 @@
                         </select>
                     </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
-                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (मोठ्या रकमेसाठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
+                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
                     <div class="form-group" id="commissionBox"><label style="color:var(--success);">कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                 </div>
 
                 <div class="form-row"><div class="form-group"><label>विशेष टीप / नरेशन</label><input type="text" id="entryNarration" placeholder="टीप..."></div></div>
                 <input type="hidden" id="villageInput" value="-">
 
-                <!-- Bank Selection -->
                 <div class="form-row highlight-bank-row" id="bankSelectRow" style="display: none; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
                     <div class="form-group" style="max-width: 300px;">
                         <label id="bankSelectLabel">⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला? *</label>
@@ -209,14 +205,15 @@
                         </select>
                     </div>
                 </div>
-                <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">💾 Save Transaction Entry</button>
+                <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">Save Transaction Entry</button>
             </div>
+            
         </div>
 
         <!-- ================= VIEW 2: BANK CASH DEPOSIT LOG ================= -->
         <div id="viewBankDep" class="view-section">
             <div class="container" style="border-left: 4px solid #10b981;">
-                <h3 style="color: #047857;">🏦 बँक कॅश डिपॉझिट (फक्त माहितीसाठी)</h3>
+                <h3 style="color: #047857;">🏦 फक्त माहितीसाठी (No Balance Effect) - बँक कॅश डिपॉझिट</h3>
                 <div class="form-row">
                     <div class="form-group"><label>तारीख व वेळ</label><input type="datetime-local" id="bdDate"></div>
                     <div class="form-group">
@@ -232,403 +229,81 @@
                <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
            </div>
 
-           <!-- बँकेनुसार एकूण रक्कम (Summary) -->
-           <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
-               <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 10px;">📊 बँकेनुसार जमा</h3>
-               <div class="table-responsive" style="box-shadow: none; border: none;">
-                   <table style="width: 100%; font-size: 12px; min-width:unset;">
-                       <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
-                       <tbody id="bdSummaryBody"></tbody>
-                       <tfoot style="background: #f8fafc; font-weight: bold;">
-                           <tr><td style="color:var(--primary);">सर्व बँकांची एकूण:</td><td style="text-align:right; color:var(--success); font-size:16px;" id="bdGrandTotal">₹ 0</td></tr>
-                       </tfoot>
-                   </table>
+           <div>
+               <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
+                   <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 10px;">📊 बँकेनुसार जमा</h3>
+                   <div class="table-responsive" style="box-shadow: none; border: none;">
+                       <table style="width: 100%; font-size: 12px; min-width: 300px;">
+                           <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
+                           <tbody id="bdSummaryBody"></tbody>
+                           <tfoot style="background: #f8fafc; font-weight: bold;">
+                               <tr><td style="color:var(--primary);">सर्व बँकांची एकूण:</td><td style="text-align:right; color:var(--success); font-size:16px;" id="bdGrandTotal">₹ 0</td></tr>
+                           </tfoot>
+                       </table>
+                   </div>
                </div>
-           </div>
 
-           <!-- लाईन-शीर स्टेटमेंट -->
-           <div class="container" style="border-left: 4px solid #475569;">
-               <h3 style="color: #475569;">📝 लाईन-शीर स्टेटमेंट</h3>
-               <div class="table-responsive">
-                   <table id="bdTable">
-                       <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead>
-                       <tbody id="bdTableBody"></tbody>
-                   </table>
+               <div class="container" style="border-left: 4px solid #475569;">
+                   <h3 style="color: #475569;">📝 लाईन-शीर स्टेटमेंट</h3>
+                   <div class="table-responsive">
+                       <table id="bdTable" style="min-width: 600px;">
+                           <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead>
+                           <tbody id="bdTableBody"></tbody>
+                       </table>
+                   </div>
                </div>
            </div>
        </div>
 
         <!-- ================= VIEW 3: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
-            <div class="container filter-section">
+            <div class="container filter-section form-row">
                 <div class="form-group" style="margin-bottom:0; max-width: 180px;">
                     <label>खाते / वॉलेट निवडा:</label>
-                    <select id="walletFilter" onchange="filterData()">
-                        <option value="All">सर्व वॉलेट्स व बँका</option>
-                        <option value="Cash">Cash in Hand</option>
-                        <option value="Fino" class="lbl-fino1">Fino Dipak</option>
-                        <option value="Fino2" class="lbl-fino2">Fino Pallavi</option>
-                        <option value="Payworld" class="lbl-payworld">Payworld</option>
-                        <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
-                        <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
-                        <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
-                        <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
-                        <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
-                        <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
-                        <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
-                    </select>
+                    <select id="walletFilter" onchange="filterData()"><option value="All">सर्व वॉलेट्स व बँका</option><option value="Cash">Cash in Hand</option><option value="Fino" class="lbl-fino1">Fino Dipak</option><option value="Fino2" class="lbl-fino2">Fino Pallavi</option><option value="Payworld" class="lbl-payworld">Payworld</option><option value="Paynearby" class="lbl-paynearby">Paynearby</option><option value="Mahapower" class="lbl-mahapower">Mahapower</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
                 </div>
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
                 <div class="form-group" style="margin-bottom:0; min-width: 150px;"><label>🔍 एन्ट्री शोधा:</label><input type="text" id="stmtSearch" placeholder="शोधा..." oninput="filterData()"></div>
-                
-                <button class="save-btn" style="background:#475569; width:auto;" onclick="window.print()">🖨️ Print</button>
-                <button class="save-btn" style="background:var(--primary); width:auto;" onclick="resetFilter()">Reset Filter</button>
+                <div class="form-group" style="display:flex; align-items:flex-end; gap:5px;">
+                    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+                    <button class="print-btn" style="background:#10b981;" onclick="downloadExcel()">📥 Excel</button>
+                    <button class="print-btn" style="background:var(--primary);" onclick="resetFilter()">Reset</button>
+                </div>
             </div>
-            
             <div class="table-responsive">
                 <table id="reportTable">
-                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>पॅन/आधार</th><th>स्थिती</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th class="no-print">कृती</th></tr></thead>
+                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>पॅन/आधार</th><th>स्थिती</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th>एकूण शिल्लक</th><th class="no-print">कृती</th></tr></thead>
                     <tbody id="statementTableEntries"></tbody>
+                    <tfoot id="statementTotalFoot" style="background: #f8fafc; font-weight: bold; border-top: 2px solid #cbd5e1;"></tfoot>
                 </table>
             </div>
         </div>
 
-        <!-- ================= VIEW 4: CUSTOMERS ================= -->
+        <!-- ================= VIEW 4: QUICK LINKS ================= -->
+        <div id="viewLinks" class="view-section">
+            <div class="container" style="border-left: 4px solid var(--primary);">
+                <h3 style="color: var(--primary);">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
+                <div class="form-row"><div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="नाव"></div><div class="form-group"><label>URL *</label><input type="text" id="qlUrl" placeholder="https://..."></div><div class="form-group"><label>इमोजी</label><input type="text" id="qlIcon" placeholder="🌐"></div></div>
+                <button class="save-btn" id="saveQuickLinkBtn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
+            </div>
+            <div class="quick-links-container no-print">
+                <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स</h3>
+                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
+            </div>
+            <div class="table-responsive"><table id="linksTable" style="min-width: 600px;"><thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th class="no-print">कृती</th></tr></thead><tbody id="linksTableBody"></tbody></table></div>
+        </div>
+
+        <!-- ================= VIEW 5: CUSTOMERS ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
-                <h3 style="color: var(--primary);">👥 नवीन ग्राहक ॲड करा</h3>
-                <div class="form-row">
-                    <div class="form-group"><label>नाव *</label><input type="text" id="cName" placeholder="नाव"></div>
-                    <div class="form-group"><label>मोबाईल *</label><input type="tel" id="cMobile" maxlength="10" placeholder="नंबर"></div>
-                    <div class="form-group"><label>गाव</label><input type="text" id="cVillage" placeholder="गाव"></div>
-                    <div class="form-group"><label>पॅन/आधार</label><input type="text" id="cIdProof" placeholder="आयडी"></div>
-                </div>
+                <h3 style="color: var(--primary);">👥 ग्राहकांची यादी (एकूण ग्राहक: <span id="totalCustomersCount" style="color:var(--danger); font-size: 20px;">0</span>)</h3>
+                <h3 style="color: var(--primary); margin-top:20px; font-size:16px;">+ नवीन ग्राहक ॲड करा</h3>
+                <div class="form-row"><div class="form-group"><label>नाव *</label><input type="text" id="cName" placeholder="नाव"></div><div class="form-group"><label>मोबाईल *</label><input type="tel" id="cMobile" maxlength="10" placeholder="नंबर"></div><div class="form-group"><label>गाव</label><input type="text" id="cVillage" placeholder="गाव"></div><div class="form-group"><label>पॅन/आधार</label><input type="text" id="cIdProof" placeholder="आयडी"></div></div>
                 <button class="save-btn" id="saveCustomerBtn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह करा</button>
             </div>
-            <div class="container filter-section"><input type="text" id="customerSearchInput" placeholder="🔍 ग्राहक शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
-            <div class="table-responsive">
-                <table id="customersTable">
-                    <thead><tr><th>अ.क्र.</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव</th><th>पॅन / आधार</th><th class="no-print">कृती</th></tr></thead>
-                    <tbody id="customersTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ================= VIEW 5: SETTINGS ================= -->
-        <div id="viewSettings" class="view-section">
-            <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
-                <h3>⚙️ बँक आणि वॉलेटची नावे सेट करा</h3>
-                <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
-                    <div style="flex:1; min-width:250px; background:#f8fafc; padding:15px; border-radius:8px;">
-                        <h4 style="color:var(--primary); margin-top:0;">५ मुख्य वॉलेट्स</h4>
-                        <div class="form-group"><label>Fino १</label><input type="text" id="renameFino1"></div><br><div class="form-group"><label>Fino २</label><input type="text" id="renameFino2"></div><br><div class="form-group"><label>Payworld</label><input type="text" id="renamePayworld"></div><br><div class="form-group"><label>Paynearby</label><input type="text" id="renamePaynearby"></div><br><div class="form-group"><label>Mahapower</label><input type="text" id="renameMahapower"></div>
-                    </div>
-                    <div style="flex:2; min-width:350px; background:#f5f3ff; padding:15px; border-radius:8px;">
-                        <h4 style="color:#7c3aed; margin-top:0;">९ UPI बँका</h4>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;"><div class="form-group"><label>बँक १</label><input type="text" id="renameB1"></div><div class="form-group"><label>बँक 2</label><input type="text" id="renameB2"></div><div class="form-group"><label>बँक ३</label><input type="text" id="renameB3"></div><div class="form-group"><label>बँक ४</label><input type="text" id="renameB4"></div><div class="form-group"><label>बँक ५</label><input type="text" id="renameB5"></div><div class="form-group"><label>बँक ६</label><input type="text" id="renameB6"></div><div class="form-group"><label>बँक ७</label><input type="text" id="renameB7"></div><div class="form-group"><label>बँक ८</label><input type="text" id="renameB8"></div><div class="form-group"><label>बँक ९</label><input type="text" id="renameB9"></div></div>
-                    </div>
-                </div>
-                <button class="save-btn" style="background:var(--success); margin-top:15px;" onclick="saveWalletNames()">Save Settings</button>
-            </div>
+            <div class="container filter-section"><input type="text" id="customerSearchInput" placeholder="🔍 शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
+            <div class="table-responsive"><table id="customersTable" style="min-width: 700px;"><thead><tr><th>अ.क्र.</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव</th><th>पॅन / आधार</th><th class="no-print">कृती</th></tr></thead><tbody id="customersTableBody"></tbody></table></div>
         </div>
 
     </div>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-
-    <script>
-        const firebaseConfig = { apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U", authDomain: "pusdekar-services.firebaseapp.com", projectId: "pusdekar-services", storageBucket: "pusdekar-services.firebasestorage.app" };
-        firebase.initializeApp(firebaseConfig); const db = firebase.firestore(); 
-
-        const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
-        let allTransactions = []; let allCustomers = []; let allBankDeps = [];
-        let editEntryId = null;
-
-        window.onload = function() { 
-            loadWalletNames(); 
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
-            
-            if(document.getElementById('fromDate')) document.getElementById('fromDate').value = todayStr;
-            if(document.getElementById('toDate')) document.getElementById('toDate').value = todayStr;
-        }
-
-        firebase.auth().onAuthStateChanged((user) => { 
-            if (!user) { window.location.href = "login.html"; }
-            else { loadDataFromFirebase(); loadCustomersList(); loadBankDeposits(); } 
-        });
-
-        function logoutUser() { firebase.auth().signOut().then(() => { window.location.href = "login.html"; }); }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
-            
-            if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
-            else if(tabName === 'bankDep') { document.getElementById('viewBankDep').classList.add('active-view'); document.getElementById('menuBankDep').classList.add('active'); }
-            else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
-            else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
-            else if(tabName === 'settings') { document.getElementById('viewSettings').classList.add('active-view'); document.getElementById('menuSettings').classList.add('active'); }
-        }
-
-        function saveWalletNames() {
-            localStorage.setItem("wallet_fino1", document.getElementById('renameFino1').value || "Fino Dipak"); localStorage.setItem("wallet_fino2", document.getElementById('renameFino2').value || "Fino Pallavi"); localStorage.setItem("wallet_payworld", document.getElementById('renamePayworld').value || "Payworld"); localStorage.setItem("wallet_paynearby", document.getElementById('renamePaynearby').value || "Paynearby"); localStorage.setItem("wallet_mahapower", document.getElementById('renameMahapower').value || "Mahapower");
-            BANK_KEYS.forEach((key, i) => { localStorage.setItem("wallet_" + key, document.getElementById('renameB'+(i+1)).value || key); });
-            loadWalletNames(); alert("सेटिंग्स सेव्ह झाल्या!"); switchTab('dashboard');
-        }
-        
-        function updateLabels(className, text) { document.querySelectorAll('.' + className).forEach(el => el.innerText = text); }
-        
-        function loadWalletNames() {
-            const f1 = localStorage.getItem("wallet_fino1") || "Fino Dipak"; const f2 = localStorage.getItem("wallet_fino2") || "Fino Pallavi"; const pw = localStorage.getItem("wallet_payworld") || "Payworld"; const pn = localStorage.getItem("wallet_paynearby") || "Paynearby"; const mp = localStorage.getItem("wallet_mahapower") || "Mahapower";
-            updateLabels('lbl-fino1', f1); updateLabels('lbl-fino2', f2); updateLabels('lbl-payworld', pw); updateLabels('lbl-paynearby', pn); updateLabels('lbl-mahapower', mp);
-            BANK_KEYS.forEach((key, i) => { let nm = localStorage.getItem("wallet_" + key) || key; updateLabels('lbl-b' + (i+1), nm); });
-        }
-
-        function toggleFormFields() {
-            const st = document.getElementById('serviceType').value; 
-            const bRow = document.getElementById('bankSelectRow'); 
-            const eRow = document.getElementById('expenseSourceRow'); 
-            const aRow = document.getElementById('aepsRow');
-            const benRow = document.getElementById('beneficiaryRow'); 
-            
-            bRow.style.display = "none"; eRow.style.display = "none"; aRow.style.display = "none";
-            if(benRow) benRow.style.display = "none"; 
-            
-            document.getElementById('commissionBox').style.display = "block";
-
-            if(st === "Money Transfer" && benRow) benRow.style.display = "flex";
-            
-            if(st === "Money Transfer" || st === "UPI Cash Given" || st === "Self Bank Deposit" || st === "Self Bank Withdrawal") { 
-                bRow.style.display = "flex"; 
-                document.getElementById('bankSelectLabel').innerText = (st.includes("Deposit") || st.includes("Withdrawal")) ? "कोणत्या बँकेत/बँकेतून व्यवहार झाला? *" : "⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला? *";
-            } else if(st === "Shop Expense") { eRow.style.display = "flex"; } else if(st === "AEPS") { aRow.style.display = "flex"; }
-        }
-
-        function goToAddCustomer(mob) {
-            document.getElementById('cMobile').value = mob;
-            switchTab('customers');
-            document.getElementById('cName').focus();
-        }
-
-        function searchCustomer() {
-            const mobile = document.getElementById('mobile').value; const msgSpan = document.getElementById('searchMsg');
-            if (mobile.length === 10) {
-                db.collection("customers").doc(mobile).get().then((doc) => {
-                    if (doc.exists) { 
-                        const d = doc.data(); 
-                        document.getElementById('details').value = d.name || ""; 
-                        document.getElementById('idProof').value = d.idProof || "-"; 
-                        msgSpan.innerHTML="✔️ जुना ग्राहक!"; msgSpan.style.color="var(--success)"; msgSpan.style.display="inline-block"; setTimeout(()=>msgSpan.style.display="none", 3000); 
-                    } 
-                    else { 
-                        msgSpan.innerHTML=`❌ जुना नंबर नाही! <a href="javascript:void(0)" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px; text-decoration:none;">+ नवीन ॲड करा</a>`; 
-                        msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById('details').value=""; 
-                    }
-                });
-            }
-        }
-
-        function addNewCustomerManually() {
-            const btn = document.getElementById('saveCustomerBtn');
-            const name = document.getElementById('cName').value; const mobile = document.getElementById('cMobile').value; const village = document.getElementById('cVillage').value || "-"; const idProof = document.getElementById('cIdProof').value || "-";
-            if(name === "" || mobile.length !== 10) return alert("नाव आणि 10 अंकी नंबर आवश्यक!");
-            
-            btn.disabled = true; btn.innerText = "Saving...";
-            db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { 
-                btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; alert("ग्राहक सेव्ह झाला!"); 
-                document.getElementById('cName').value = ""; document.getElementById('cMobile').value = ""; document.getElementById('cVillage').value = ""; document.getElementById('cIdProof').value = "";
-                
-                document.getElementById('mobile').value = mobile;
-                switchTab('dashboard');
-                searchCustomer();
-            }).catch(() => { btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; });
-        }
-
-        function editCust(mobile) { let c = allCustomers.find(x => x.mobile === mobile); if(c) { document.getElementById('cName').value = c.name||""; document.getElementById('cMobile').value = c.mobile||""; document.getElementById('cVillage').value = c.village||""; document.getElementById('cIdProof').value = c.idProof||""; switchTab('customers'); window.scrollTo(0,0); } }
-        
-        function loadCustomersList() { 
-            db.collection("customers").onSnapshot((snap) => { 
-                allCustomers = []; snap.forEach(doc => allCustomers.push(doc.data())); 
-                renderCustTable(allCustomers); 
-            }); 
-        }
-        function renderCustTable(data) { 
-            const tb = document.getElementById("customersTableBody"); tb.innerHTML = ""; 
-            let srNo = 1; 
-            data.forEach(c => { 
-                tb.innerHTML += `<tr><td><b>${srNo++}</b></td><td><b>${c.name}</b></td><td>${c.mobile}</td><td>${c.village}</td><td>${c.idProof}</td><td class="no-print"><button class="edit-btn" onclick="editCust('${c.mobile}')">✏️ Edit</button></td></tr>`; 
-            }); 
-        }
-        function filterCustomerTable() { const q = document.getElementById("customerSearchInput").value.toLowerCase(); renderCustTable(allCustomers.filter(c => c.name.toLowerCase().includes(q) || c.mobile.includes(q) || c.village.toLowerCase().includes(q))); }
-
-        // Bank Deposit Logic
-        function loadBankDeposits() {
-            db.collection("bankDeposits").orderBy("timestamp", "desc").onSnapshot(snap => {
-                allBankDeps = []; 
-                const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
-                const sumTb = document.getElementById('bdSummaryBody'); sumTb.innerHTML = "";
-        
-                snap.forEach(doc => { allBankDeps.push({id: doc.id, ...doc.data()}); });
-        
-                let bankTotals = {}; let grandTotal = 0;
-                allBankDeps.forEach(d => {
-                    let dt = d.timestamp ? d.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : "-";
-                    let bName = localStorage.getItem("wallet_" + d.bank) || d.bank;
-                    tb.innerHTML += `<tr><td>${dt}</td><td><b>${bName}</b></td><td class="text-green">₹ ${d.amount}</td><td>${d.note}</td><td class="no-print"><button class="delete-btn" onclick="db.collection('bankDeposits').doc('${d.id}').delete()">❌</button></td></tr>`;
-                    
-                    if(!bankTotals[bName]) bankTotals[bName] = 0;
-                    bankTotals[bName] += Number(d.amount);
-                    grandTotal += Number(d.amount);
-                });
-
-                for(let b in bankTotals) { sumTb.innerHTML += `<tr><td><b>${b}</b></td><td style="text-align:right;" class="text-green">₹ ${bankTotals[b]}</td></tr>`; }
-                if(Object.keys(bankTotals).length === 0) sumTb.innerHTML = `<tr><td colspan="2" style="text-align:center;">कोणतीही नोंद नाही</td></tr>`;
-                document.getElementById('bdGrandTotal').innerText = `₹ ${grandTotal}`;
-            });
-        }
-        
-        function saveBankDeposit() {
-            const btn = document.getElementById('saveBdBtn');
-            const bank = document.getElementById('bdBank').value; const amt = document.getElementById('bdAmount').value; const note = document.getElementById('bdNote').value || "-"; const dVal = document.getElementById('bdDate').value;
-            if(bank === "" || amt === "") return alert("बँक आणि रक्कम भरणे आवश्यक आहे!");
-            
-            btn.disabled = true; btn.innerText = "Saving...";
-            let data = { bank: bank, amount: Number(amt), note: note };
-            if(dVal) data.timestamp = firebase.firestore.Timestamp.fromDate(new Date(dVal)); else data.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            
-            db.collection("bankDeposits").add(data).then(() => { 
-                btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा";
-                document.getElementById('bdBank').value=""; document.getElementById('bdAmount').value=""; document.getElementById('bdNote').value=""; alert("सेव्ह झाले!"); 
-            }).catch(() => { btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा"; });
-        }
-
-        // Transaction Entry Logic
-        function saveEntry() {
-            const btn = document.getElementById('saveEntryBtn'); 
-            let baseService = document.getElementById('serviceType').value; const amount = parseFloat(document.getElementById('amount').value) || 0; 
-            const upiBankVal = document.getElementById('upiBank').value;
-            const expenseSource = document.getElementById('expenseSource').value;
-            const aepsPortal = document.getElementById('aepsPortal').value;
-            const aepsType = document.getElementById('aepsType').value;
-            const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
-            
-            if(!baseService) return alert("⚠️ सर्व्हिसचा प्रकार निवडणे सक्तीचे आहे!");
-            if(!amount || amount <= 0) return alert("⚠️ रक्कम भरणे सक्तीचे आहे!");
-            if(mobile.length !== 10) return alert("⚠️ १० अंकी ग्राहक मोबाईल नंबर भरणे सक्तीचे आहे!");
-            if(!details) return alert("⚠️ ग्राहकाचे नाव आलेले नाही! (आधी नवीन ग्राहक ॲड करा)");
-            if((baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") && upiBankVal === "") { alert("⚠️ बँक निवडणे सक्तीचे आहे!"); return; }
-            
-            btn.disabled = true; btn.innerText = "Saving...";
-
-            let service = baseService;
-            if(baseService === "AEPS") {
-                if(aepsPortal === "Fino") service = aepsType === "Withdrawal" ? "Fino Payment Bank" : "Fino Cash Deposit";
-                else if(aepsPortal === "Fino2") service = aepsType === "Withdrawal" ? "Fino2 Payment Bank" : "Fino2 Cash Deposit";
-                else if(aepsPortal === "Payworld") service = aepsType === "Withdrawal" ? "Payworld Services" : "Payworld Cash Deposit";
-                else if(aepsPortal === "Paynearby") service = aepsType === "Withdrawal" ? "Paynearby Services" : "Paynearby Cash Deposit";
-            }
-
-            const finalBankSource = (baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") ? upiBankVal : "-"; 
-            const finalExpenseSource = (baseService === "Shop Expense") ? expenseSource : "-"; 
-
-            let updateData = { category: "General", service, amount: Number(amount), bankSource: finalBankSource, expenseSource: finalExpenseSource, details, mobile: mobile || "-", village, payStatus, purpose, idProof, commission: Number(commission), narration };
-            if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
-            
-            if(editEntryId) {
-                db.collection("transactions").doc(editEntryId).update(updateData).then(() => { 
-                    resetEntryForm(); editEntryId=null; btn.disabled=false; btn.innerText="💾 Save Transaction Entry"; alert("अपडेट झाले!"); 
-                }).catch(() => { btn.disabled=false; btn.innerText="💾 Save Transaction Entry"; });
-            } else {
-                db.collection("transactions").add(updateData).then(() => { 
-                    resetEntryForm(); btn.disabled=false; btn.innerText="💾 Save Transaction Entry"; alert("एन्ट्री सेव्ह झाली!");
-                }).catch(() => { btn.disabled=false; btn.innerText="💾 Save Transaction Entry"; });
-            }
-        }
-        function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; document.getElementById('payStatus').value="Paid"; document.getElementById('expenseSource').value=""; document.getElementById('aepsPortal').value=""; document.getElementById('aepsType').value=""; }
-
-        function editTxn(id) {
-            let data = allTransactions.find(x => x.id === id); if(!data) return;
-            let st = data.service;
-            if(st.includes("Cash Deposit") || st.includes("Payment Bank") || st.includes("Payworld Services") || st.includes("Paynearby Services")) {
-                document.getElementById('serviceType').value = "AEPS";
-                if(st.includes("Fino2")) document.getElementById('aepsPortal').value = "Fino2"; else if(st.includes("Fino")) document.getElementById('aepsPortal').value = "Fino"; else if(st.includes("Payworld")) document.getElementById('aepsPortal').value = "Payworld"; else if(st.includes("Paynearby")) document.getElementById('aepsPortal').value = "Paynearby";
-                if(st.includes("Cash Deposit")) document.getElementById('aepsType').value = "Deposit"; else document.getElementById('aepsType').value = "Withdrawal";
-            } else { document.getElementById('serviceType').value = st; }
-            toggleFormFields(); 
-            document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('payStatus').value=data.payStatus; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; 
-            editEntryId = id; switchTab('dashboard'); window.scrollTo(0,0); 
-        }
-        function deleteEntry(docId) { if(confirm("डिलीट करायचे?")) db.collection("transactions").doc(docId).delete(); }
-
-        // Core Data Fetch
-        function loadDataFromFirebase() {
-            db.collection("transactions").orderBy("timestamp", "asc").onSnapshot(snap => {
-                allTransactions = []; snap.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
-                filterData();
-            });
-        }
-        
-        function renderStatementTable(dataList) {
-            const table = document.getElementById("statementTableEntries"); table.innerHTML = "";
-            const sel = document.getElementById('walletFilter').value;
-
-            dataList.forEach((data) => {
-                let dtStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}) : "-";
-                const comm = parseFloat(data.commission) || 0;
-                let bSrc = data.bankSource || "-"; let eSrc = data.expenseSource || "-"; let svc = data.service || "-";
-                
-                let amtDisp = `₹ ${data.amount}`;
-                
-                if(svc === "Money Transfer" || svc === "UPI Cash Given") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svc += ` (${dBank})`; } 
-                else if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svc = `<span class="text-blue">${svc} (${dBank})</span>`; }
-                else if(svc === "Shop Expense") { let dExp = localStorage.getItem("wallet_" + eSrc) || eSrc; amtDisp = `<span class="text-red">- ₹ ${data.amount} (${dExp})</span>`; } 
-                else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisp = `<span class="text-red">- ₹ ${data.amount}</span>`; } 
-                else { amtDisp = `<span class="text-green">+ ₹ ${data.amount}</span>`; }
-
-                let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
-
-                table.innerHTML += `<tr><td>${dtStr}</td><td>${svc}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${data.payStatus}</td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${comm > 0 ? "+ ₹ "+comm : "-"}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
-            });
-        }
-
-        function filterData() {
-            const sel = document.getElementById('walletFilter').value; const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value; const searchQ = document.getElementById('stmtSearch').value.toLowerCase().trim();
-            let filtered = allTransactions.filter(item => {
-                let match = true;
-                if(sel !== "All") {
-                    let bSrc = item.bankSource || "-"; let eSrc = item.expenseSource || "-"; let svc = item.service || "-";
-                    match = svc.includes(sel) || bSrc === sel || eSrc === sel;
-                }
-                if(match && searchQ) {
-                    let amtStr = (item.amount || 0).toString(); let detStr = (item.details || "").toLowerCase(); let svcStr = (item.service || "").toLowerCase();
-                    if (!amtStr.includes(searchQ) && !detStr.includes(searchQ) && !svcStr.includes(searchQ)) match = false;
-                }
-                return match;
-            });
-            if(f && t) { const fromDate = new Date(f); fromDate.setHours(0,0,0,0); const toDate = new Date(t); toDate.setHours(23,59,59,999); filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; }); }
-            renderStatementTable(filtered);
-        }
-        
-        function resetFilter() { 
-            document.getElementById('walletFilter').value = "All"; 
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
-            document.getElementById('fromDate').value = todayStr; 
-            document.getElementById('toDate').value = todayStr; 
-            document.getElementById('stmtSearch').value = ""; 
-            filterData(); 
-        }
-    </script>
-</body>
-</html>
