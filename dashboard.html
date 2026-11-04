@@ -8,7 +8,7 @@
         :root {
             --primary: #2563eb; --primary-dark: #1d4ed8;
             --success: #059669; --danger: #dc2626; --warning: #d97706;
-            --bg-color: #f1f5f9; --sidebar-width: 240px;
+            --bg-color: #f1f5f9; --sidebar-width: 220px;
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
@@ -16,19 +16,19 @@
 
         /* Sidebar & Logout Button */
         .sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-width); height: 100%; background: #0f172a; color: #f8fafc; display: flex; flex-direction: column; z-index: 100; box-shadow: 4px 0 10px rgba(0,0,0,0.05); }
-        .sidebar-brand { padding: 20px 15px; font-size: 16px; font-weight: 700; color: #ffffff; background: #1e293b; border-bottom: 1px solid #334155; }
+        .sidebar-brand { padding: 20px 15px; font-size: 16px; font-weight: 700; color: #ffffff; background: #1e293b; border-bottom: 1px solid #334155; text-align: center; }
         .sidebar-menu { list-style: none; padding: 10px 0; margin: 0; flex-grow: 1; overflow-y: auto; }
-        .sidebar-menu li { padding: 12px 20px; font-size: 13px; font-weight: 500; color: #94a3b8; cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent; }
+        .sidebar-menu li { padding: 14px 20px; font-size: 14px; font-weight: 500; color: #94a3b8; cursor: pointer; transition: all 0.2s; border-left: 4px solid transparent; }
         .sidebar-menu li:hover, .sidebar-menu li.active { background: #1e293b; color: #ffffff; border-left: 4px solid var(--primary); }
         
         .logout-container { padding: 15px; border-top: 1px solid #1e293b; margin-top: auto; }
-        .logout-btn-sidebar { background: transparent; color: #ef4444; border: 1px solid #ef4444; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; width: 100%; transition: 0.3s; text-align: center; }
+        .logout-btn-sidebar { background: transparent; color: #ef4444; border: 1px solid #ef4444; padding: 8px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; width: 100%; transition: 0.3s; text-align: center; }
         .logout-btn-sidebar:hover { background: #ef4444; color: white; }
 
         /* Main Content */
         .main-content { margin-left: var(--sidebar-width); padding: 15px 20px; max-width: 100%; box-sizing: border-box; }
-        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 12px 20px; border-radius: 8px; box-shadow: var(--card-shadow); margin-bottom: 15px; border: 1px solid #e2e8f0; }
-        .header h2 { margin: 0; font-size: 18px; color: #0f172a; }
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 15px 20px; border-radius: 8px; box-shadow: var(--card-shadow); margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .header h2 { margin: 0; font-size: 20px; color: #0f172a; }
 
         .view-section { display: none; }
         .view-section.active-view { display: block; }
@@ -41,23 +41,22 @@
         .ql-btn:hover { background: var(--primary); color: white; transform: translateY(-3px); }
         .ql-icon { font-size: 20px; margin-bottom: 4px; }
 
-        /* Form Elements */
+        /* Forms */
         .container { background: white; padding: 15px 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
         .form-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
         .form-group { flex: 1; min-width: 180px; }
         label { display: block; font-weight: 600; margin-bottom: 4px; color: #334155; font-size: 11.5px; }
         
         select, input, textarea { width: 100%; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 13px; background: #fff; font-family: inherit; }
-        input[type="date"] { max-width: 140px; cursor: pointer; font-weight: 600; color: #0f172a; }
-        input[type="datetime-local"] { max-width: 190px; cursor: pointer; font-weight: 600; color: #0f172a; }
+        input[type="date"], input[type="datetime-local"] { cursor: pointer; font-weight: 600; color: #0f172a; }
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); }
         
         .save-btn { background: var(--success); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; width: 100%; font-weight: 600; margin-top: 5px; }
         .save-btn:disabled { background: #94a3b8; cursor: not-allowed; }
-        .print-btn { background: #475569; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
         
-        .table-responsive { overflow-x: auto; background: white; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        /* Tables */
+        .table-responsive { overflow-x: auto; background: white; border-radius: 8px; box-shadow: var(--card-shadow); border: 1px solid #e2e8f0; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th, td { border-bottom: 1px solid #e2e8f0; padding: 10px 12px; text-align: left; font-size: 12px; }
         th { background-color: #f8fafc; color: #475569; font-weight: 600; white-space: nowrap; }
         tr:hover { background-color: #f1f5f9; }
@@ -66,11 +65,13 @@
         .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
 
+        /* Utilities */
         @keyframes blinkRed { 0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.8); } 100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } }
         .highlight-bank-row { background: #fef2f2 !important; border: 2px dashed #dc2626 !important; animation: blinkRed 1.5s infinite; justify-content: center; }
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
         .highlight-bank-row select { border: 2px solid #dc2626 !important; font-weight: bold; color: #dc2626; text-align: center; cursor: pointer; }
-
+        
+        .print-btn { background: #475569; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
         @media print { .sidebar, .no-print { display: none !important; } .main-content { margin-left: 0; padding: 0; } }
     </style>
 </head>
@@ -80,10 +81,9 @@
     <div class="sidebar no-print">
         <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
         <ul class="sidebar-menu">
-            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 मुख्य डॅशबोर्ड (Entry)</li>
+            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व लिंक्स</li>
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
-            <li id="menuLinks" onclick="switchTab('links')">🔗 क्विक लिंक्स (Websites)</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
         </ul>
         <div class="logout-container no-print">
@@ -97,9 +97,10 @@
             <div><h2>Pusdekar Online Center</h2></div>
         </div>
 
-        <!-- ================= VIEW 1: DASHBOARD (ENTRY) ================= -->
+        <!-- ================= VIEW 1: DASHBOARD (ENTRY + LINKS) ================= -->
         <div id="viewDashboard" class="view-section active-view">
             
+            <!-- New Entry Form -->
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3>🚀 नवीन व्यवहार नोंद (New Entry)</h3>
                 <div style="background:#f0f9ff; padding:8px 12px; border-radius:6px; border:1px dashed #bae6fd; margin-bottom:12px; display:inline-block;">
@@ -119,11 +120,10 @@
                             <option value="Self Bank Deposit" style="font-weight:bold; color:#2563eb;">🏦 स्वतःची कॅश बँकेत भरली</option>
                             <option value="Self Bank Withdrawal" style="font-weight:bold; color:#dc2626;">🏦 बँकेतून कॅश काढली</option>
                             <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- इतर सर्व्हिसेस ---</option>
-                            <option value="Mahapower Bill Collection" class="lbl-mahapower-srv">Mahapower Bill Collection</option>
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
+                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम"></div>
                     <div class="form-group"><label>ग्राहक मोबाईल *</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:4px; font-size:12px;"></span></div>
                     <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील) *</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
@@ -133,10 +133,9 @@
                         <label style="color:var(--warning);">पोर्टल निवडा *</label>
                         <select id="aepsPortal" style="border-color:#fcd34d;">
                             <option value="" disabled selected>-- 👇 पोर्टल निवडा --</option>
-                            <option value="Fino" class="lbl-fino1">Fino Dipak</option>
-                            <option value="Fino2" class="lbl-fino2">Fino Pallavi</option>
-                            <option value="Payworld" class="lbl-payworld">Payworld</option>
-                            <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
+                            <option value="Fino">Fino</option>
+                            <option value="Payworld">Payworld</option>
+                            <option value="Paynearby">Paynearby</option>
                         </select>
                     </div>
                     <div class="form-group" style="max-width: 250px;">
@@ -147,41 +146,32 @@
                         </select>
                     </div>
                 </div>
-             
+
                 <div class="form-row" id="expenseSourceRow" style="display: none; background: #fff5f5; padding: 10px; border-radius: 6px; border: 1px dashed var(--danger);">
                     <div class="form-group">
                         <label id="dynamicSourceLabel" style="color: var(--danger);">हा खर्च कोणत्या माध्यमातून केला? *</label>
                         <select id="expenseSource">
                             <option value="" disabled selected>-- 👇 खर्च कुठून झाला निवडा --</option>
                             <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                            <option value="Fino" class="lbl-fino1">Fino Dipak</option>
-                            <option value="Fino2" class="lbl-fino2">Fino Pallavi</option>
-                            <option value="Payworld" class="lbl-payworld">Payworld</option>
-                            <option value="Paynearby" class="lbl-paynearby">Paynearby</option>
-                            <option value="Mahapower" class="lbl-mahapower">Mahapower</option>
-                            <option value="AXIS-2669" class="lbl-b1-upi">AXIS-2669 UPI</option>
-                            <option value="BOI-0005" class="lbl-b2-upi">BOI-0005 UPI</option>
-                            <option value="BOI-0168" class="lbl-b3-upi">BOI-0168 UPI</option>
-                            <option value="WANA-0027" class="lbl-b4-upi">WANA-0027 UPI</option>
-                            <option value="BOI-4281" class="lbl-b5-upi">BOI-4281 UPI</option>
-                            <option value="AXIS-12548" class="lbl-b6-upi">AXIS-12548 UPI</option>
-                            <option value="BOI-0735" class="lbl-b7-upi">BOI-0735 UPI</option>
-                            <option value="UNION-1529" class="lbl-b8-upi">UNION-1529 UPI</option>
-                            <option value="SBI-9083" class="lbl-b9-upi">SBI-9083 UPI</option>
+                            <option value="Fino">Fino</option>
+                            <option value="Payworld">Payworld</option>
+                            <option value="Paynearby">Paynearby</option>
+                            <option value="AXIS-2669">AXIS-2669 UPI</option>
+                            <option value="BOI-0005">BOI-0005 UPI</option>
+                            <option value="BOI-0168">BOI-0168 UPI</option>
+                            <option value="WANA-0027">WANA-0027 UPI</option>
+                            <option value="BOI-4281">BOI-4281 UPI</option>
+                            <option value="AXIS-12548">AXIS-12548 UPI</option>
+                            <option value="BOI-0735">BOI-0735 UPI</option>
+                            <option value="UNION-1529">UNION-1529 UPI</option>
+                            <option value="SBI-9083">SBI-9083 UPI</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>पेमेंट स्थिती *</label>
-                        <select id="payStatus">
-                            <option value="Paid" selected>Paid (रोख जमा)</option>
-                            <option value="Udhar">Udhar (उधार / बाकी)</option>
-                        </select>
-                    </div>
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
-                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10k+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
+                    <div class="form-group"><label>पॅन/आधार</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
                     <div class="form-group" id="commissionBox"><label style="color:var(--success);">कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                 </div>
 
@@ -193,34 +183,58 @@
                         <label id="bankSelectLabel">⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला? *</label>
                         <select id="upiBank">
                             <option value="" disabled selected>-- 👇 बँक निवडा --</option>
-                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option>
-                            <option value="BOI-0005" class="lbl-b2">BOI-0005</option>
-                            <option value="BOI-0168" class="lbl-b3">BOI-0168</option>
-                            <option value="WANA-0027" class="lbl-b4">WANA-0027</option>
-                            <option value="BOI-4281" class="lbl-b5">BOI-4281</option>
-                            <option value="AXIS-12548" class="lbl-b6">AXIS-12548</option>
-                            <option value="BOI-0735" class="lbl-b7">BOI-0735</option>
-                            <option value="UNION-1529" class="lbl-b8">UNION-1529</option>
-                            <option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                            <option value="AXIS-2669">AXIS-2669</option>
+                            <option value="BOI-0005">BOI-0005</option>
+                            <option value="BOI-0168">BOI-0168</option>
+                            <option value="WANA-0027">WANA-0027</option>
+                            <option value="BOI-4281">BOI-4281</option>
+                            <option value="AXIS-12548">AXIS-12548</option>
+                            <option value="BOI-0735">BOI-0735</option>
+                            <option value="UNION-1529">UNION-1529</option>
+                            <option value="SBI-9083">SBI-9083</option>
                         </select>
                     </div>
                 </div>
                 <button class="save-btn" id="saveEntryBtn" onclick="saveEntry()">Save Transaction Entry</button>
             </div>
-            
+
+            <!-- Quick Links Container -->
+            <div class="quick-links-container no-print">
+                <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स</h3>
+                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
+            </div>
+
+            <!-- Add/Manage Quick Links -->
+            <div class="container no-print" style="border-left: 4px solid #8b5cf6;">
+                <h3 style="color: #8b5cf6;">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
+                <div class="form-row">
+                    <div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="नाव"></div>
+                    <div class="form-group"><label>URL *</label><input type="text" id="qlUrl" placeholder="https://..."></div>
+                    <div class="form-group"><label>इमोजी</label><input type="text" id="qlIcon" placeholder="🌐"></div>
+                </div>
+                <button class="save-btn" id="saveQuickLinkBtn" style="background:#8b5cf6;" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
+                
+                <div class="table-responsive" style="margin-top:15px; border:none; box-shadow:none;">
+                    <table id="linksTable">
+                        <thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th>कृती</th></tr></thead>
+                        <tbody id="linksTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
         <!-- ================= VIEW 2: BANK CASH DEPOSIT LOG ================= -->
         <div id="viewBankDep" class="view-section">
             <div class="container" style="border-left: 4px solid #10b981;">
-                <h3 style="color: #047857;">🏦 फक्त माहितीसाठी (No Balance Effect) - बँक कॅश डिपॉझिट</h3>
+                <h3 style="color: #047857;">🏦 बँक कॅश डिपॉझिट (रेकॉर्ड)</h3>
                 <div class="form-row">
                     <div class="form-group"><label>तारीख व वेळ</label><input type="datetime-local" id="bdDate"></div>
                     <div class="form-group">
                         <label>कोणत्या बँकेत भरली? *</label>
                         <select id="bdBank">
                             <option value="" disabled selected>-- 👇 बँक निवडा --</option>
-                            <option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option>
+                            <option value="AXIS-2669">AXIS-2669</option><option value="BOI-0005">BOI-0005</option><option value="BOI-0168">BOI-0168</option><option value="WANA-0027">WANA-0027</option><option value="BOI-4281">BOI-4281</option><option value="AXIS-12548">AXIS-12548</option><option value="BOI-0735">BOI-0735</option><option value="UNION-1529">UNION-1529</option><option value="SBI-9083">SBI-9083</option>
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="रक्कम"></div>
@@ -229,85 +243,75 @@
                <button class="save-btn" id="saveBdBtn" style="background:#047857;" onclick="saveBankDeposit()">💾 कॅश डिपॉझिट सेव्ह करा</button>
            </div>
 
-           <div>
-               <div class="container" style="border-left: 4px solid var(--primary); margin-bottom: 20px;">
-                   <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 10px;">📊 बँकेनुसार जमा</h3>
-                   <div class="table-responsive" style="box-shadow: none; border: none;">
-                       <table style="width: 100%; font-size: 12px; min-width: 300px;">
-                           <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
-                           <tbody id="bdSummaryBody"></tbody>
-                           <tfoot style="background: #f8fafc; font-weight: bold;">
-                               <tr><td style="color:var(--primary);">सर्व बँकांची एकूण:</td><td style="text-align:right; color:var(--success); font-size:16px;" id="bdGrandTotal">₹ 0</td></tr>
-                           </tfoot>
-                       </table>
-                   </div>
-               </div>
-
-               <div class="container" style="border-left: 4px solid #475569;">
-                   <h3 style="color: #475569;">📝 लाईन-शीर स्टेटमेंट</h3>
-                   <div class="table-responsive">
-                       <table id="bdTable" style="min-width: 600px;">
-                           <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead>
-                           <tbody id="bdTableBody"></tbody>
-                       </table>
-                   </div>
+           <!-- बँकेनुसार एकूण रक्कम (Summary) -->
+           <div class="container" style="border-left: 4px solid var(--primary);">
+               <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 10px;">📊 बँकेनुसार जमा</h3>
+               <div class="table-responsive" style="box-shadow: none; border: none;">
+                   <table style="width: 100%; font-size: 12px; min-width:unset;">
+                       <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
+                       <tbody id="bdSummaryBody"></tbody>
+                       <tfoot style="background: #f8fafc; font-weight: bold;">
+                           <tr><td style="color:var(--primary);">सर्व बँकांची एकूण:</td><td style="text-align:right; color:var(--success); font-size:16px;" id="bdGrandTotal">₹ 0</td></tr>
+                       </tfoot>
+                   </table>
                </div>
            </div>
-       </div>
+
+           <!-- लाईन-शीर स्टेटमेंट -->
+           <div class="container" style="border-left: 4px solid #475569;">
+               <h3 style="color: #475569;">📝 कॅश डिपॉझिट स्टेटमेंट</h3>
+               <div class="table-responsive">
+                   <table id="bdTable">
+                       <thead><tr><th>तारीख</th><th>बँकेचे नाव</th><th>रक्कम (₹)</th><th>टीप</th><th class="no-print">कृती</th></tr></thead>
+                       <tbody id="bdTableBody"></tbody>
+                   </table>
+               </div>
+           </div>
+        </div>
 
         <!-- ================= VIEW 3: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
-            <div class="container filter-section form-row">
-                <div class="form-group" style="margin-bottom:0; max-width: 180px;">
-                    <label>खाते / वॉलेट निवडा:</label>
-                    <select id="walletFilter" onchange="filterData()"><option value="All">सर्व वॉलेट्स व बँका</option><option value="Cash">Cash in Hand</option><option value="Fino" class="lbl-fino1">Fino Dipak</option><option value="Fino2" class="lbl-fino2">Fino Pallavi</option><option value="Payworld" class="lbl-payworld">Payworld</option><option value="Paynearby" class="lbl-paynearby">Paynearby</option><option value="Mahapower" class="lbl-mahapower">Mahapower</option><option value="AXIS-2669" class="lbl-b1">AXIS-2669</option><option value="BOI-0005" class="lbl-b2">BOI-0005</option><option value="BOI-0168" class="lbl-b3">BOI-0168</option><option value="WANA-0027" class="lbl-b4">WANA-0027</option><option value="BOI-4281" class="lbl-b5">BOI-4281</option><option value="AXIS-12548" class="lbl-b6">AXIS-12548</option><option value="BOI-0735" class="lbl-b7">BOI-0735</option><option value="UNION-1529" class="lbl-b8">UNION-1529</option><option value="SBI-9083" class="lbl-b9">SBI-9083</option></select>
-                </div>
+            <div class="container form-row align-items-end">
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
                 <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
-                <div class="form-group" style="margin-bottom:0; min-width: 150px;"><label>🔍 एन्ट्री शोधा:</label><input type="text" id="stmtSearch" placeholder="शोधा..." oninput="filterData()"></div>
-                <div class="form-group" style="display:flex; align-items:flex-end; gap:5px;">
-                    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
-                    <button class="print-btn" style="background:#10b981;" onclick="downloadExcel()">📥 Excel</button>
-                    <button class="print-btn" style="background:var(--primary);" onclick="resetFilter()">Reset</button>
-                </div>
+                <div class="form-group" style="margin-bottom:0; min-width: 200px;"><label>🔍 एन्ट्री शोधा:</label><input type="text" id="stmtSearch" placeholder="नाव, रक्कम किंवा सर्व्हिस शोधा..." oninput="filterData()"></div>
+                <button class="print-btn" onclick="window.print()" style="margin-top:20px;">🖨️ Print</button>
+                <button class="print-btn" style="background:#10b981; margin-top:20px;" onclick="downloadExcel()">📥 Excel</button>
+                <button class="print-btn" style="background:var(--primary); margin-top:20px;" onclick="resetFilter()">Reset (All)</button>
             </div>
             <div class="table-responsive">
                 <table id="reportTable">
-                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>पॅन/आधार</th><th>स्थिती</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th>एकूण शिल्लक</th><th class="no-print">कृती</th></tr></thead>
+                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th class="no-print">कृती</th></tr></thead>
                     <tbody id="statementTableEntries"></tbody>
-                    <tfoot id="statementTotalFoot" style="background: #f8fafc; font-weight: bold; border-top: 2px solid #cbd5e1;"></tfoot>
                 </table>
             </div>
         </div>
 
-        <!-- ================= VIEW 4: QUICK LINKS ================= -->
-        <div id="viewLinks" class="view-section">
-            <div class="container" style="border-left: 4px solid var(--primary);">
-                <h3 style="color: var(--primary);">🔗 नवीन वेबसाईट लिंक ॲड करा</h3>
-                <div class="form-row"><div class="form-group"><label>लिंकचे नाव *</label><input type="text" id="qlName" placeholder="नाव"></div><div class="form-group"><label>URL *</label><input type="text" id="qlUrl" placeholder="https://..."></div><div class="form-group"><label>इमोजी</label><input type="text" id="qlIcon" placeholder="🌐"></div></div>
-                <button class="save-btn" id="saveQuickLinkBtn" onclick="saveQuickLink()">💾 लिंक सेव्ह करा</button>
-            </div>
-            <div class="quick-links-container no-print">
-                <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स</h3>
-                <div class="quick-links-grid" id="dashboardQuickLinks"></div>
-            </div>
-            <div class="table-responsive"><table id="linksTable" style="min-width: 600px;"><thead><tr><th>आयकॉन</th><th>लिंकचे नाव</th><th>URL</th><th class="no-print">कृती</th></tr></thead><tbody id="linksTableBody"></tbody></table></div>
-        </div>
-
-        <!-- ================= VIEW 5: CUSTOMERS ================= -->
+        <!-- ================= VIEW 4: CUSTOMERS ================= -->
         <div id="viewCustomers" class="view-section">
             <div class="container" style="border-left: 4px solid var(--primary);">
                 <h3 style="color: var(--primary);">👥 ग्राहकांची यादी (एकूण ग्राहक: <span id="totalCustomersCount" style="color:var(--danger); font-size: 20px;">0</span>)</h3>
                 <h3 style="color: var(--primary); margin-top:20px; font-size:16px;">+ नवीन ग्राहक ॲड करा</h3>
-                <div class="form-row"><div class="form-group"><label>नाव *</label><input type="text" id="cName" placeholder="नाव"></div><div class="form-group"><label>मोबाईल *</label><input type="tel" id="cMobile" maxlength="10" placeholder="नंबर"></div><div class="form-group"><label>गाव</label><input type="text" id="cVillage" placeholder="गाव"></div><div class="form-group"><label>पॅन/आधार</label><input type="text" id="cIdProof" placeholder="आयडी"></div></div>
+                <div class="form-row">
+                    <div class="form-group"><label>नाव *</label><input type="text" id="cName" placeholder="नाव"></div>
+                    <div class="form-group"><label>मोबाईल *</label><input type="tel" id="cMobile" maxlength="10" placeholder="नंबर"></div>
+                    <div class="form-group"><label>गाव</label><input type="text" id="cVillage" placeholder="गाव"></div>
+                    <div class="form-group"><label>पॅन/आधार</label><input type="text" id="cIdProof" placeholder="आयडी"></div>
+                </div>
                 <button class="save-btn" id="saveCustomerBtn" onclick="addNewCustomerManually()">💾 ग्राहक सेव्ह करा</button>
             </div>
-            <div class="container filter-section"><input type="text" id="customerSearchInput" placeholder="🔍 शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
-            <div class="table-responsive"><table id="customersTable" style="min-width: 700px;"><thead><tr><th>अ.क्र.</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव</th><th>पॅन / आधार</th><th class="no-print">कृती</th></tr></thead><tbody id="customersTableBody"></tbody></table></div>
+            <div class="container"><input type="text" id="customerSearchInput" placeholder="🔍 ग्राहक शोधा..." oninput="filterCustomerTable()" style="width: 100%; padding: 8px;"></div>
+            <div class="table-responsive">
+                <table id="customersTable">
+                    <thead><tr><th>अ.क्र.</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>गाव</th><th>पॅन / आधार</th><th class="no-print">कृती</th></tr></thead>
+                    <tbody id="customersTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
     </div>
 
+    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -316,15 +320,11 @@
         const firebaseConfig = { apiKey: "AIzaSyCKGCAEv8_YiBt1oZzZVz4zMbNL5yiVA1U", authDomain: "pusdekar-services.firebaseapp.com", projectId: "pusdekar-services", storageBucket: "pusdekar-services.firebasestorage.app" };
         firebase.initializeApp(firebaseConfig); const db = firebase.firestore(); 
 
-        const BANK_KEYS = ["AXIS-2669", "BOI-0005", "BOI-0168", "WANA-0027", "BOI-4281", "AXIS-12548", "BOI-0735", "UNION-1529", "SBI-9083"];
-        const LEGACY_MAP = { "Axis": "AXIS-2669", "BOI": "BOI-0005", "Union": "UNION-1529", "SBI": "SBI-9083", "Papa": "AXIS-12548", "Other": "BOI-0168" };
-        
         let allTransactions = []; let allCustomers = []; let allBankDeps = [];
         let editLinkId = null, editEntryId = null;
-        let isSavingGeneral = false; let isSavingDep = false; let isSavingCust = false; let isSavingLink = false;
+        let isSavingGeneral = false, isSavingDep = false, isSavingCust = false, isSavingLink = false;
 
         window.onload = function() { 
-            loadWalletNames(); 
             const today = new Date();
             const yyyy = today.getFullYear();
             const mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -350,15 +350,7 @@
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
             else if(tabName === 'bankDep') { document.getElementById('viewBankDep').classList.add('active-view'); document.getElementById('menuBankDep').classList.add('active'); }
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
-            else if(tabName === 'links') { document.getElementById('viewLinks').classList.add('active-view'); document.getElementById('menuLinks').classList.add('active'); }
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
-        }
-
-        function updateLabels(className, text) { document.querySelectorAll('.' + className).forEach(el => el.innerText = text); }
-        function loadWalletNames() {
-            const f1 = localStorage.getItem("wallet_fino1") || "Fino Dipak"; const f2 = localStorage.getItem("wallet_fino2") || "Fino Pallavi"; const pw = localStorage.getItem("wallet_payworld") || "Payworld"; const pn = localStorage.getItem("wallet_paynearby") || "Paynearby"; const mp = localStorage.getItem("wallet_mahapower") || "Mahapower";
-            updateLabels('lbl-fino1', f1); updateLabels('lbl-fino2', f2); updateLabels('lbl-payworld', pw); updateLabels('lbl-paynearby', pn); updateLabels('lbl-mahapower', mp);
-            BANK_KEYS.forEach((key, i) => { let nm = localStorage.getItem("wallet_" + key) || key; updateLabels('lbl-b' + (i+1), nm); });
         }
 
         function toggleFormFields() {
@@ -375,8 +367,6 @@
                 document.getElementById('bankSelectLabel').innerText = (st.includes("Deposit") || st.includes("Withdrawal")) ? "कोणत्या बँकेत/बँकेतून व्यवहार झाला? *" : "⚠️ कोणत्या बँकेतून/बँकेत व्यवहार झाला? *";
             } else if(st === "Shop Expense") { eRow.style.display = "flex"; } else if(st === "AEPS") { aRow.style.display = "flex"; }
         }
-        
-        function checkCAuditRule() { const amt = parseFloat(document.getElementById('amount').value) || 0; const label = document.getElementById('idProofLabel'); if(amt >= 10000) { label.innerHTML = "पॅन/आधार (<b>सक्तीचे</b>)"; label.style.color = "var(--danger)"; } else { label.innerHTML = "पॅन/आधार"; label.style.color = "#334155"; } }
 
         function goToAddCustomer(mob) {
             document.getElementById('cMobile').value = mob;
@@ -391,10 +381,9 @@
                     if (doc.exists) { 
                         const d = doc.data(); 
                         document.getElementById('details').value = d.name || ""; 
-                        document.getElementById('idProof').value = d.idProof || "-"; 
+                        document.getElementById('idProof').value = d.idProof||"-"; 
                         msgSpan.innerHTML="✔️ जुना ग्राहक!"; msgSpan.style.color="var(--success)"; msgSpan.style.display="inline-block"; setTimeout(()=>msgSpan.style.display="none", 3000); 
-                    } 
-                    else { 
+                    } else { 
                         msgSpan.innerHTML=`❌ जुना नंबर नाही! <a href="javascript:void(0)" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px; text-decoration:none;">+ नवीन ॲड करा</a>`; 
                         msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById('details').value=""; 
                     }
@@ -412,7 +401,6 @@
             db.collection("customers").doc(mobile).set({ name, mobile, village, idProof }, { merge: true }).then(() => { 
                 isSavingCust = false; btn.disabled = false; btn.innerText = "💾 ग्राहक सेव्ह करा"; 
                 alert("ग्राहक सेव्ह झाला!"); 
-                
                 document.getElementById('cName').value = ""; document.getElementById('cMobile').value = ""; document.getElementById('cVillage').value = ""; document.getElementById('cIdProof').value = "";
                 document.getElementById('mobile').value = mobile;
                 switchTab('dashboard');
@@ -435,33 +423,9 @@
             let srNo = 1; 
             data.forEach(c => { tb.innerHTML += `<tr><td><b>${srNo++}</b></td><td><b>${c.name}</b></td><td>${c.mobile}</td><td>${c.village}</td><td>${c.idProof}</td><td class="no-print"><button class="edit-btn" onclick="editCust('${c.mobile}')">✏️ Edit</button></td></tr>`; }); 
         }
+        
         function filterCustomerTable() { const q = document.getElementById("customerSearchInput").value.toLowerCase(); renderCustTable(allCustomers.filter(c => c.name.toLowerCase().includes(q) || c.mobile.includes(q) || c.village.toLowerCase().includes(q))); }
 
-        function loadBankDeposits() {
-            db.collection("bankDeposits").orderBy("timestamp", "desc").onSnapshot(snap => {
-                allBankDeps = []; 
-                const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
-                const sumTb = document.getElementById('bdSummaryBody'); sumTb.innerHTML = "";
-        
-                snap.forEach(doc => { allBankDeps.push({id: doc.id, ...doc.data()}); });
-        
-                let bankTotals = {}; let grandTotal = 0;
-
-                allBankDeps.forEach(d => {
-                    let dt = d.timestamp ? d.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : "-";
-                    let bName = localStorage.getItem("wallet_" + d.bank) || d.bank;
-                    tb.innerHTML += `<tr><td>${dt}</td><td><b>${bName}</b></td><td class="text-green">₹ ${d.amount}</td><td>${d.note}</td><td class="no-print"><button class="delete-btn" onclick="db.collection('bankDeposits').doc('${d.id}').delete()">❌</button></td></tr>`;
-            
-                    if(!bankTotals[bName]) bankTotals[bName] = 0;
-                    bankTotals[bName] += Number(d.amount); grandTotal += Number(d.amount);
-                });
-
-                for(let b in bankTotals) { sumTb.innerHTML += `<tr><td><b>${b}</b></td><td style="text-align:right;" class="text-green">₹ ${bankTotals[b]}</td></tr>`; }
-                if(Object.keys(bankTotals).length === 0) { sumTb.innerHTML = `<tr><td colspan="2" style="text-align:center;">कोणतीही नोंद नाही</td></tr>`; }
-                document.getElementById('bdGrandTotal').innerText = `₹ ${grandTotal}`;
-            }, err => console.log(err));
-        }
-        
         function saveBankDeposit() {
             if(isSavingDep) return;
             const btn = document.getElementById('saveBdBtn');
@@ -476,6 +440,30 @@
                 isSavingDep = false; btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा";
                 document.getElementById('bdBank').value=""; document.getElementById('bdAmount').value=""; document.getElementById('bdNote').value=""; alert("सेव्ह झाले!"); 
             }).catch(() => { isSavingDep = false; btn.disabled = false; btn.innerText = "💾 कॅश डिपॉझिट सेव्ह करा"; });
+        }
+        
+        function loadBankDeposits() {
+            db.collection("bankDeposits").orderBy("timestamp", "desc").onSnapshot(snap => {
+                allBankDeps = []; 
+                const tb = document.getElementById('bdTableBody'); tb.innerHTML = "";
+                const sumTb = document.getElementById('bdSummaryBody'); sumTb.innerHTML = "";
+        
+                snap.forEach(doc => { allBankDeps.push({id: doc.id, ...doc.data()}); });
+        
+                let bankTotals = {}; let grandTotal = 0;
+                allBankDeps.forEach(d => {
+                    let dt = d.timestamp ? d.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : "-";
+                    tb.innerHTML += `<tr><td>${dt}</td><td><b>${d.bank}</b></td><td class="text-green">₹ ${d.amount}</td><td>${d.note}</td><td class="no-print"><button class="delete-btn" onclick="if(confirm('ही नोंद डिलीट करायची का?')) db.collection('bankDeposits').doc('${d.id}').delete()">❌</button></td></tr>`;
+            
+                    if(!bankTotals[d.bank]) bankTotals[d.bank] = 0;
+                    bankTotals[d.bank] += Number(d.amount);
+                    grandTotal += Number(d.amount);
+                });
+
+                for(let b in bankTotals) { sumTb.innerHTML += `<tr><td><b>${b}</b></td><td style="text-align:right;" class="text-green">₹ ${bankTotals[b]}</td></tr>`; }
+                if(Object.keys(bankTotals).length === 0) { sumTb.innerHTML = `<tr><td colspan="2" style="text-align:center;">कोणतीही नोंद नाही</td></tr>`; }
+                document.getElementById('bdGrandTotal').innerText = `₹ ${grandTotal}`;
+            }, err => console.log(err));
         }
 
         function saveQuickLink() {
@@ -495,15 +483,16 @@
                 }).catch(e => { isSavingLink = false; btn.disabled = false; btn.innerText = "💾 लिंक सेव्ह करा"; }); 
             }
         }
-        function editLink(id) { db.collection("quicklinks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; switchTab('links'); window.scrollTo(0,0); } }); }
-        function deleteQuickLink(docId) { if(confirm("ही लिंक डिलीट करायची का?")) db.collection("quicklinks").doc(docId).delete(); }
+        
+        function editLink(id) { db.collection("quicklinks").doc(id).get().then(doc => { if(doc.exists) { let data = doc.data(); document.getElementById('qlName').value = data.name; document.getElementById('qlUrl').value = data.url; document.getElementById('qlIcon').value = data.icon; editLinkId = id; document.getElementById('saveQuickLinkBtn').innerText = "🔄 लिंक अपडेट करा"; window.scrollTo(0, document.body.scrollHeight); } }); }
+        
         function loadQuickLinks() {
             db.collection("quicklinks").onSnapshot((snapshot) => {
                 const dg = document.getElementById('dashboardQuickLinks'); const tb = document.getElementById('linksTableBody'); dg.innerHTML = ""; tb.innerHTML = "";
                 snapshot.forEach(doc => {
                     let data = doc.data();
                     dg.innerHTML += `<a href="${data.url}" target="_blank" class="ql-btn"><span class="ql-icon">${data.icon}</span>${data.name}</a>`;
-                    tb.innerHTML += `<tr><td style="font-size:18px; text-align:center;">${data.icon}</td><td><b>${data.name}</b></td><td><a href="${data.url}" target="_blank">${data.url}</a></td><td class="no-print"><button class="delete-btn" onclick="db.collection('quicklinks').doc('${doc.id}').delete()">❌</button></td></tr>`;
+                    tb.innerHTML += `<tr><td style="font-size:18px; text-align:center;">${data.icon}</td><td><b>${data.name}</b></td><td><a href="${data.url}" target="_blank">${data.url}</a></td><td class="no-print"><button class="edit-btn" onclick="editLink('${doc.id}')">✏️ Edit</button> <button class="delete-btn" onclick="if(confirm('ही लिंक डिलीट करायची का?')) db.collection('quicklinks').doc('${doc.id}').delete()">❌</button></td></tr>`;
                 });
             }, err => console.log(err));
         }
@@ -516,14 +505,13 @@
             const expenseSource = document.getElementById('expenseSource').value;
             const aepsPortal = document.getElementById('aepsPortal').value;
             const aepsType = document.getElementById('aepsType').value;
-            const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const payStatus = document.getElementById('payStatus').value; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
+            const mobile = document.getElementById('mobile').value; const details = document.getElementById('details').value; const village = document.getElementById('villageInput').value || "-"; const purpose = document.getElementById('purpose').value || "-"; const idProof = document.getElementById('idProof').value || "-"; const commission = document.getElementById('commission').value || 0; const narration = document.getElementById('entryNarration').value || "-"; const customDateVal = document.getElementById('entryCustomDate').value;
             
-            // 🚀 STRICT VALIDATIONS
+            // Validations
             if(!baseService) return alert("⚠️ सर्व्हिसचा प्रकार निवडणे सक्तीचे आहे!");
             if(!amount || amount <= 0) return alert("⚠️ रक्कम भरणे सक्तीचे आहे!");
             if(mobile.length !== 10) return alert("⚠️ १० अंकी ग्राहक मोबाईल नंबर भरणे सक्तीचे आहे!");
             if(!details) return alert("⚠️ ग्राहकाचे नाव आलेले नाही! (आधी नवीन ग्राहक ॲड करा)");
-            if(payStatus === "") return alert("⚠️ पेमेंट स्थिती निवडणे सक्तीचे आहे!");
             if((baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") && upiBankVal === "") { alert("⚠️ बँक निवडणे सक्तीचे आहे!"); document.getElementById('upiBank').focus(); return; }
             if(baseService === "Shop Expense" && expenseSource === "") { alert("⚠️ खर्च कुठून झाला ते निवडणे सक्तीचे आहे!"); document.getElementById('expenseSource').focus(); return; }
             if(baseService === "AEPS" && (aepsPortal === "" || aepsType === "")) { alert("⚠️ AEPS पोर्टल आणि व्यवहार निवडणे सक्तीचे आहे!"); return; }
@@ -533,7 +521,6 @@
             let service = baseService;
             if(baseService === "AEPS") {
                 if(aepsPortal === "Fino") service = aepsType === "Withdrawal" ? "Fino Payment Bank" : "Fino Cash Deposit";
-                else if(aepsPortal === "Fino2") service = aepsType === "Withdrawal" ? "Fino2 Payment Bank" : "Fino2 Cash Deposit";
                 else if(aepsPortal === "Payworld") service = aepsType === "Withdrawal" ? "Payworld Services" : "Payworld Cash Deposit";
                 else if(aepsPortal === "Paynearby") service = aepsType === "Withdrawal" ? "Paynearby Services" : "Paynearby Cash Deposit";
             }
@@ -541,7 +528,7 @@
             const finalBankSource = (baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") ? upiBankVal : "-"; 
             const finalExpenseSource = (baseService === "Shop Expense") ? expenseSource : "-"; 
 
-            let updateData = { category: "General", service, amount: Number(amount), bankSource: finalBankSource, expenseSource: finalExpenseSource, details, mobile: mobile || "-", village, payStatus, purpose, idProof, commission: Number(commission), narration };
+            let updateData = { category: "General", service, amount: Number(amount), bankSource: finalBankSource, expenseSource: finalExpenseSource, details, mobile: mobile || "-", village, payStatus: "Paid", purpose, idProof, commission: Number(commission), narration };
             if(customDateVal) updateData.timestamp = firebase.firestore.Timestamp.fromDate(new Date(customDateVal)); else updateData.timestamp = firebase.firestore.FieldValue.serverTimestamp();
             
             if(editEntryId) {
@@ -551,127 +538,45 @@
             } else {
                 db.collection("transactions").add(updateData).then(() => { 
                     isSavingGeneral = false; resetEntryForm(); btn.disabled=false; btn.innerText="Save Transaction Entry"; 
-                    
-                    if (mobile && mobile.length === 10) {
-                        let waMsg = `*Pusdekar Online Center*\nनमस्कार *${details}*,\nतुमचा *${service}* चा व्यवहार यशस्वी झाला आहे.\nरक्कम: ₹${amount}\nस्थिती: *${payStatus === "Paid" ? "रोख जमा" : "उधारी"}*\nधन्यवाद! 🙏`;
-                        if(confirm("रेकॉर्ड सेव्ह झाला! ग्राहकाला WhatsApp वर पावती पाठवायची आहे का?")) {
-                            let a = document.createElement('a'); a.href = `https://wa.me/91${mobile}?text=${encodeURIComponent(waMsg)}`; a.target = "_blank"; document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                        }
-                    } else { alert("सेव्ह झाले!"); }
+                    alert("नोंद यशस्वीरित्या सेव्ह झाली!"); 
                 }).catch(() => { isSavingGeneral = false; btn.disabled=false; btn.innerText="Save Transaction Entry"; });
             }
         }
-        function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; document.getElementById('payStatus').value="Paid"; document.getElementById('expenseSource').value=""; document.getElementById('aepsPortal').value=""; document.getElementById('aepsType').value=""; }
+
+        function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; document.getElementById('expenseSource').value=""; document.getElementById('aepsPortal').value=""; document.getElementById('aepsType').value=""; }
 
         function editTxn(id) {
             let data = allTransactions.find(x => x.id === id); if(!data) return;
+            
             let st = data.service;
             if(st.includes("Cash Deposit") || st.includes("Payment Bank") || st.includes("Payworld Services") || st.includes("Paynearby Services")) {
                 document.getElementById('serviceType').value = "AEPS";
-                if(st.includes("Fino2")) document.getElementById('aepsPortal').value = "Fino2"; else if(st.includes("Fino")) document.getElementById('aepsPortal').value = "Fino"; else if(st.includes("Payworld")) document.getElementById('aepsPortal').value = "Payworld"; else if(st.includes("Paynearby")) document.getElementById('aepsPortal').value = "Paynearby";
+                if(st.includes("Fino")) document.getElementById('aepsPortal').value = "Fino"; else if(st.includes("Payworld")) document.getElementById('aepsPortal').value = "Payworld"; else if(st.includes("Paynearby")) document.getElementById('aepsPortal').value = "Paynearby";
                 if(st.includes("Cash Deposit")) document.getElementById('aepsType').value = "Deposit"; else document.getElementById('aepsType').value = "Withdrawal";
             } else { document.getElementById('serviceType').value = st; }
             toggleFormFields(); 
-            document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('payStatus').value=data.payStatus; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; 
+            document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; 
             editEntryId = id; switchTab('dashboard'); window.scrollTo(0,0); 
         }
-        function deleteEntry(docId) { if(confirm("डिलीट करायचे?")) db.collection("transactions").doc(docId).delete(); }
 
-        // ================= CALCULATIONS & STATEMENT =================
+        function deleteEntry(docId) { if(confirm("ही नोंद कायमची डिलीट करायची का?")) db.collection("transactions").doc(docId).delete(); }
+
         function loadDataFromFirebase() {
             db.collection("transactions").orderBy("timestamp", "asc").onSnapshot(snap => {
                 allTransactions = []; snap.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
-                filterData();
-            }, error => console.error(error));
-        }
-        function getSafeString(val) { return val ? val.toString() : "-"; }
-        
-        function renderStatementTable(dataList) {
-            const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; const sel = document.getElementById('walletFilter').value; let runBal = 0; let sumP = 0; let sumM = 0; let sumC = 0;
-            const f1=localStorage.getItem("wallet_fino1")||"Fino Dipak"; const f2=localStorage.getItem("wallet_fino2")||"Fino Pallavi"; const pw=localStorage.getItem("wallet_payworld")||"Payworld"; const pn=localStorage.getItem("wallet_paynearby")||"Paynearby"; const mp=localStorage.getItem("wallet_mahapower")||"Mahapower";
-
-            dataList.forEach((data) => {
-                let dtStr = "Loading..."; if (data.timestamp) dtStr = data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true});
-                const amt = parseFloat(data.amount) || 0; const comm = parseFloat(data.commission) || 0;
-                let bSrc = getSafeString(data.bankSource); let eSrc = getSafeString(data.expenseSource); let svc = getSafeString(data.service);
-                if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc];
-
-                if (sel === "All") {
-                    if(svc.includes("Opening") || svc === "Udhar Received") runBal += amt; 
-                    else if(svc === "Shop Expense" || svc.includes("Cash Deposit") || svc === "Self Bank Deposit") runBal -= amt;
-                    if(data.category === "Mahaonline") runBal += amt; else if(comm > 0) runBal += comm;
-                } else {
-                    let imp = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === sel) imp = amt; else if(sel === "Cash" && bSrc === "Cash") imp = amt; } 
-                    else {
-                        if (sel === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank") imp = amt; else if (svc === "Fino Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino")) imp = -amt; }
-                        else if (sel === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank") imp = amt; else if (svc === "Fino2 Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino2")) imp = -amt; }
-                        else if (sel === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit") imp = amt; else if (svc === "Shop Expense" && eSrc === "Payworld") imp = -amt; }
-                        else if (sel === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit") imp = amt; else if (svc === "Shop Expense" && eSrc === "Paynearby") imp = -amt; }
-                        else if (sel === "Mahapower") { if (svc === "Mahapower Opening") imp = amt; else if (svc === "Mahapower Bill Collection" || (svc === "Shop Expense" && eSrc === "Mahapower")) imp = -amt; }
-                        else if (sel === "Cash") {
-                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "Udhar Received") imp = amt;
-                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) imp = -amt;
-                        } else {
-                            if (svc === `${sel} Opening` || (svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel)) imp = amt;
-                            else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || (svc === "Shop Expense" && eSrc === sel)) imp = -amt;
-                        }
-                    }
-                    if(sel === "Cash" && comm > 0) imp += comm;
-                    runBal += imp;
-                }
-
-                let svcDisp = svc; if(svcDisp.includes("Fino2")) svcDisp = svcDisp.replace("Fino2", f2); if(svcDisp.includes("Fino") && !svcDisp.includes(f2)) svcDisp = svcDisp.replace("Fino", f1); if(svcDisp.includes("Payworld")) svcDisp = svcDisp.replace("Payworld", pw); if(svcDisp.includes("Paynearby")) svcDisp = svcDisp.replace("Paynearby", pn); if(svcDisp.includes("Mahapower")) svcDisp = svcDisp.replace("Mahapower", mp);
-                let amtDisp = `₹ ${data.amount}`; let isPlus = false; let isMinus = false;
-
-                if(data.category === "Mahaonline") { svcDisp = `<b>[Mahaonline]</b> ${svc}`; let bName = localStorage.getItem("wallet_" + bSrc) || bSrc; amtDisp = `<span class="text-green">+ ₹ ${data.amount} (${bName})</span>`; isPlus = true; }
-                else if(svc === "Money Transfer" || svc === "UPI Cash Given") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svcDisp += ` (${dBank})`; if(svc === "Money Transfer") isPlus = true; else isMinus = true; } 
-                else if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") { let dBank = localStorage.getItem("wallet_" + bSrc) || bSrc; svcDisp = `<span class="text-blue">${svc} (${dBank})</span>`; if(svc === "Self Bank Deposit") isPlus = true; else isMinus = true; }
-                else if(svc === "Shop Expense") { let dExp = localStorage.getItem("wallet_" + eSrc) || eSrc; if(eSrc==="Fino") dExp=f1; else if(eSrc==="Fino2") dExp=f2; else if(eSrc==="Payworld") dExp=pw; else if(eSrc==="Paynearby") dExp=pn; amtDisp = `<span class="text-red">- ₹ ${data.amount} (${dExp})</span>`; isMinus = true; } 
-                else if(svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection") { amtDisp = `<span class="text-red">- ₹ ${data.amount}</span>`; isMinus = true; } 
-                else if(svc === "Udhar Received" || !svc.includes("Opening")) { amtDisp = `<span class="text-green">+ ₹ ${data.amount}</span>`; isPlus = true; }
-
-                if(sel !== "All") {
-                    let imp = 0;
-                    if(data.category === "Mahaonline") { if(bSrc === sel) imp = amt; else if(sel === "Cash" && bSrc === "Cash") imp = amt; } 
-                    else {
-                        if (sel === "Fino") { if (svc === "Fino Opening" || svc === "Fino Payment Bank") imp = amt; else if (svc === "Fino Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino")) imp = -amt; }
-                        else if (sel === "Fino2") { if (svc === "Fino2 Opening" || svc === "Fino2 Payment Bank") imp = amt; else if (svc === "Fino2 Cash Deposit" || (svc === "Shop Expense" && eSrc === "Fino2")) imp = -amt; }
-                        else if (sel === "Payworld") { if (svc === "Payworld Opening" || svc === "Payworld Services" || svc === "Payworld Cash Deposit") imp = amt; else if (svc === "Shop Expense" && eSrc === "Payworld") imp = -amt; }
-                        else if (sel === "Paynearby") { if (svc === "Paynearby Opening" || svc === "Paynearby Services" || svc === "Paynearby Cash Deposit") imp = amt; else if (svc === "Shop Expense" && eSrc === "Paynearby") imp = -amt; }
-                        else if (sel === "Mahapower") { if (svc === "Mahapower Opening") imp = amt; else if (svc === "Mahapower Bill Collection" || (svc === "Shop Expense" && eSrc === "Mahapower")) imp = -amt; }
-                        else if (sel === "Cash") {
-                            if (svc === "Cash Opening" || svc.includes("Cash Deposit") || svc === "Mahapower Bill Collection" || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "Udhar Received") imp = amt;
-                            else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) imp = -amt;
-                        } else {
-                            if (svc === `${sel} Opening` || (svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel)) imp = amt;
-                            else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || (svc === "Shop Expense" && eSrc === sel)) imp = -amt;
-                        }
-                    }
-                    if(sel === "Cash" && comm > 0) imp += comm;
-                    if(imp > 0) { isPlus = true; isMinus = false; amtDisp = `<span class="text-green">+ ₹ ${Math.abs(imp)}</span>`; } else if(imp < 0) { isPlus = false; isMinus = true; amtDisp = `<span class="text-red">- ₹ ${Math.abs(imp)}</span>`; } else { isPlus = false; isMinus = false; }
-                }
-
-                if(isPlus) sumP += (sel !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); if(isMinus) sumM += (sel !== "All" && !svc.includes("Opening") ? Math.abs(amt) : amt); sumC += comm;
-                let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
-
-                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${data.payStatus}</td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${comm > 0 ? "+ ₹ "+comm : "-"}</td><td><strong>₹ ${runBal}</strong></td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
-            });
-            document.getElementById("statementTotalFoot").innerHTML = `<tr><td colspan="7" style="text-align: right; color: var(--primary); font-size:14px;"><b>येथील एकूण (Total):</b></td><td><span class="text-green">+ ₹ ${sumP}</span><br><span class="text-red">- ₹ ${sumM}</span></td><td class="text-green" style="font-size:14px;">+ ₹ ${sumC}</td><td colspan="2"></td></tr>`;
+                filterData(); 
+            }, error => { console.error(error); });
         }
 
         function filterData() {
-            const sel = document.getElementById('walletFilter').value; const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value; const searchQ = document.getElementById('stmtSearch').value.toLowerCase().trim();
+            const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value; const searchQ = document.getElementById('stmtSearch').value.toLowerCase().trim();
             let filtered = allTransactions.filter(item => {
+                // Ignore unwanted categories logic from old code if they somehow exist
+                if(item.category === "Adjustment" || item.category === "Mahaonline" || item.payStatus === "Udhar") return false;
+                if(item.service.includes("Mahapower")) return false;
+
                 let match = true;
-                if(sel !== "All") {
-                    let bSrc = getSafeString(item.bankSource); let eSrc = getSafeString(item.expenseSource); let svc = getSafeString(item.service);
-                    if (LEGACY_MAP[bSrc]) bSrc = LEGACY_MAP[bSrc]; if (LEGACY_MAP[eSrc]) eSrc = LEGACY_MAP[eSrc]; if (svc.includes("Opening") && LEGACY_MAP[svc.replace(" Opening", "")]) svc = LEGACY_MAP[svc.replace(" Opening", "")] + " Opening";
-                    if(item.category === "Mahaonline") match = (bSrc === sel) || (sel === "Cash" && bSrc === "Cash");
-                    else if(sel === "Fino") match = (svc.includes("Fino") && !svc.includes("Fino2")) || eSrc === "Fino";
-                    else if(sel === "Fino2") match = svc.includes("Fino2") || eSrc === "Fino2"; else if(sel === "Payworld") match = svc.includes("Payworld") || eSrc === "Payworld"; else if(sel === "Paynearby") match = svc.includes("Paynearby") || eSrc === "Paynearby"; else if(sel === "Mahapower") match = svc.includes("Mahapower") || eSrc === "Mahapower"; else match = svc.includes(sel) || bSrc === sel || eSrc === sel;
-                }
-                if(match && searchQ) {
+                if(searchQ) {
                     let amtStr = (item.amount || 0).toString(); let detStr = (item.details || "").toLowerCase(); let svcStr = (item.service || "").toLowerCase();
                     if (!amtStr.includes(searchQ) && !detStr.includes(searchQ) && !svcStr.includes(searchQ)) match = false;
                 }
@@ -682,19 +587,33 @@
         }
         
         function resetFilter() { 
-            document.getElementById('walletFilter').value = "All"; 
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const todayStr = `${yyyy}-${mm}-${dd}`;
-            document.getElementById('fromDate').value = todayStr; 
-            document.getElementById('toDate').value = todayStr; 
-            document.getElementById('stmtSearch').value = ""; 
-            filterData(); 
+            const today = new Date(); const yyyy = today.getFullYear(); const mm = String(today.getMonth() + 1).padStart(2, '0'); const dd = String(today.getDate()).padStart(2, '0'); const todayStr = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('fromDate').value = todayStr; document.getElementById('toDate').value = todayStr; document.getElementById('stmtSearch').value = ""; filterData(); 
         }
 
-        function downloadExcel() { let csv = []; let rows = document.querySelectorAll("#reportTable tr"); for (let i = 0; i < rows.length; i++) { let row = []; let cols = rows[i].querySelectorAll("td, th"); for (let j = 0; j < cols.length; j++) { if(cols[j].classList.contains("no-print")) continue; let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); row.push('"' + data + '"'); } csv.push(row.join(",")); } let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"}); let downloadLink = document.createElement("a"); downloadLink.download = "Pusdekar_Full_Statement.csv"; downloadLink.href = window.URL.createObjectURL(csvFile); downloadLink.style.display = "none"; document.body.appendChild(downloadLink); downloadLink.click(); }
+        function renderStatementTable(dataList) {
+            const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
+            // Simple sorting by latest first
+            dataList.sort((a,b) => b.timestamp - a.timestamp).forEach((data) => {
+                let dtStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}) : "-";
+                
+                let bSrc = data.bankSource || "-"; let eSrc = data.expenseSource || "-"; let svc = data.service || "-";
+                let svcDisp = svc; let amtDisp = `₹ ${data.amount}`;
+                
+                if(svc === "Money Transfer" || svc === "UPI Cash Given") { svcDisp += ` (${bSrc})`; amtDisp = `<span class="text-blue">₹ ${data.amount}</span>`; } 
+                else if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") { svcDisp = `<span class="text-blue">${svc} (${bSrc})</span>`; }
+                else if(svc === "Shop Expense") { amtDisp = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`; } 
+                else if(svc.includes("Cash Deposit")) { amtDisp = `<span class="text-red">- ₹ ${data.amount}</span>`; } 
+                else { amtDisp = `<span class="text-green">+ ₹ ${data.amount}</span>`; }
+
+                let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
+                let commTxt = data.commission > 0 ? `+ ₹ ${data.commission}` : "-";
+
+                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+            });
+        }
+
+        function downloadExcel() { let csv = []; let rows = document.querySelectorAll("#reportTable tr"); for (let i = 0; i < rows.length; i++) { let row = []; let cols = rows[i].querySelectorAll("td, th"); for (let j = 0; j < cols.length; j++) { if(cols[j].classList.contains("no-print")) continue; let data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/,/g, " "); row.push('"' + data + '"'); } csv.push(row.join(",")); } let csvFile = new Blob(["\uFEFF"+csv.join("\n")], {type: "text/csv;charset=utf-8;"}); let downloadLink = document.createElement("a"); downloadLink.download = "Pusdekar_Statement.csv"; downloadLink.href = window.URL.createObjectURL(csvFile); downloadLink.style.display = "none"; document.body.appendChild(downloadLink); downloadLink.click(); }
     </script>
 </body>
 </html>
