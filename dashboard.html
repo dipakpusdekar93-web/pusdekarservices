@@ -134,7 +134,8 @@
                         <label style="color:var(--warning);">पोर्टल निवडा *</label>
                         <select id="aepsPortal" style="border-color:#fcd34d;">
                             <option value="" disabled selected>-- 👇 पोर्टल निवडा --</option>
-                            <option value="Fino">Fino</option>
+                            <option value="Fino1">Fino Dipak</option>
+                            <option value="Fino2">Fino Pallavi</option>
                             <option value="Payworld">Payworld</option>
                             <option value="Paynearby">Paynearby</option>
                         </select>
@@ -154,7 +155,8 @@
                         <select id="expenseSource">
                             <option value="" disabled selected>-- 👇 खर्च कुठून झाला निवडा --</option>
                             <option value="Cash">Cash in Hand (रोख गल्ला)</option>
-                            <option value="Fino">Fino</option>
+                            <option value="Fino1">Fino Dipak</option>
+                            <option value="Fino2">Fino Pallavi</option>
                             <option value="Payworld">Payworld</option>
                             <option value="Paynearby">Paynearby</option>
                             <option value="AXIS-2669">AXIS-2669 UPI</option>
@@ -165,7 +167,7 @@
                             <option value="AXIS-12548">AXIS-12548 UPI</option>
                             <option value="BOI-0735">BOI-0735 UPI</option>
                             <option value="UNION-1529">UNION-1529 UPI</option>
-                            <option value="SBI-9083">SBI-9083 UPI</option>
+                            <option value="WANA-31">WANA-31 UPI</option>
                         </select>
                     </div>
                 </div>
@@ -192,7 +194,7 @@
                             <option value="AXIS-12548">AXIS-12548</option>
                             <option value="BOI-0735">BOI-0735</option>
                             <option value="UNION-1529">UNION-1529</option>
-                            <option value="SBI-9083">SBI-9083</option>
+                            <option value="WANA-31">WANA-31</option>
                         </select>
                     </div>
                 </div>
@@ -216,7 +218,7 @@
                         <label>कोणत्या बँकेत भरली? *</label>
                         <select id="bdBank">
                             <option value="" disabled selected>-- 👇 बँक निवडा --</option>
-                            <option value="AXIS-2669">AXIS-2669</option><option value="BOI-0005">BOI-0005</option><option value="BOI-0168">BOI-0168</option><option value="WANA-0027">WANA-0027</option><option value="BOI-4281">BOI-4281</option><option value="AXIS-12548">AXIS-12548</option><option value="BOI-0735">BOI-0735</option><option value="UNION-1529">UNION-1529</option><option value="SBI-9083">SBI-9083</option>
+                            <option value="AXIS-2669">AXIS-2669</option><option value="BOI-0005">BOI-0005</option><option value="BOI-0168">BOI-0168</option><option value="WANA-0027">WANA-0027</option><option value="BOI-4281">BOI-4281</option><option value="AXIS-12548">AXIS-12548</option><option value="BOI-0735">BOI-0735</option><option value="UNION-1529">UNION-1529</option><option value="WANA-31">WANA-31</option>
                         </select>
                     </div>
                     <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="bdAmount" placeholder="रक्कम"></div>
@@ -259,7 +261,8 @@
                     <select id="walletFilter" onchange="filterData()">
                         <option value="All">सर्व स्टेटमेंट (All)</option>
                         <option value="Cash">Cash in Hand</option>
-                        <option value="Fino">Fino</option>
+                        <option value="Fino1">Fino Dipak</option>
+                        <option value="Fino2">Fino Pallavi</option>
                         <option value="Payworld">Payworld</option>
                         <option value="Paynearby">Paynearby</option>
                         <option value="AXIS-2669">AXIS-2669</option>
@@ -270,7 +273,7 @@
                         <option value="AXIS-12548">AXIS-12548</option>
                         <option value="BOI-0735">BOI-0735</option>
                         <option value="UNION-1529">UNION-1529</option>
-                        <option value="SBI-9083">SBI-9083</option>
+                        <option value="WANA-31">WANA-31</option>
                     </select>
                 </div>
                 <div class="form-group" style="margin-bottom:0; max-width: 130px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
@@ -566,7 +569,8 @@
 
             let service = baseService;
             if(baseService === "AEPS") {
-                if(aepsPortal === "Fino") service = aepsType === "Withdrawal" ? "Fino Payment Bank" : "Fino Cash Deposit";
+                if(aepsPortal === "Fino1") service = aepsType === "Withdrawal" ? "Fino Dipak Payment Bank" : "Fino Dipak Cash Deposit";
+                else if(aepsPortal === "Fino2") service = aepsType === "Withdrawal" ? "Fino Pallavi Payment Bank" : "Fino Pallavi Cash Deposit";
                 else if(aepsPortal === "Payworld") service = aepsType === "Withdrawal" ? "Payworld Services" : "Payworld Cash Deposit";
                 else if(aepsPortal === "Paynearby") service = aepsType === "Withdrawal" ? "Paynearby Services" : "Paynearby Cash Deposit";
             }
@@ -597,7 +601,7 @@
             let st = data.service;
             if(st.includes("Cash Deposit") || st.includes("Payment Bank") || st.includes("Payworld Services") || st.includes("Paynearby Services")) {
                 document.getElementById('serviceType').value = "AEPS";
-                if(st.includes("Fino")) document.getElementById('aepsPortal').value = "Fino"; else if(st.includes("Payworld")) document.getElementById('aepsPortal').value = "Payworld"; else if(st.includes("Paynearby")) document.getElementById('aepsPortal').value = "Paynearby";
+                if(st.includes("Fino Dipak") || st.includes("Fino1")) document.getElementById('aepsPortal').value = "Fino1"; else if(st.includes("Fino Pallavi") || st.includes("Fino2")) document.getElementById('aepsPortal').value = "Fino2"; else if(st.includes("Payworld")) document.getElementById('aepsPortal').value = "Payworld"; else if(st.includes("Paynearby")) document.getElementById('aepsPortal').value = "Paynearby";
                 if(st.includes("Cash Deposit")) document.getElementById('aepsType').value = "Deposit"; else document.getElementById('aepsType').value = "Withdrawal";
             } else { document.getElementById('serviceType').value = st; }
             toggleFormFields(); 
@@ -637,7 +641,8 @@
                         else if(svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) match = true;
                         else match = false;
                     }
-                    else if(sel === "Fino") match = svc.includes("Fino") || eSrc === "Fino";
+                    else if(sel === "Fino1") match = svc.includes("Fino Dipak") || svc.includes("Fino1") || eSrc === "Fino1";
+                    else if(sel === "Fino2") match = svc.includes("Fino Pallavi") || svc.includes("Fino2") || eSrc === "Fino2";
                     else if(sel === "Payworld") match = svc.includes("Payworld") || eSrc === "Payworld";
                     else if(sel === "Paynearby") match = svc.includes("Paynearby") || eSrc === "Paynearby";
                     else match = svc.includes(sel) || bSrc === sel || eSrc === sel; // UPI Banks
@@ -687,7 +692,7 @@
                     if (sel === "Cash") {
                         if (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal") imp = data.amount;
                         else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) imp = -data.amount;
-                    } else if (sel === "Fino" || sel === "Payworld" || sel === "Paynearby") {
+                    } else if (sel === "Fino1" || sel === "Fino2" || sel === "Payworld" || sel === "Paynearby") {
                         if (svc.includes("Payment Bank") || svc.includes("Services")) imp = data.amount;
                         else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel)) imp = -data.amount;
                     } else { // Banks
