@@ -71,7 +71,7 @@
         .highlight-bank-row label { color: #dc2626 !important; font-size: 13px !important; font-weight: 800 !important; text-align: center; }
         .highlight-bank-row select { border: 2px solid #dc2626 !important; font-weight: bold; color: #dc2626; text-align: center; cursor: pointer; }
         
-        .print-btn { background: #475569; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .print-btn { background: #475569; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; margin-top: 5px; }
         @media print { .sidebar, .no-print { display: none !important; } .main-content { margin-left: 0; padding: 0; } }
     </style>
 </head>
@@ -123,7 +123,7 @@
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम"></div>
+                    <div class="form-group"><label>रक्कम (₹) *</label><input type="number" id="amount" placeholder="रक्कम" oninput="checkCAuditRule()"></div>
                     <div class="form-group"><label>ग्राहक मोबाईल *</label><input type="tel" id="mobile" maxlength="10" placeholder="मोबाईल नंबर" onblur="searchCustomer()"><span id="searchMsg" style="display:none; margin-top:4px; font-size:12px;"></span></div>
                     <div class="form-group"><label>ग्राहकाचे नाव (ऑटो-फील) *</label><input type="text" id="details" placeholder="नाव आपोआप येईल" readonly style="background:#f8fafc;"></div>
                 </div>
@@ -171,7 +171,7 @@
 
                 <div class="form-row">
                     <div class="form-group"><label>कारण / सर्व्हिस नाव</label><input type="text" id="purpose" placeholder="उदा. लाईट बिल"></div>
-                    <div class="form-group"><label>पॅन/आधार</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
+                    <div class="form-group"><label id="idProofLabel">पॅन/आधार (₹10,000+ साठी)</label><input type="text" id="idProof" placeholder="आयडी नंबर" style="background:#f8fafc;"></div>
                     <div class="form-group" id="commissionBox"><label style="color:var(--success);">कमिशन (₹)</label><input type="number" id="commission" placeholder="कमिशन"></div>
                 </div>
 
@@ -246,7 +246,7 @@
            <!-- बँकेनुसार एकूण रक्कम (Summary) -->
            <div class="container" style="border-left: 4px solid var(--primary);">
                <h3 style="color: var(--primary); font-size: 14px; margin-bottom: 10px;">📊 बँकेनुसार जमा</h3>
-               <div class="table-responsive" style="box-shadow: none; border: none;">
+               <div class="table-responsive" style="box-shadow: none; border: none; margin-bottom: 0;">
                    <table style="width: 100%; font-size: 12px; min-width:unset;">
                        <thead><tr><th>बँकेचे नाव</th><th style="text-align:right;">एकूण जमा रक्कम (₹)</th></tr></thead>
                        <tbody id="bdSummaryBody"></tbody>
@@ -271,17 +271,40 @@
 
         <!-- ================= VIEW 3: STATEMENT ================= -->
         <div id="viewStatement" class="view-section">
-            <div class="container form-row align-items-end">
-                <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
-                <div class="form-group" style="margin-bottom:0; max-width: 140px;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
-                <div class="form-group" style="margin-bottom:0; min-width: 200px;"><label>🔍 एन्ट्री शोधा:</label><input type="text" id="stmtSearch" placeholder="नाव, रक्कम किंवा सर्व्हिस शोधा..." oninput="filterData()"></div>
-                <button class="print-btn" onclick="window.print()" style="margin-top:20px;">🖨️ Print</button>
-                <button class="print-btn" style="background:#10b981; margin-top:20px;" onclick="downloadExcel()">📥 Excel</button>
-                <button class="print-btn" style="background:var(--primary); margin-top:20px;" onclick="resetFilter()">Reset (All)</button>
+            <div class="container form-row align-items-end" style="border-left: 4px solid #0ea5e9;">
+                <div class="form-group" style="margin-bottom:0; max-width: 180px;">
+                    <label>कोणते स्टेटमेंट पाहिजे?</label>
+                    <select id="walletFilter" onchange="filterData()">
+                        <option value="All">सर्व स्टेटमेंट (All)</option>
+                        <option value="Cash">Cash in Hand</option>
+                        <option value="Fino">Fino</option>
+                        <option value="Payworld">Payworld</option>
+                        <option value="Paynearby">Paynearby</option>
+                        <option value="AXIS-2669">AXIS-2669</option>
+                        <option value="BOI-0005">BOI-0005</option>
+                        <option value="BOI-0168">BOI-0168</option>
+                        <option value="WANA-0027">WANA-0027</option>
+                        <option value="BOI-4281">BOI-4281</option>
+                        <option value="AXIS-12548">AXIS-12548</option>
+                        <option value="BOI-0735">BOI-0735</option>
+                        <option value="UNION-1529">UNION-1529</option>
+                        <option value="SBI-9083">SBI-9083</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0; max-width: 130px;"><label>कुठून (From):</label><input type="date" id="fromDate" onchange="filterData()"></div>
+                <div class="form-group" style="margin-bottom:0; max-width: 130px;"><label>कुठपर्यंत (To):</label><input type="date" id="toDate" onchange="filterData()"></div>
+                <div class="form-group" style="margin-bottom:0; min-width: 180px;"><label>🔍 एन्ट्री शोधा:</label><input type="text" id="stmtSearch" placeholder="नाव, रक्कम किंवा सर्व्हिस शोधा..." oninput="filterData()"></div>
+                
+                <div style="display:flex; gap:8px; align-items:flex-end;">
+                    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
+                    <button class="print-btn" style="background:#10b981;" onclick="downloadExcel()">📥 Excel</button>
+                    <button class="print-btn" style="background:var(--primary);" onclick="resetFilter()">Reset</button>
+                </div>
             </div>
+            
             <div class="table-responsive">
                 <table id="reportTable">
-                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th class="no-print">कृती</th></tr></thead>
+                    <thead><tr><th>तारीख/वेळ</th><th>सर्व्हिस</th><th>ग्राहकाचे नाव</th><th>मोबाईल नंबर</th><th>पॅन / आधार</th><th>कारण / नरेशन</th><th>रक्कम (₹)</th><th>कमिशन (₹)</th><th class="no-print">कृती</th></tr></thead>
                     <tbody id="statementTableEntries"></tbody>
                 </table>
             </div>
@@ -353,6 +376,18 @@
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
         }
 
+        function checkCAuditRule() { 
+            const amt = parseFloat(document.getElementById('amount').value) || 0; 
+            const label = document.getElementById('idProofLabel'); 
+            if(amt >= 10000) { 
+                label.innerHTML = "पॅन/आधार (<b>सक्तीचे आहे</b>)"; 
+                label.style.color = "var(--danger)"; 
+            } else { 
+                label.innerHTML = "पॅन/आधार"; 
+                label.style.color = "#334155"; 
+            } 
+        }
+
         function toggleFormFields() {
             const st = document.getElementById('serviceType').value; 
             const bRow = document.getElementById('bankSelectRow'); 
@@ -385,7 +420,7 @@
                         msgSpan.innerHTML="✔️ जुना ग्राहक!"; msgSpan.style.color="var(--success)"; msgSpan.style.display="inline-block"; setTimeout(()=>msgSpan.style.display="none", 3000); 
                     } else { 
                         msgSpan.innerHTML=`❌ जुना नंबर नाही! <a href="javascript:void(0)" onclick="goToAddCustomer('${mobile}')" style="color:var(--primary); font-weight:bold; background:#e0f2fe; padding:2px 6px; border-radius:4px; text-decoration:none;">+ नवीन ॲड करा</a>`; 
-                        msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById('details').value=""; 
+                        msgSpan.style.color="var(--danger)"; msgSpan.style.display="block"; document.getElementById('details').value=""; document.getElementById('idProof').value="";
                     }
                 });
             }
@@ -512,6 +547,14 @@
             if(!amount || amount <= 0) return alert("⚠️ रक्कम भरणे सक्तीचे आहे!");
             if(mobile.length !== 10) return alert("⚠️ १० अंकी ग्राहक मोबाईल नंबर भरणे सक्तीचे आहे!");
             if(!details) return alert("⚠️ ग्राहकाचे नाव आलेले नाही! (आधी नवीन ग्राहक ॲड करा)");
+            
+            // 🚨 Mandatory ID Proof Check for >= 10000
+            if(amount >= 10000 && (idProof === "" || idProof === "-")) {
+                alert("⚠️ ₹10,000 किंवा त्याहून अधिक रकमेसाठी पॅन कार्ड / आधार नंबर देणे सक्तीचे आहे!");
+                document.getElementById('idProof').focus();
+                return;
+            }
+
             if((baseService === "Money Transfer" || baseService === "UPI Cash Given" || baseService === "Self Bank Deposit" || baseService === "Self Bank Withdrawal") && upiBankVal === "") { alert("⚠️ बँक निवडणे सक्तीचे आहे!"); document.getElementById('upiBank').focus(); return; }
             if(baseService === "Shop Expense" && expenseSource === "") { alert("⚠️ खर्च कुठून झाला ते निवडणे सक्तीचे आहे!"); document.getElementById('expenseSource').focus(); return; }
             if(baseService === "AEPS" && (aepsPortal === "" || aepsType === "")) { alert("⚠️ AEPS पोर्टल आणि व्यवहार निवडणे सक्तीचे आहे!"); return; }
@@ -543,7 +586,7 @@
             }
         }
 
-        function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; document.getElementById('expenseSource').value=""; document.getElementById('aepsPortal').value=""; document.getElementById('aepsType').value=""; }
+        function resetEntryForm() { document.getElementById('serviceType').value=""; toggleFormFields(); document.getElementById('amount').value=""; document.getElementById('mobile').value=""; document.getElementById('details').value=""; document.getElementById('purpose').value=""; document.getElementById('idProof').value=""; document.getElementById('commission').value=""; document.getElementById('entryNarration').value=""; document.getElementById('entryCustomDate').value=""; document.getElementById('upiBank').value=""; document.getElementById('expenseSource').value=""; document.getElementById('aepsPortal').value=""; document.getElementById('aepsType').value=""; checkCAuditRule(); }
 
         function editTxn(id) {
             let data = allTransactions.find(x => x.id === id); if(!data) return;
@@ -556,6 +599,9 @@
             } else { document.getElementById('serviceType').value = st; }
             toggleFormFields(); 
             document.getElementById('amount').value=data.amount; document.getElementById('mobile').value=data.mobile==='-'?'':data.mobile; document.getElementById('details').value=data.details; document.getElementById('purpose').value=data.purpose==='-'?'':data.purpose; document.getElementById('idProof').value=data.idProof==='-'?'':data.idProof; document.getElementById('commission').value=data.commission||0; document.getElementById('entryNarration').value=data.narration==='-'?'':data.narration; if(data.bankSource!=='-') document.getElementById('upiBank').value=data.bankSource; if(data.expenseSource!=='-') document.getElementById('expenseSource').value=data.expenseSource; 
+            
+            checkCAuditRule(); // Updates the UI label immediately
+            
             editEntryId = id; switchTab('dashboard'); window.scrollTo(0,0); 
         }
 
@@ -570,46 +616,90 @@
 
         function filterData() {
             const f = document.getElementById('fromDate').value; const t = document.getElementById('toDate').value; const searchQ = document.getElementById('stmtSearch').value.toLowerCase().trim();
+            const sel = document.getElementById('walletFilter').value;
+            
             let filtered = allTransactions.filter(item => {
-                // Ignore unwanted categories logic from old code if they somehow exist
+                // Ignore unwanted categories logic from old code
                 if(item.category === "Adjustment" || item.category === "Mahaonline" || item.payStatus === "Udhar") return false;
                 if(item.service.includes("Mahapower")) return false;
-
+                
                 let match = true;
-                if(searchQ) {
+                
+                // --- WALLET WISE FILTER LOGIC ---
+                if(sel !== "All") {
+                    let bSrc = item.bankSource || "-"; let eSrc = item.expenseSource || "-"; let svc = item.service || "-";
+                    
+                    if(sel === "Cash") {
+                        if(svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal") match = true;
+                        else if(svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) match = true;
+                        else match = false;
+                    }
+                    else if(sel === "Fino") match = svc.includes("Fino") || eSrc === "Fino";
+                    else if(sel === "Payworld") match = svc.includes("Payworld") || eSrc === "Payworld";
+                    else if(sel === "Paynearby") match = svc.includes("Paynearby") || eSrc === "Paynearby";
+                    else match = svc.includes(sel) || bSrc === sel || eSrc === sel; // UPI Banks
+                }
+                
+                // --- SEARCH BAR LOGIC ---
+                if(match && searchQ) {
                     let amtStr = (item.amount || 0).toString(); let detStr = (item.details || "").toLowerCase(); let svcStr = (item.service || "").toLowerCase();
                     if (!amtStr.includes(searchQ) && !detStr.includes(searchQ) && !svcStr.includes(searchQ)) match = false;
                 }
+                
                 return match;
             });
+            
+            // --- DATE LOGIC ---
             if(f && t) { const fromDate = new Date(f); fromDate.setHours(0,0,0,0); const toDate = new Date(t); toDate.setHours(23,59,59,999); filtered = filtered.filter(item => { if(!item.timestamp) return false; const d = item.timestamp.toDate(); return d >= fromDate && d <= toDate; }); }
             renderStatementTable(filtered);
         }
         
         function resetFilter() { 
             const today = new Date(); const yyyy = today.getFullYear(); const mm = String(today.getMonth() + 1).padStart(2, '0'); const dd = String(today.getDate()).padStart(2, '0'); const todayStr = `${yyyy}-${mm}-${dd}`;
-            document.getElementById('fromDate').value = todayStr; document.getElementById('toDate').value = todayStr; document.getElementById('stmtSearch').value = ""; filterData(); 
+            document.getElementById('walletFilter').value = "All"; document.getElementById('fromDate').value = todayStr; document.getElementById('toDate').value = todayStr; document.getElementById('stmtSearch').value = ""; filterData(); 
         }
 
         function renderStatementTable(dataList) {
             const table = document.getElementById("statementTableEntries"); table.innerHTML = ""; 
-            // Simple sorting by latest first
+            const sel = document.getElementById('walletFilter').value;
+            
             dataList.sort((a,b) => b.timestamp - a.timestamp).forEach((data) => {
                 let dtStr = data.timestamp ? data.timestamp.toDate().toLocaleString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:true}) : "-";
                 
                 let bSrc = data.bankSource || "-"; let eSrc = data.expenseSource || "-"; let svc = data.service || "-";
                 let svcDisp = svc; let amtDisp = `₹ ${data.amount}`;
                 
+                let isPlus = false; let isMinus = false;
+                
+                // Default styling when "All" is selected
                 if(svc === "Money Transfer" || svc === "UPI Cash Given") { svcDisp += ` (${bSrc})`; amtDisp = `<span class="text-blue">₹ ${data.amount}</span>`; } 
                 else if(svc === "Self Bank Deposit" || svc === "Self Bank Withdrawal") { svcDisp = `<span class="text-blue">${svc} (${bSrc})</span>`; }
                 else if(svc === "Shop Expense") { amtDisp = `<span class="text-red">- ₹ ${data.amount} (${eSrc})</span>`; } 
                 else if(svc.includes("Cash Deposit")) { amtDisp = `<span class="text-red">- ₹ ${data.amount}</span>`; } 
                 else { amtDisp = `<span class="text-green">+ ₹ ${data.amount}</span>`; }
+                
+                // Adjust Plus/Minus specifically if a Wallet Filter is active
+                if(sel !== "All") {
+                    let imp = 0;
+                    if (sel === "Cash") {
+                        if (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal") imp = data.amount;
+                        else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) imp = -data.amount;
+                    } else if (sel === "Fino" || sel === "Payworld" || sel === "Paynearby") {
+                        if (svc.includes("Payment Bank") || svc.includes("Services")) imp = data.amount;
+                        else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel)) imp = -data.amount;
+                    } else { // Banks
+                        if ((svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel)) imp = data.amount;
+                        else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || (svc === "Shop Expense" && eSrc === sel)) imp = -data.amount;
+                    }
+                    
+                    if(imp > 0) amtDisp = `<span class="text-green">+ ₹ ${Math.abs(imp)}</span>`;
+                    else if(imp < 0) amtDisp = `<span class="text-red">- ₹ ${Math.abs(imp)}</span>`;
+                }
 
                 let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
                 let commTxt = data.commission > 0 ? `+ ₹ ${data.commission}` : "-";
 
-                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
             });
         }
 
