@@ -64,6 +64,7 @@
         
         .edit-btn { background: #e0f2fe; color: #0284c7; border: 1px solid #7dd3fc; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; }
         .delete-btn { background: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-bottom: 2px;}
+        .wa-btn { background: #25D366; color: white; border: 1px solid #20b858; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; margin-right: 4px; margin-bottom: 2px; text-decoration:none;}
 
         /* Utilities */
         @keyframes blinkRed { 0% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } 50% { box-shadow: 0 0 15px rgba(220, 38, 38, 0.8); } 100% { box-shadow: 0 0 5px rgba(220, 38, 38, 0.2); } }
@@ -81,11 +82,12 @@
     <div class="sidebar no-print">
         <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
         <ul class="sidebar-menu">
-            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व लिंक्स</li>
+            <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व एंट्री</li>
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
             <li id="menuLinks" onclick="switchTab('links')">🔗 लिंक्स व्यवस्थापन</li>
+            <li id="menuWaSettings" onclick="switchTab('waSettings')">💬 WhatsApp मेसेज सेटिंग</li>
         </ul>
         <div class="logout-container no-print">
             <button class="logout-btn-sidebar" onclick="logoutUser()">🚪 Logout (लॉगआऊट)</button>
@@ -337,6 +339,18 @@
             </div>
         </div>
 
+        <!-- ================= VIEW 6: WHATSAPP SETTINGS ================= -->
+        <div id="viewWaSettings" class="view-section">
+            <div class="container" style="border-left: 4px solid #25D366;">
+                <h3 style="color: #20b858;">💬 WhatsApp प्रमोशनल मेसेज सेटिंग</h3>
+                <p style="font-size:12px; color:#64748b;">हा मेसेज पावत्यांसोबत ग्राहकांना जाईल.</p>
+                <div class="form-group">
+                    <textarea id="promoMessage" rows="4" placeholder="उदा. *आमच्या इतर सेवा:* पॅन कार्ड, आधार प्रिंट इ."></textarea>
+                </div>
+                <button class="save-btn" style="background:#25D366; margin-top:15px;" onclick="saveWaSettings()">💾 मेसेज सेव्ह करा</button>
+            </div>
+        </div>
+
     </div>
 
     <!-- Firebase Scripts -->
@@ -362,6 +376,8 @@
             let fd = document.getElementById('fromDate');
             let td = document.getElementById('toDate');
             if(fd && td) { fd.value = todayStr; td.value = todayStr; }
+            
+            document.getElementById('promoMessage').value = localStorage.getItem("wa_promo_msg") !== null ? localStorage.getItem("wa_promo_msg") : "\n*आमच्या इतर सेवा:* सेतूची सर्व कामे, पॅन कार्ड इत्यादी.";
         }
 
         firebase.auth().onAuthStateChanged((user) => { 
@@ -380,6 +396,12 @@
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
             else if(tabName === 'links') { document.getElementById('viewLinks').classList.add('active-view'); document.getElementById('menuLinks').classList.add('active'); }
+            else if(tabName === 'waSettings') { document.getElementById('viewWaSettings').classList.add('active-view'); document.getElementById('menuWaSettings').classList.add('active'); }
+        }
+
+        function saveWaSettings() {
+            localStorage.setItem("wa_promo_msg", document.getElementById('promoMessage').value);
+            alert("WhatsApp मेसेज सेव्ह झाला!");
         }
 
         function checkCAuditRule() { 
@@ -538,6 +560,13 @@
             }, err => console.log(err));
         }
 
+        function sendWhatsApp(mobile, details, service, amount, payStatus) {
+            let promo = localStorage.getItem("wa_promo_msg") || "\n*आमच्या इतर सेवा:* पॅन कार्ड, इत्यादी.";
+            let waMsg = `*Pusdekar Online Center*\nनमस्कार *${details}*,\nतुमचा *${service}* चा व्यवहार यशस्वी झाला आहे.\nरक्कम: ₹${amount}\nधन्यवाद! 🙏\n${promo}`;
+            let waUrl = `https://wa.me/91${mobile}?text=${encodeURIComponent(waMsg)}`;
+            window.open(waUrl, '_blank');
+        }
+
         function saveEntry() {
             if(isSavingGeneral) return;
             const btn = document.getElementById('saveEntryBtn'); 
@@ -588,7 +617,9 @@
             } else {
                 db.collection("transactions").add(updateData).then(() => { 
                     isSavingGeneral = false; resetEntryForm(); btn.disabled=false; btn.innerText="Save Transaction Entry"; 
-                    alert("नोंद यशस्वीरित्या सेव्ह झाली!"); 
+                    if(confirm("नोंद यशस्वीरित्या सेव्ह झाली!\nग्राहकाला WhatsApp वर पावती पाठवायची आहे का?")) {
+                        sendWhatsApp(mobile, details, service, amount, "Paid");
+                    }
                 }).catch(() => { isSavingGeneral = false; btn.disabled=false; btn.innerText="Save Transaction Entry"; });
             }
         }
@@ -707,7 +738,7 @@
                 let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
                 let commTxt = data.commission > 0 ? `+ ₹ ${data.commission}` : "-";
 
-                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="wa-btn" onclick="sendWhatsApp('${data.mobile}', '${data.details}', '${svc}', '${data.amount}', '${data.payStatus}')">🟢 WA</button><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
             });
         }
 
