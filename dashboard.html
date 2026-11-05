@@ -229,6 +229,22 @@
                 </div>
             </div>
             
+            <!-- खर्चाचे ३ नवीन बॉक्स -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid var(--danger); box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">आजचा खर्च</h4>
+                    <h3 id="monTodayExp" style="margin: 0; color: var(--danger); font-size: 22px;">₹ 0</h3>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid var(--danger); box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">या महिन्याचा खर्च</h4>
+                    <h3 id="monMonthExp" style="margin: 0; color: var(--danger); font-size: 22px;">₹ 0</h3>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid #b91c1c; box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">एकूण खर्च</h4>
+                    <h3 id="monTotalExp" style="margin: 0; color: #b91c1c; font-size: 22px;">₹ 0</h3>
+                </div>
+            </div>
+            
             <!-- Date-wise Daily Income -->
             <div class="container" style="border-left: 4px solid #10b981; margin-bottom:15px;">
                 <h3 style="color: #047857; margin-top:0;">📅 तारखेनुसार रोजची कमाई (Daily Income)</h3>
@@ -711,6 +727,7 @@
 
         function renderMonitoring(dataList) {
             let tInc = 0, mInc = 0, totalInc = 0;
+            let tExp = 0, mExp = 0, totalExp = 0;
             let svcMap = {}; let custMap = {}; let dailyIncMap = {};
             
             const now = new Date();
@@ -729,7 +746,7 @@
                 if(d.timestamp) {
                     let dt = d.timestamp.toDate();
                     
-                    // Add to Date-wise mapping
+                    // Add to Date-wise mapping (Income Only from Commission)
                     let dateStr = dt.toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'});
                     if(!dailyIncMap[dateStr]) dailyIncMap[dateStr] = { dateObj: dt, income: 0 };
                     dailyIncMap[dateStr].income += comm;
@@ -742,6 +759,13 @@
                 if(isToday) tInc += comm;
                 if(isThisMonth) mInc += comm;
                 totalInc += comm;
+
+                // Shop Expense Tracking
+                if(svc === "Shop Expense") {
+                    if(isToday) tExp += amt;
+                    if(isThisMonth) mExp += amt;
+                    totalExp += amt;
+                }
 
                 if(!svcMap[svc]) svcMap[svc] = { count: 0, totalAmt: 0 };
                 svcMap[svc].count += 1;
@@ -758,31 +782,44 @@
             document.getElementById('monMonthInc').innerText = "₹ " + mInc;
             document.getElementById('monTotalInc').innerText = "₹ " + totalInc;
 
+            let elTodayExp = document.getElementById('monTodayExp'); if(elTodayExp) elTodayExp.innerText = "₹ " + tExp;
+            let elMonthExp = document.getElementById('monMonthExp'); if(elMonthExp) elMonthExp.innerText = "₹ " + mExp;
+            let elTotalExp = document.getElementById('monTotalExp'); if(elTotalExp) elTotalExp.innerText = "₹ " + totalExp;
+
             // Render Daily Income Table
             let dailyArr = Object.keys(dailyIncMap).map(k => ({ dateStr: k, ...dailyIncMap[k] }));
             dailyArr.sort((a,b) => b.dateObj - a.dateObj); // Sort Latest First
 
-            let dBody = document.getElementById('monDailyIncBody'); dBody.innerHTML = "";
-            dailyArr.forEach(d => {
-                dBody.innerHTML += `<tr><td><b>${d.dateStr}</b></td><td style="text-align:right; color:var(--success); font-weight:bold; font-size:14px;">₹ ${d.income}</td></tr>`;
-            });
-            if(dailyArr.length === 0) dBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>कोणतीही नोंद नाही</td></tr>";
+            let dBody = document.getElementById('monDailyIncBody'); 
+            if(dBody) {
+                dBody.innerHTML = "";
+                dailyArr.forEach(d => {
+                    dBody.innerHTML += `<tr><td><b>${d.dateStr}</b></td><td style="text-align:right; color:var(--success); font-weight:bold; font-size:14px;">₹ ${d.income}</td></tr>`;
+                });
+                if(dailyArr.length === 0) dBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>कोणतीही नोंद नाही</td></tr>";
+            }
 
             let svcArr = Object.keys(svcMap).map(k => ({ name: k, ...svcMap[k] }));
             svcArr.sort((a,b) => b.count - a.count);
             
-            let sBody = document.getElementById('monServiceBody'); sBody.innerHTML = "";
-            svcArr.slice(0, 10).forEach(s => {
-                sBody.innerHTML += `<tr><td><b>${s.name}</b></td><td style="text-align:center;"><span style="background:#e2e8f0; padding:2px 8px; border-radius:10px; font-weight:bold;">${s.count}</span></td><td style="text-align:right; color:var(--success); font-weight:bold;">₹ ${s.totalAmt}</td></tr>`;
-            });
+            let sBody = document.getElementById('monServiceBody'); 
+            if(sBody) {
+                sBody.innerHTML = "";
+                svcArr.slice(0, 10).forEach(s => {
+                    sBody.innerHTML += `<tr><td><b>${s.name}</b></td><td style="text-align:center;"><span style="background:#e2e8f0; padding:2px 8px; border-radius:10px; font-weight:bold;">${s.count}</span></td><td style="text-align:right; color:var(--success); font-weight:bold;">₹ ${s.totalAmt}</td></tr>`;
+                });
+            }
 
             let custArr = Object.keys(custMap).map(k => ({ mobile: k, ...custMap[k] }));
             custArr.sort((a,b) => b.count - a.count);
             
-            let cBody = document.getElementById('monCustomerBody'); cBody.innerHTML = "";
-            custArr.slice(0, 10).forEach(c => {
-                cBody.innerHTML += `<tr><td><b>${c.name}</b><br><small>${c.mobile}</small></td><td style="text-align:center;"><span style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:10px; font-weight:bold;">${c.count}</span></td><td style="text-align:right; color:var(--primary); font-weight:bold;">₹ ${c.totalAmt}</td></tr>`;
-            });
+            let cBody = document.getElementById('monCustomerBody'); 
+            if(cBody) {
+                cBody.innerHTML = "";
+                custArr.slice(0, 10).forEach(c => {
+                    cBody.innerHTML += `<tr><td><b>${c.name}</b><br><small>${c.mobile}</small></td><td style="text-align:center;"><span style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:10px; font-weight:bold;">${c.count}</span></td><td style="text-align:right; color:var(--primary); font-weight:bold;">₹ ${c.totalAmt}</td></tr>`;
+                });
+            }
         }
 
         function filterData() {
