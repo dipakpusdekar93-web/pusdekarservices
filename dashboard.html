@@ -228,6 +228,17 @@
                     <h3 id="monTotalInc" style="margin: 0; color: var(--primary); font-size: 22px;">₹ 0</h3>
                 </div>
             </div>
+            
+            <!-- Date-wise Daily Income -->
+            <div class="container" style="border-left: 4px solid #10b981; margin-bottom:15px;">
+                <h3 style="color: #047857; margin-top:0;">📅 तारखेनुसार रोजची कमाई (Daily Income)</h3>
+                <div class="table-responsive" style="max-height: 250px; overflow-y: auto; box-shadow:none; border:none; margin-bottom:0;">
+                    <table style="width: 100%; font-size: 12px; min-width:unset;">
+                        <thead style="position: sticky; top: 0; z-index: 1;"><tr><th>तारीख</th><th style="text-align:right;">त्या दिवशीची एकूण कमाई (₹)</th></tr></thead>
+                        <tbody id="monDailyIncBody"></tbody>
+                    </table>
+                </div>
+            </div>
 
             <div style="display: flex; flex-wrap: wrap; gap: 15px;">
                 <!-- Service Performance -->
@@ -700,7 +711,7 @@
 
         function renderMonitoring(dataList) {
             let tInc = 0, mInc = 0, totalInc = 0;
-            let svcMap = {}; let custMap = {};
+            let svcMap = {}; let custMap = {}; let dailyIncMap = {};
             
             const now = new Date();
             const currM = now.getMonth();
@@ -717,6 +728,12 @@
                 let isToday = false, isThisMonth = false;
                 if(d.timestamp) {
                     let dt = d.timestamp.toDate();
+                    
+                    // Add to Date-wise mapping
+                    let dateStr = dt.toLocaleDateString('en-IN', {day:'2-digit',month:'short',year:'numeric'});
+                    if(!dailyIncMap[dateStr]) dailyIncMap[dateStr] = { dateObj: dt, income: 0 };
+                    dailyIncMap[dateStr].income += comm;
+
                     if(dt.getDate() === currD && dt.getMonth() === currM && dt.getFullYear() === currY) isToday = true;
                     if(dt.getMonth() === currM && dt.getFullYear() === currY) isThisMonth = true;
                 }
@@ -740,6 +757,16 @@
             document.getElementById('monTodayInc').innerText = "₹ " + tInc;
             document.getElementById('monMonthInc').innerText = "₹ " + mInc;
             document.getElementById('monTotalInc').innerText = "₹ " + totalInc;
+
+            // Render Daily Income Table
+            let dailyArr = Object.keys(dailyIncMap).map(k => ({ dateStr: k, ...dailyIncMap[k] }));
+            dailyArr.sort((a,b) => b.dateObj - a.dateObj); // Sort Latest First
+
+            let dBody = document.getElementById('monDailyIncBody'); dBody.innerHTML = "";
+            dailyArr.forEach(d => {
+                dBody.innerHTML += `<tr><td><b>${d.dateStr}</b></td><td style="text-align:right; color:var(--success); font-weight:bold; font-size:14px;">₹ ${d.income}</td></tr>`;
+            });
+            if(dailyArr.length === 0) dBody.innerHTML = "<tr><td colspan='2' style='text-align:center;'>कोणतीही नोंद नाही</td></tr>";
 
             let svcArr = Object.keys(svcMap).map(k => ({ name: k, ...svcMap[k] }));
             svcArr.sort((a,b) => b.count - a.count);
