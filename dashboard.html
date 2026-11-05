@@ -83,6 +83,7 @@
         <div class="sidebar-brand"><span>⚡ Pusdekar Online</span></div>
         <ul class="sidebar-menu">
             <li class="active" id="menuDash" onclick="switchTab('dashboard')">📊 डॅशबोर्ड व एंट्री</li>
+            <li id="menuMonitoring" onclick="switchTab('monitoring')">📈 बिझनेस मॉनिटरिंग</li>
             <li id="menuBankDep" onclick="switchTab('bankDep')">🏦 बँक कॅश डिपॉझिट</li>
             <li id="menuStatement" onclick="switchTab('statement')">📑 स्टेटमेंट व रिपोर्ट्स</li>
             <li id="menuCustomers" onclick="switchTab('customers')">👥 ग्राहकांची यादी</li>
@@ -207,6 +208,49 @@
             <div class="quick-links-container no-print">
                 <h3 style="margin-top:0;">🌐 महत्त्वाच्या शासकीय व सर्व्हिस लिंक्स</h3>
                 <div class="quick-links-grid" id="dashboardQuickLinks"></div>
+            </div>
+        </div>
+
+        <!-- ================= VIEW 1.5: BUSINESS MONITORING ================= -->
+        <div id="viewMonitoring" class="view-section">
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid var(--success); box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">आजची कमाई (कमिशन)</h4>
+                    <h3 id="monTodayInc" style="margin: 0; color: var(--success); font-size: 22px;">₹ 0</h3>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid var(--success); box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">या महिन्याची कमाई</h4>
+                    <h3 id="monMonthInc" style="margin: 0; color: var(--success); font-size: 22px;">₹ 0</h3>
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid var(--primary); box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; color: #64748b;">आजपर्यंतची एकूण कमाई</h4>
+                    <h3 id="monTotalInc" style="margin: 0; color: var(--primary); font-size: 22px;">₹ 0</h3>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                <!-- Service Performance -->
+                <div class="container" style="flex: 1; min-width: 300px; border-left: 4px solid #8b5cf6;">
+                    <h3 style="color: #8b5cf6; margin-top:0;">📊 कोणती सर्व्हिस किती चालली? (Top 10)</h3>
+                    <div class="table-responsive" style="box-shadow:none; border:none; margin-bottom:0;">
+                        <table style="width: 100%; font-size: 12px; min-width:unset;">
+                            <thead><tr><th>सर्व्हिसचे नाव</th><th style="text-align:center;">किती वेळा?</th><th style="text-align:right;">एकूण व्यवसाय (Volume)</th></tr></thead>
+                            <tbody id="monServiceBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Top Customers -->
+                <div class="container" style="flex: 1; min-width: 300px; border-left: 4px solid #f59e0b;">
+                    <h3 style="color: #d97706; margin-top:0;">🏆 टॉप ग्राहक (वारंवार येणारे)</h3>
+                    <div class="table-responsive" style="box-shadow:none; border:none; margin-bottom:0;">
+                        <table style="width: 100%; font-size: 12px; min-width:unset;">
+                            <thead><tr><th>ग्राहकाचे नाव</th><th style="text-align:center;">किती वेळा?</th><th style="text-align:right;">एकूण व्यवसाय (₹)</th></tr></thead>
+                            <tbody id="monCustomerBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -392,6 +436,7 @@
             document.querySelectorAll('.sidebar-menu li').forEach(el => el.classList.remove('active'));
             
             if(tabName === 'dashboard') { document.getElementById('viewDashboard').classList.add('active-view'); document.getElementById('menuDash').classList.add('active'); } 
+            else if(tabName === 'monitoring') { document.getElementById('viewMonitoring').classList.add('active-view'); document.getElementById('menuMonitoring').classList.add('active'); }
             else if(tabName === 'bankDep') { document.getElementById('viewBankDep').classList.add('active-view'); document.getElementById('menuBankDep').classList.add('active'); }
             else if(tabName === 'statement') { document.getElementById('viewStatement').classList.add('active-view'); document.getElementById('menuStatement').classList.add('active'); } 
             else if(tabName === 'customers') { document.getElementById('viewCustomers').classList.add('active-view'); document.getElementById('menuCustomers').classList.add('active'); }
@@ -560,7 +605,7 @@
             }, err => console.log(err));
         }
 
-        function sendWhatsApp(mobile, details, service, amount, payStatus) {
+        function sendWhatsApp(mobile, details, service, amount) {
             let promo = localStorage.getItem("wa_promo_msg") || "\n*आमच्या इतर सेवा:* पॅन कार्ड, इत्यादी.";
             let waMsg = `*Pusdekar Online Center*\nनमस्कार *${details}*,\nतुमचा *${service}* चा व्यवहार यशस्वी झाला आहे.\nरक्कम: ₹${amount}\nधन्यवाद! 🙏\n${promo}`;
             let waUrl = `https://wa.me/91${mobile}?text=${encodeURIComponent(waMsg)}`;
@@ -618,7 +663,7 @@
                 db.collection("transactions").add(updateData).then(() => { 
                     isSavingGeneral = false; resetEntryForm(); btn.disabled=false; btn.innerText="Save Transaction Entry"; 
                     if(confirm("नोंद यशस्वीरित्या सेव्ह झाली!\nग्राहकाला WhatsApp वर पावती पाठवायची आहे का?")) {
-                        sendWhatsApp(mobile, details, service, amount, "Paid");
+                        sendWhatsApp(mobile, details, service, amount);
                     }
                 }).catch(() => { isSavingGeneral = false; btn.disabled=false; btn.innerText="Save Transaction Entry"; });
             }
@@ -649,7 +694,68 @@
             db.collection("transactions").orderBy("timestamp", "asc").onSnapshot(snap => {
                 allTransactions = []; snap.forEach(doc => allTransactions.push({ id: doc.id, ...doc.data() }));
                 filterData(); 
+                renderMonitoring(allTransactions);
             }, error => { console.error(error); });
+        }
+
+        function renderMonitoring(dataList) {
+            let tInc = 0, mInc = 0, totalInc = 0;
+            let svcMap = {}; let custMap = {};
+            
+            const now = new Date();
+            const currM = now.getMonth();
+            const currY = now.getFullYear();
+            const currD = now.getDate();
+
+            dataList.forEach(d => {
+                let amt = parseFloat(d.amount) || 0;
+                let comm = parseFloat(d.commission) || 0;
+                let svc = d.service || "Unknown";
+                let mobile = d.mobile || "-";
+                let details = d.details || "Unknown";
+
+                let isToday = false, isThisMonth = false;
+                if(d.timestamp) {
+                    let dt = d.timestamp.toDate();
+                    if(dt.getDate() === currD && dt.getMonth() === currM && dt.getFullYear() === currY) isToday = true;
+                    if(dt.getMonth() === currM && dt.getFullYear() === currY) isThisMonth = true;
+                }
+
+                // Income is counted from Commission
+                if(isToday) tInc += comm;
+                if(isThisMonth) mInc += comm;
+                totalInc += comm;
+
+                if(!svcMap[svc]) svcMap[svc] = { count: 0, totalAmt: 0 };
+                svcMap[svc].count += 1;
+                svcMap[svc].totalAmt += amt;
+
+                if(mobile !== "-") {
+                    if(!custMap[mobile]) custMap[mobile] = { name: details, count: 0, totalAmt: 0 };
+                    custMap[mobile].count += 1;
+                    custMap[mobile].totalAmt += amt;
+                }
+            });
+
+            document.getElementById('monTodayInc').innerText = "₹ " + tInc;
+            document.getElementById('monMonthInc').innerText = "₹ " + mInc;
+            document.getElementById('monTotalInc').innerText = "₹ " + totalInc;
+
+            let svcArr = Object.keys(svcMap).map(k => ({ name: k, ...svcMap[k] }));
+            svcArr.sort((a,b) => b.count - a.count);
+            
+            let sBody = document.getElementById('monServiceBody'); sBody.innerHTML = "";
+            svcArr.slice(0, 10).forEach(s => {
+                sBody.innerHTML += `<tr><td><b>${s.name}</b></td><td style="text-align:center;"><span style="background:#e2e8f0; padding:2px 8px; border-radius:10px; font-weight:bold;">${s.count}</span></td><td style="text-align:right; color:var(--success); font-weight:bold;">₹ ${s.totalAmt}</td></tr>`;
+            });
+
+            let custArr = Object.keys(custMap).map(k => ({ mobile: k, ...custMap[k] }));
+            custArr.sort((a,b) => b.count - a.count);
+            
+            let cBody = document.getElementById('monCustomerBody'); cBody.innerHTML = "";
+            custArr.slice(0, 10).forEach(c => {
+                cBody.innerHTML += `<tr><td><b>${c.name}</b><br><small>${c.mobile}</small></td><td style="text-align:center;"><span style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:10px; font-weight:bold;">${c.count}</span></td><td style="text-align:right; color:var(--primary); font-weight:bold;">₹ ${c.totalAmt}</td></tr>`;
+            });
         }
 
         function filterData() {
@@ -738,7 +844,7 @@
                 let purpTxt = data.purpose || "-"; if(data.narration && data.narration !== "-") purpTxt += ` <br><small style="color: #64748b;">📝 ${data.narration}</small>`;
                 let commTxt = data.commission > 0 ? `+ ₹ ${data.commission}` : "-";
 
-                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="wa-btn" onclick="sendWhatsApp('${data.mobile}', '${data.details}', '${svc}', '${data.amount}', '${data.payStatus}')">🟢 WA</button><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
+                table.innerHTML += `<tr><td>${dtStr}</td><td>${svcDisp}</td><td><b>${data.details}</b></td><td>${(data.mobile&&data.mobile!=="-")?data.mobile:"-"}</td><td><b>${(data.idProof&&data.idProof!=="-")?data.idProof:"-"}</b></td><td>${purpTxt}</td><td>${amtDisp}</td><td class="text-green">${commTxt}</td><td class="no-print"><button class="wa-btn" onclick="sendWhatsApp('${data.mobile}', '${data.details}', '${svc}', '${data.amount}')">🟢 WA</button><button class="edit-btn" onclick="editTxn('${data.id}')">✏️ Edit</button><button class="delete-btn" onclick="deleteEntry('${data.id}')">❌</button></td></tr>`;
             });
         }
 
