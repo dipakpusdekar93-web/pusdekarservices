@@ -126,7 +126,7 @@
                             <option value="Balance Adjustment" style="font-weight:bold; color:#0ea5e9;">⚙️ Wallet Adjustment (बॅलन्स दुरुस्ती)</option>
                             <option value="Self Bank Deposit" style="font-weight:bold; color:#2563eb;">🏦 स्वतःची कॅश बँकेत भरली</option>
                             <option value="Self Bank Withdrawal" style="font-weight:bold; color:#dc2626;">🏦 बँकेतून कॅश काढली</option>
-                            <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- इतर ---</option>
+                            <option value="" disabled style="background:#e2e8f0; color:#0f172a; font-weight:bold;">--- इतर सर्व्हिसेस ---</option>
                             <option value="Shop Expense">दुकानाचा खर्च (Shop Expense)</option>
                         </select>
                     </div>
@@ -206,15 +206,15 @@
                             <option value="Fino2">Fino Pallavi</option>
                             <option value="Payworld">Payworld</option>
                             <option value="Paynearby">Paynearby</option>
-                            <option value="AXIS-2669">AXIS-2669</option>
-                            <option value="BOI-0005">BOI-0005</option>
-                            <option value="BOI-0168">BOI-0168</option>
-                            <option value="WANA-0027">WANA-0027</option>
-                            <option value="BOI-4281">BOI-4281</option>
-                            <option value="AXIS-12548">AXIS-12548</option>
-                            <option value="BOI-0735">BOI-0735</option>
-                            <option value="UNION-1529">UNION-1529</option>
-                            <option value="WANA-31">WANA-31</option>
+                            <option value="AXIS-2669">AXIS-2669 UPI</option>
+                            <option value="BOI-0005">BOI-0005 UPI</option>
+                            <option value="BOI-0168">BOI-0168 UPI</option>
+                            <option value="WANA-0027">WANA-0027 UPI</option>
+                            <option value="BOI-4281">BOI-4281 UPI</option>
+                            <option value="AXIS-12548">AXIS-12548 UPI</option>
+                            <option value="BOI-0735">BOI-0735 UPI</option>
+                            <option value="UNION-1529">UNION-1529 UPI</option>
+                            <option value="WANA-31">WANA-31 UPI</option>
                         </select>
                     </div>
                 </div>
@@ -286,6 +286,51 @@
                 <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #e2e8f0; border-top: 3px solid #b91c1c; box-shadow: var(--card-shadow);">
                     <h4 style="margin: 0 0 5px 0; color: #64748b;">एकूण खर्च</h4>
                     <h3 id="monTotalExp" style="margin: 0; color: #b91c1c; font-size: 22px;">₹ 0</h3>
+                </div>
+            </div>
+
+            <!-- सर्व वॉलेट व बँक बॅलन्स (All Balances) -->
+            <div class="container" style="border-left: 4px solid #3b82f6; margin-bottom:15px; background: #eff6ff;">
+                <h3 style="color: #1d4ed8; margin-top:0; border-bottom: 1px solid #bfdbfe; padding-bottom:8px;">💰 सर्व्हिस आणि बँक बॅलन्स</h3>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h4 style="margin: 0 0 10px 0; color: #1e40af;">💼 वॉलेट्स (Wallets)</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px;">
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #bfdbfe; text-align: center;">
+                                <span style="display: block; font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 4px;">Cash in Hand</span>
+                                <strong id="monBalCash" style="font-size: 14px; color: #10b981;">₹ 0</strong>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #bfdbfe; text-align: center;">
+                                <span style="display: block; font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 4px;">Fino Dipak</span>
+                                <strong id="monBalFino1" style="font-size: 14px; color: #3b82f6;">₹ 0</strong>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #bfdbfe; text-align: center;">
+                                <span style="display: block; font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 4px;">Fino Pallavi</span>
+                                <strong id="monBalFino2" style="font-size: 14px; color: #8b5cf6;">₹ 0</strong>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #bfdbfe; text-align: center;">
+                                <span style="display: block; font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 4px;">Payworld</span>
+                                <strong id="monBalPayworld" style="font-size: 14px; color: #f59e0b;">₹ 0</strong>
+                            </div>
+                            <div style="background: white; padding: 10px; border-radius: 6px; border: 1px solid #bfdbfe; text-align: center;">
+                                <span style="display: block; font-size: 11px; color: #64748b; font-weight: bold; margin-bottom: 4px;">Paynearby</span>
+                                <strong id="monBalPaynearby" style="font-size: 14px; color: #ec4899;">₹ 0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="flex: 1.5; min-width: 300px;">
+                        <h4 style="margin: 0 0 10px 0; color: #1e40af;">🏦 बँका (Banks)</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px;" id="monBankBalancesGrid">
+                            <!-- Banks will be loaded here dynamically -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #059669, #047857); color: white; padding: 12px; border-radius: 8px; text-align: center; box-shadow: var(--card-shadow);">
+                    <h4 style="margin: 0 0 5px 0; font-size: 12px; opacity: 0.9; text-transform: uppercase;">सर्व मिळून एकूण उपलब्ध बॅलन्स (Total Balance)</h4>
+                    <h2 id="monTotalOverallBalance" style="margin: 0; font-size: 24px; font-weight: 700;">₹ 0</h2>
                 </div>
             </div>
             
@@ -851,7 +896,6 @@
                 // Other Services entire amount is considered as income.
                 let incomeToAdd = comm;
                 if(svc === "Other Services") incomeToAdd = amt + comm; 
-                // Note: Only if it's "Other Services", otherwise we just take commission.
 
                 let isToday = false, isThisMonth = false;
                 if(d.timestamp) {
@@ -935,6 +979,84 @@
                     cBody.innerHTML += `<tr><td><b>${c.name}</b><br><small>${c.mobile}</small></td><td style="text-align:center;"><span style="background:#fef3c7; color:#d97706; padding:2px 8px; border-radius:10px; font-weight:bold;">${c.count}</span></td><td style="text-align:right; color:var(--primary); font-weight:bold;">₹ ${c.totalAmt}</td></tr>`;
                 });
             }
+
+            // -------- बॅलन्स मोजणी (Wallet & Bank Balances) --------
+            let cBal = 0, f1Bal = 0, f2Bal = 0, pwBal = 0, pnBal = 0;
+            let bBal = {
+                "AXIS-2669": 0, "BOI-0005": 0, "BOI-0168": 0, "WANA-0027": 0, 
+                "BOI-4281": 0, "AXIS-12548": 0, "BOI-0735": 0, "UNION-1529": 0, "WANA-31": 0
+            };
+
+            dataList.forEach(d => {
+                let amt = parseFloat(d.amount) || 0;
+                let comm = parseFloat(d.commission) || 0;
+                let bSrc = d.bankSource || "-"; 
+                let eSrc = d.expenseSource || "-"; 
+                let svc = d.service || "-";
+
+                // Add Adjustments
+                if (d.category === "Adjustment") {
+                    let impact = (eSrc === "Add") ? amt : -amt;
+                    if(bSrc === "Cash") cBal += impact;
+                    else if(bSrc === "Fino1") f1Bal += impact;
+                    else if(bSrc === "Fino2") f2Bal += impact;
+                    else if(bSrc === "Payworld") pwBal += impact;
+                    else if(bSrc === "Paynearby") pnBal += impact;
+                    else if(bBal[bSrc] !== undefined) bBal[bSrc] += impact;
+                } 
+                // Add Internal Transfers
+                else if (svc === "Internal Transfer") {
+                    if(bSrc === "Cash") cBal -= amt; else if(bSrc === "Fino1") f1Bal -= amt; else if(bSrc === "Fino2") f2Bal -= amt; else if(bSrc === "Payworld") pwBal -= amt; else if(bSrc === "Paynearby") pnBal -= amt; else if(bBal[bSrc] !== undefined) bBal[bSrc] -= amt;
+                    if(eSrc === "Cash") cBal += amt; else if(eSrc === "Fino1") f1Bal += amt; else if(eSrc === "Fino2") f2Bal += amt; else if(eSrc === "Payworld") pwBal += amt; else if(eSrc === "Paynearby") pnBal += amt; else if(bBal[eSrc] !== undefined) bBal[eSrc] += amt;
+                }
+                // General Transactions
+                else {
+                    let finalImpact = (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) ? -amt : 
+                                      (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "Other Services") ? amt : 0;
+                    
+                    if (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || (svc === "Other Services" && bSrc === "Cash")) cBal += amt;
+                    else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) cBal -= amt;
+                    
+                    if(svc.includes("Fino Dipak") || svc.includes("Fino1")) { if(svc.includes("Payment Bank")) f1Bal += amt; else if(svc.includes("Cash Deposit")) f1Bal -= amt; }
+                    else if(svc.includes("Fino Pallavi") || svc.includes("Fino2")) { if(svc.includes("Payment Bank")) f2Bal += amt; else if(svc.includes("Cash Deposit")) f2Bal -= amt; }
+                    else if(svc.includes("Payworld")) { if(svc.includes("Services")) pwBal += amt; else if(svc.includes("Cash Deposit")) pwBal -= amt; }
+                    else if(svc.includes("Paynearby")) { if(svc.includes("Services")) pnBal += amt; else if(svc.includes("Cash Deposit")) pnBal -= amt; }
+                    
+                    if(bBal[bSrc] !== undefined) {
+                        if(svc === "UPI Cash Given" || svc === "Self Bank Deposit" || svc === "Other Services") bBal[bSrc] += amt;
+                        else if(svc === "Money Transfer" || svc === "Self Bank Withdrawal") bBal[bSrc] -= amt;
+                    }
+                    if(bBal[eSrc] !== undefined && svc === "Shop Expense") {
+                        bBal[eSrc] -= amt;
+                    } else if (svc === "Shop Expense") {
+                        if(eSrc === "Fino1") f1Bal -= amt; else if(eSrc === "Fino2") f2Bal -= amt; else if(eSrc === "Payworld") pwBal -= amt; else if(eSrc === "Paynearby") pnBal -= amt;
+                    }
+                }
+                
+                // Add commission to Cash by default
+                if(comm > 0) cBal += comm;
+            });
+
+            let tElC = document.getElementById('monBalCash'); if(tElC) tElC.innerText = "₹ " + cBal;
+            let tElF1 = document.getElementById('monBalFino1'); if(tElF1) tElF1.innerText = "₹ " + f1Bal;
+            let tElF2 = document.getElementById('monBalFino2'); if(tElF2) tElF2.innerText = "₹ " + f2Bal;
+            let tElPw = document.getElementById('monBalPayworld'); if(tElPw) tElPw.innerText = "₹ " + pwBal;
+            let tElPn = document.getElementById('monBalPaynearby'); if(tElPn) tElPn.innerText = "₹ " + pnBal;
+
+            let bGrid = document.getElementById('monBankBalancesGrid');
+            let totalBankBal = 0;
+            if(bGrid) {
+                bGrid.innerHTML = "";
+                for(let bk in bBal) {
+                    totalBankBal += bBal[bk];
+                    bGrid.innerHTML += `<div style="background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; text-align: center;"><span style="display: block; font-size: 10px; color: #475569; font-weight: bold; margin-bottom: 4px;">${bk}</span><strong style="font-size: 13px; color: #0f172a;">₹ ${bBal[bk]}</strong></div>`;
+                }
+            }
+
+            let overall = cBal + f1Bal + f2Bal + pwBal + pnBal + totalBankBal;
+            let overallEl = document.getElementById('monTotalOverallBalance');
+            if(overallEl) overallEl.innerText = "₹ " + overall;
+            // -------------------------------------------------------------
         }
 
         function filterData() {
@@ -956,12 +1078,12 @@
                     } else if (svc === "Internal Transfer") {
                         match = (bSrc === sel || eSrc === sel);
                     } else if (sel === "Cash") {
-                        if (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || svc === "Other Services") match = true;
+                        if (svc.includes("Cash Deposit") || svc === "Money Transfer" || svc === "Self Bank Withdrawal" || (svc === "Other Services" && bSrc === "Cash")) match = true;
                         else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) match = true;
                         else match = (bSrc === "Cash");
                     } else if (sel === "Fino1" || sel === "Fino2" || sel === "Payworld" || sel === "Paynearby") {
-                        if (svc.includes("Payment Bank") || svc.includes("Services")) match = svc.includes(sel) || svc.includes(sel.replace('Fino1','Fino Dipak').replace('Fino2','Fino Pallavi'));
-                        else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel) || bSrc === sel) match = true;
+                        if (svc.includes("Payment Bank") || svc.includes("Services") && svc !== "Other Services") match = svc.includes(sel) || svc.includes(sel.replace('Fino1','Fino Dipak').replace('Fino2','Fino Pallavi'));
+                        else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel) || (svc === "Other Services" && bSrc === sel)) match = true;
                         else match = false;
                     } else { // Banks
                         match = (bSrc === sel || eSrc === sel);
@@ -1032,8 +1154,7 @@
                         else if (svc.includes("Payment Bank") || svc.includes("Payworld Services") || svc.includes("Paynearby Services") || svc === "UPI Cash Given" || svc === "Self Bank Deposit" || (svc === "Shop Expense" && eSrc === "Cash")) imp = -data.amount;
                     } else if (sel === "Fino1" || sel === "Fino2" || sel === "Payworld" || sel === "Paynearby") {
                         if (svc.includes("Payment Bank") || svc.includes("Services") && svc !== "Other Services") imp = data.amount;
-                        else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel)) imp = -data.amount;
-                        else if (svc === "Other Services" && bSrc === sel) imp = data.amount;
+                        else if (svc.includes("Cash Deposit") || (svc === "Shop Expense" && eSrc === sel) || (svc === "Other Services" && bSrc === sel)) imp = -data.amount;
                     } else { // Banks
                         if ((svc === "UPI Cash Given" && bSrc === sel) || (svc === "Self Bank Deposit" && bSrc === sel) || (svc === "Other Services" && bSrc === sel)) imp = data.amount;
                         else if ((svc === "Money Transfer" && bSrc === sel) || (svc === "Self Bank Withdrawal" && bSrc === sel) || (svc === "Shop Expense" && eSrc === sel)) imp = -data.amount;
